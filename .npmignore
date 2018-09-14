@@ -1,0 +1,10 @@
+# Dependencies
+/yarn.lock
+
+# Configuration
+.*
+config.json
+webpack.config.js
+
+# Documentation
+/docs/
