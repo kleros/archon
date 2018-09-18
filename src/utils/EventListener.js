@@ -18,19 +18,7 @@ class EventListener {
     contractInstance = isRequired('contractInstance'),
     firstBlock = 0,
     lastBlock = 'latest'
-  ) =>
-    Promise.all(
-      contractInstance.allEvents({
-          fromBlock: firstBlock,
-          toBlock: lastBlock
-        })
-        .get((error, result) => {
-          if (error)
-            throw new Error(errorConstants.ERROR_FETCHING_EVENTS(error))
-
-          return result
-        })
-    )
+  ) => {}
 
   /**
    * Fetch logs from contractInstance for a specific event in a block range.
@@ -44,21 +32,15 @@ class EventListener {
   static getEventLogs = async (
     contractInstance = isRequired('contractInstance'),
     eventName = isRequired('eventName'),
-    firstBlock = 0,
-    lastBlock = 'latest',
+    fromBlock = 0,
+    toBlock = 'latest',
     filters = {}
-  ) => {
-    return new Promise((resolve, reject) => {
-      contractInstance[eventName](filters, {
-        fromBlock: firstBlock,
-        toBlock: lastBlock
-      }).get((error, result) => {
-        if (error) reject(errorConstants.ERROR_FETCHING_EVENTS(error))
-
-        resolve(result)
-      })
+  ) =>
+    contractInstance.getPastEvents(eventName, {
+      filter: filters,
+      fromBlock,
+      toBlock
     })
-  }
 }
 
 export default EventListener
