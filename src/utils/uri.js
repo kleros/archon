@@ -1,2 +1,1 @@
-export const getURISuffix = uri =>
-  uri.split('/').pop()
+export const getURISuffix = uri => uri.split('/').pop()

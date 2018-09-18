@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import EventListener from '../utils/EventListener'
 import isRequired from '../utils/isRequired'
-import { validateMultihash } from '../utils/hash'
+import { validMultihash } from '../utils/hash'
 import { getURISuffix } from '../utils/uri'
 
 import StandardContract from './StandardContract'
@@ -14,14 +14,13 @@ import StandardContract from './StandardContract'
  * const arbitrable = new Arbitable(web3Provider)
  */
 class Arbitrable extends StandardContract {
-
   /**
    * Load an arbitrable web3 contract instance
    * @param {string} contractAddress - Address of the Arbitrable contract.
-   * @return {object} web3 contract instance
+   * @returns {object} web3 contract instance
    */
   _loadContractInstance = contractAddress =>
-    new this.web3.eth.Contract(ArbitrableJSONInterface, contractAddress)
+    new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
 
   /**
    * Get the metaEvidenceID for a dispute from the Dispute event log.
@@ -55,8 +54,7 @@ class Arbitrable extends StandardContract {
     const contractInstance = this._loadContractInstance(contractAddress)
 
     const metaEvidenceLog = await EventListener.getEventLogs(
-      this,
-      contractAddress,
+      contractInstance,
       'MetaEvidence',
       options.fromBlock || 0,
       options.toBlock || 'latest',
@@ -69,33 +67,48 @@ class Arbitrable extends StandardContract {
         `No MetaEvidence log for ${contractAddress} with metaEvidenceID ${metaEvidenceID}`
       )
 
-    const metaEvidenceUri = metaEvidenceLog[0].args._evidence
+    const args = await metaEvidenceLog[0].returnValues
+    const metaEvidenceUri = args._evidence
     // TODO handle different protocols than HTTP (e.g. ipfs://)
     const httpResponse = await axios.get(metaEvidenceUri)
 
     // TODO smart error handling
     if (httpResponse.status !== 200)
-      throw new Error(`HTTP Error: Unable to fetch MetaEvidence at ${metaEvidenceUri}. Returned status code ${httpResponse.status}`)
+      throw new Error(
+        `HTTP Error: Unable to fetch MetaEvidence at ${metaEvidenceUri}. Returned status code ${
+          httpResponse.status
+        }`
+      )
 
-    const [selfHash, ...metaEvidence] = httpResponse.data
+    const { selfHash, ...metaEvidence } = httpResponse.data
+
     let metaEvidenceHashValid = true
     // validate MetaEvidence JSON hash
-    if (!validMultihash(selfHash || getURISuffix(metaEvidenceUri), metaEvidence)) {
+    if (
+      !validMultihash(selfHash || getURISuffix(metaEvidenceUri), metaEvidence)
+    ) {
       metaEvidenceHashValid = false
-      if (object.strictHashes)
-        throw new Error(`Hash Validation Error: MetaEvidence hash validation failed`)
+      if (options.strictHashes)
+        throw new Error(
+          `Hash Validation Error: MetaEvidence hash validation failed`
+        )
     }
 
     let fileHashValid = true
     // validate file hash
-    if (validHashes && metaEvidence.fileURI) {
+    if (metaEvidence.fileURI) {
       const fileResponse = await axios.get(metaEvidence.fileURI)
       if (fileResponse.status !== 200)
-        throw new Error(`HTTP Error: Unable to fetch file at ${metaEvidence.fileURI}. Returned status code ${fileResponse.status}`)
+        throw new Error(
+          `HTTP Error: Unable to fetch file at ${
+            metaEvidence.fileURI
+          }. Returned status code ${fileResponse.status}`
+        )
 
       if (!validMultihash(metaEvidence.fileHash, fileResponse.data)) {
-        validHashes = false
-        throw new Error(`Hash Validation Error: File hash validation failed`)
+        fileHashValid = false
+        if (options.strictHashes)
+          throw new Error(`Hash Validation Error: File hash validation failed`)
       }
     }
 

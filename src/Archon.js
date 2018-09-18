@@ -1,12 +1,11 @@
 import isRequired from './utils/isRequired'
-import { Arbitrable, Arbitrator } from './contracts'
+import { Arbitrable, Arbitrator } from './standards'
 
 /**
  * Archon provides functionality for Arbitrator and Arbitrable Ethereum smart contracts
  * as defined in ERC 792 and ___insert_evidence_standard_ERC___.
  */
 class Archon {
-
   /**
    * Instantiates a new Archon instance that provides the public interface
    * to Kleros contracts and library. All params are required. To use an individual
@@ -15,9 +14,7 @@ class Archon {
    *                 Kleros.js library to use for interacting with the
    *                 Ethereum network.
    */
-  constructor(
-    ethereumProvider
-  ) {
+  constructor(ethereumProvider) {
     this.arbitrator = new Arbitrator(ethereumProvider)
     this.arbitrable = new Arbitrable(ethereumProvider)
   }
