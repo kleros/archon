@@ -1,7 +1,3 @@
-import Arbitrator from 'kleros-interaction/build/contracts/Arbitrator'
-
-import EventListener from '../utils/EventListener'
-
 import StandardContract from './StandardContract'
 
 /**

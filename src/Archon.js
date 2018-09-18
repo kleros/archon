@@ -22,7 +22,7 @@ class Archon {
     this.arbitrable = new Arbitrable(ethereumProvider)
   }
 
-  setProvider = provider = isRequired('provider') => {
+  setProvider = (provider = isRequired('provider')) => {
     this.arbitrator.setProvider(provider)
     this.arbitrable.setProvider(provider)
   }

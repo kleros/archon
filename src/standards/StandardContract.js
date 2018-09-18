@@ -13,3 +13,5 @@ class StandardContract {
     this.web3.setProvider(newProvider)
   }
 }
+
+export default StandardContract
