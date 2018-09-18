@@ -64,9 +64,11 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
+    "js-sha256": "^0.9.0",
     "kleros-interaction": "^0.0.24",
     "lodash": "^4.17.4",
     "multihashes": "^0.4.14",
+    "solc": "^0.4.25",
     "web3": "^1.0.0-beta.36"
   }
 }
