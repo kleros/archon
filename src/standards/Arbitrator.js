@@ -6,3 +6,5 @@ import StandardContract from './StandardContract'
 class Arbitrator extends StandardContract {
   // TODO
 }
+
+export default Arbitrator

@@ -19,10 +19,14 @@ class Archon {
     this.arbitrable = new Arbitrable(ethereumProvider)
   }
 
+  /**
+   * Set the provider instance.
+   * @param {object} provider - The provider object.
+   */
   setProvider = (provider = isRequired('provider')) => {
     this.arbitrator.setProvider(provider)
     this.arbitrable.setProvider(provider)
   }
 }
 
-export default EthArbitration
+export default Archon

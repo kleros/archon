@@ -5,8 +5,9 @@ import hashFns from '../constants/hash'
 /**
  * Validate a multihash.
  * @param {string} hashHex - The hexadecimal hash.
- * @param {object|string}
- * @return {bool}
+ * @param {object|string} originalObject - The object we are validating against.
+ * @param {fn} customHashFn - <optional> A custom hash function used for file.
+ * @returns {bool} If the hashes match.
  */
 export const validMultihash = (hashHex, originalObject, customHashFn) => {
   if (typeof originalObject === 'object')

@@ -54,7 +54,7 @@ describe('Arbitrable', () => {
   })
 
   describe('MetaEvidence', async () => {
-    it('valid metaEvidence - hash in uri', async () => {
+    it('validate metaEvidence -- hash in uri', async () => {
       const metaEvidenceJSON = {
         title: 'test title',
         description: 'test description'
@@ -64,9 +64,6 @@ describe('Arbitrable', () => {
         'keccak-256'
       )
       const hash = multihash.toB58String(encoded)
-
-      // mock http requests
-      const mockGet = jest.fn().mockReturnValue(metaEvidenceJSON)
 
       // deploy arbitrable contract to test with
       const arbitrableContract = await _deplyTestArbitrableContract()
@@ -93,7 +90,7 @@ describe('Arbitrable', () => {
       expect(metaEvidence.description).toEqual(metaEvidenceJSON.description)
       expect(metaEvidence.metaEvidenceHashValid).toBeTruthy()
     })
-    it('invalid metaEvidence - hash in uri', async () => {
+    it('invalid metaEvidence -- hash in uri', async () => {
       const metaEvidenceJSON = {
         title: 'test title',
         description: 'test description'
@@ -104,9 +101,6 @@ describe('Arbitrable', () => {
       )
       const hash = multihash.toB58String(encoded)
 
-      // mock http requests
-      const mockGet = jest.fn().mockReturnValue(metaEvidenceJSON)
-
       // deploy arbitrable contract to test with
       const arbitrableContract = await _deplyTestArbitrableContract()
       expect(arbitrableContract.options.address).toBeTruthy()
@@ -114,7 +108,7 @@ describe('Arbitrable', () => {
       const fakeHost = 'http://fake-address'
       nock(fakeHost)
         .get(`/${hash}`)
-        .reply(200, {"title": "different metaEvidence"})
+        .reply(200, { title: 'different metaEvidence' })
       // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
       const receipt = await arbitrableContract.methods
         .emitMetaEvidence(0, `${fakeHost}/${hash}`)
@@ -132,8 +126,8 @@ describe('Arbitrable', () => {
     })
     it('validate file -- hash in uri', async () => {
       const testFile = JSON.stringify({
-        'type': 'file',
-        'data': '0x0'
+        type: 'file',
+        data: '0x0'
       })
       const fileEncoded = multihash.encode(
         Buffer.from(web3.utils.keccak256(testFile)),
@@ -154,13 +148,9 @@ describe('Arbitrable', () => {
       )
       const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
-      // mock http requests
-      const mockGet = jest.fn().mockReturnValue(metaEvidenceJSON)
-
       // deploy arbitrable contract to test with
       const arbitrableContract = await _deplyTestArbitrableContract()
       expect(arbitrableContract.options.address).toBeTruthy()
-
 
       nock(fakeHost)
         .get(`/${metaEvidenceHash}`)
@@ -183,6 +173,196 @@ describe('Arbitrable', () => {
       )
       expect(metaEvidence.metaEvidenceHashValid).toBeTruthy()
       expect(metaEvidence.fileHashValid).toBeTruthy()
+    })
+    it('invalid file -- hash in uri', async () => {
+      const testFile = JSON.stringify({
+        type: 'file',
+        data: '0x0'
+      })
+      const fileEncoded = multihash.encode(
+        Buffer.from(web3.utils.keccak256(testFile)),
+        'keccak-256'
+      )
+      const fileHash = multihash.toB58String(fileEncoded)
+
+      const fakeHost = 'http://fake-address'
+
+      const metaEvidenceJSON = {
+        title: 'test title',
+        description: 'test description',
+        fileURI: `${fakeHost}/${fileHash}`
+      }
+      const metaEvidenceEncoded = multihash.encode(
+        Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
+        'keccak-256'
+      )
+      const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+
+      // deploy arbitrable contract to test with
+      const arbitrableContract = await _deplyTestArbitrableContract()
+      expect(arbitrableContract.options.address).toBeTruthy()
+
+      nock(fakeHost)
+        .get(`/${metaEvidenceHash}`)
+        .reply(200, metaEvidenceJSON)
+      nock(fakeHost)
+        .get(`/${fileHash}`)
+        .reply(200, { type: null })
+      // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+      const receipt = await arbitrableContract.methods
+        .emitMetaEvidence(0, `${fakeHost}/${metaEvidenceHash}`)
+        .send({
+          from: accounts[0],
+          gas: 500000
+        })
+      expect(receipt.transactionHash).toBeTruthy()
+
+      const metaEvidence = await arbitrableInstance.getMetaEvidence(
+        arbitrableContract.options.address,
+        0
+      )
+      expect(metaEvidence.metaEvidenceHashValid).toBeTruthy()
+      expect(metaEvidence.fileHashValid).toBeFalsy()
+    })
+    it('validate file -- hash as fileHash', async () => {
+      const testFile = JSON.stringify({
+        type: 'file',
+        data: '0x0'
+      })
+      const fileEncoded = multihash.encode(
+        Buffer.from(web3.utils.keccak256(testFile)),
+        'keccak-256'
+      )
+      const fileHash = multihash.toB58String(fileEncoded)
+
+      const fakeHost = 'http://fake-address'
+
+      const metaEvidenceJSON = {
+        title: 'test title',
+        description: 'test description',
+        fileURI: `${fakeHost}/file`,
+        fileHash
+      }
+      const metaEvidenceEncoded = multihash.encode(
+        Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
+        'keccak-256'
+      )
+      const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+
+      // deploy arbitrable contract to test with
+      const arbitrableContract = await _deplyTestArbitrableContract()
+      expect(arbitrableContract.options.address).toBeTruthy()
+
+      nock(fakeHost)
+        .get(`/${metaEvidenceHash}`)
+        .reply(200, metaEvidenceJSON)
+      nock(fakeHost)
+        .get(`/file`)
+        .reply(200, testFile)
+      // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+      const receipt = await arbitrableContract.methods
+        .emitMetaEvidence(0, `${fakeHost}/${metaEvidenceHash}`)
+        .send({
+          from: accounts[0],
+          gas: 500000
+        })
+      expect(receipt.transactionHash).toBeTruthy()
+
+      const metaEvidence = await arbitrableInstance.getMetaEvidence(
+        arbitrableContract.options.address,
+        0
+      )
+      expect(metaEvidence.metaEvidenceHashValid).toBeTruthy()
+      expect(metaEvidence.fileHashValid).toBeTruthy()
+    })
+    it('invalid file -- hash as fileHash', async () => {
+      const testFile = JSON.stringify({
+        type: 'file',
+        data: '0x0'
+      })
+      const fileEncoded = multihash.encode(
+        Buffer.from(web3.utils.keccak256(testFile)),
+        'keccak-256'
+      )
+      const fileHash = multihash.toB58String(fileEncoded)
+
+      const fakeHost = 'http://fake-address'
+
+      const metaEvidenceJSON = {
+        title: 'test title',
+        description: 'test description',
+        fileURI: `${fakeHost}/file`,
+        fileHash
+      }
+      const metaEvidenceEncoded = multihash.encode(
+        Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
+        'keccak-256'
+      )
+      const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+
+      // deploy arbitrable contract to test with
+      const arbitrableContract = await _deplyTestArbitrableContract()
+      expect(arbitrableContract.options.address).toBeTruthy()
+
+      nock(fakeHost)
+        .get(`/${metaEvidenceHash}`)
+        .reply(200, metaEvidenceJSON)
+      nock(fakeHost)
+        .get(`/file`)
+        .reply(200, { type: null })
+      // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+      const receipt = await arbitrableContract.methods
+        .emitMetaEvidence(0, `${fakeHost}/${metaEvidenceHash}`)
+        .send({
+          from: accounts[0],
+          gas: 500000
+        })
+      expect(receipt.transactionHash).toBeTruthy()
+
+      const metaEvidence = await arbitrableInstance.getMetaEvidence(
+        arbitrableContract.options.address,
+        0
+      )
+      expect(metaEvidence.metaEvidenceHashValid).toBeTruthy()
+      expect(metaEvidence.fileHashValid).toBeFalsy()
+    })
+    it('validate metaEvidence -- selfHash', async () => {
+      const metaEvidenceJSON = {
+        title: 'test title',
+        description: 'test description'
+      }
+      const encoded = multihash.encode(
+        Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
+        'keccak-256'
+      )
+      const hash = multihash.toB58String(encoded)
+
+      metaEvidenceJSON.selfHash = hash
+
+      // deploy arbitrable contract to test with
+      const arbitrableContract = await _deplyTestArbitrableContract()
+      expect(arbitrableContract.options.address).toBeTruthy()
+
+      const fakeHost = 'http://fake-address'
+      nock(fakeHost)
+        .get(`/test`)
+        .reply(200, metaEvidenceJSON)
+      // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+      const receipt = await arbitrableContract.methods
+        .emitMetaEvidence(0, `${fakeHost}/test`)
+        .send({
+          from: accounts[0],
+          gas: 500000
+        })
+      expect(receipt.transactionHash).toBeTruthy()
+
+      const metaEvidence = await arbitrableInstance.getMetaEvidence(
+        arbitrableContract.options.address,
+        0
+      )
+      expect(metaEvidence.title).toEqual(metaEvidenceJSON.title)
+      expect(metaEvidence.description).toEqual(metaEvidenceJSON.description)
+      expect(metaEvidence.metaEvidenceHashValid).toBeTruthy()
     })
   })
 })
