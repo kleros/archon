@@ -4,7 +4,7 @@ import axios from 'axios'
 import EventListener from '../utils/EventListener'
 import isRequired from '../utils/isRequired'
 import { validMultihash } from '../utils/hash'
-import { getURISuffix } from '../utils/uri'
+import { getURISuffix, getURIProtocol } from '../utils/uri'
 
 import StandardContract from './StandardContract'
 
@@ -68,7 +68,22 @@ class Arbitrable extends StandardContract {
       )
 
     const args = await metaEvidenceLog[0].returnValues
-    const metaEvidenceUri = args._evidence
+    let metaEvidenceUri = args._evidence
+    const JSONProtocol = getURIProtocol(metaEvidenceUri)
+
+    let metaEvidencePreValidated = false
+    switch (JSONProtocol) {
+      case 'http':
+        break
+      case 'ipfs':
+        ipfsID = getURISuffix(metaEvidenceUri)
+        metaEvidenceUri = `${process.env.IPFS_GATEWAY_URI}/${ipfsID}`
+        metaEvidencePreValidated = true
+        break
+      default:
+        throw new Error(`Unrecognized protocol ${protocol}`)
+    }
+
     // TODO handle different protocols than HTTP (e.g. ipfs://)
     const httpResponse = await axios.get(metaEvidenceUri)
 
@@ -79,12 +94,12 @@ class Arbitrable extends StandardContract {
           httpResponse.status
         }`
       )
-
     const { selfHash, ...metaEvidence } = httpResponse.data
 
     let metaEvidenceHashValid = true
-    // validate MetaEvidence JSON hash
+
     if (
+      !metaEvidencePreValidated &&
       !validMultihash(selfHash || getURISuffix(metaEvidenceUri), metaEvidence)
     ) {
       metaEvidenceHashValid = false
@@ -97,18 +112,34 @@ class Arbitrable extends StandardContract {
     let fileHashValid = true
     // validate file hash
     if (metaEvidence.fileURI) {
-      const fileResponse = await axios.get(metaEvidence.fileURI)
-      if (fileResponse.status !== 200)
-        throw new Error(
-          `HTTP Error: Unable to fetch file at ${
-            metaEvidence.fileURI
-          }. Returned status code ${fileResponse.status}`
-        )
+      const fileProtocol = getURIProtocol(metaEvidence.fileURI)
+      let filePreValidated = false
+      switch (JSONProtocol) {
+        case 'http':
+          break
+        case 'ipfs':
+          filePreValidated = true
+          break
+        default:
+          throw new Error(`Unrecognized protocol ${protocol}`)
+      }
 
-      if (!validMultihash(metaEvidence.fileHash, fileResponse.data)) {
-        fileHashValid = false
-        if (options.strictHashes)
-          throw new Error(`Hash Validation Error: File hash validation failed`)
+      let fileValidation = true
+
+      if (!filePreValidated) {
+        const fileResponse = await axios.get(metaEvidence.fileURI)
+        if (fileResponse.status !== 200)
+          throw new Error(
+            `HTTP Error: Unable to fetch file at ${
+              metaEvidence.fileURI
+            }. Returned status code ${fileResponse.status}`
+          )
+
+        if (!validMultihash(metaEvidence.fileHash, fileResponse.data)) {
+          fileHashValid = false
+          if (options.strictHashes)
+            throw new Error(`Hash Validation Error: File hash validation failed`)
+        }
       }
     }
 
