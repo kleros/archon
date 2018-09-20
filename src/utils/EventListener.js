@@ -1,5 +1,4 @@
 import isRequired from '../utils/isRequired'
-import * as errorConstants from '../constants/error'
 
 /**
  * EventListener is used to watch events on the blockchain for a set of contracts.
@@ -8,24 +7,11 @@ import * as errorConstants from '../constants/error'
  */
 class EventListener {
   /**
-   * Fetch all logs from contractInstance in a block range.
-   * @param {object} contractInstance - Contract instance.
-   * @param {number} firstBlock - Lower bound of search range.
-   * @param {number} lastBlock - Upper bound of search range.
-   * @returns {Promise} All events in block range.
-   */
-  static getAllEventLogs = async (
-    contractInstance = isRequired('contractInstance'),
-    firstBlock = 0,
-    lastBlock = 'latest'
-  ) => {}
-
-  /**
    * Fetch logs from contractInstance for a specific event in a block range.
    * @param {object} contractInstance - Contract instance.
    * @param {string} eventName - Name of the event.
-   * @param {number} firstBlock - Lower bound of search range.
-   * @param {number} lastBlock - Upper bound of search range.
+   * @param {number} fromBlock - Lower bound of search range.
+   * @param {number} toBlock - Upper bound of search range.
    * @param {object} filters - Extra filters
    * @returns {Promise} All events in block range.
    */

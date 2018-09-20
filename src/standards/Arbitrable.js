@@ -23,20 +23,6 @@ class Arbitrable extends StandardContract {
     new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
 
   /**
-   * Get the metaEvidenceID for a dispute from the Dispute event log.
-   * @param {string} contractAddress - Address of the Arbitrable contract.
-   * @param {string} arbitratorAddress - Address of the Arbitrator contract.
-   * @param {number} disputeID - The dispute index.
-   */
-  getMetaEvidenceIDForDispute = async (
-    contractAddress = isRequired('contractAddress'),
-    arbitratorAddress = isRequired('arbitratorAddress'),
-    disputeID = isRequired('disputeID')
-  ) => {
-    // TODO
-  }
-
-  /**
    * Get the MetaEvidence object for a metaEvidenceID. Hashes will be validated.
    * By default MetaEvidence will be returned regardless of the validity of the hashes
    * with an indicator on whether the hash was valid or not. To throw an error instead,
@@ -47,7 +33,7 @@ class Arbitrable extends StandardContract {
    * @returns {object} The metaEvidence object
    */
   getMetaEvidence = async (
-    contractAddress,
+    contractAddress = isRequired('contractAddress'),
     metaEvidenceID = 0,
     options = {}
   ) => {
@@ -76,12 +62,12 @@ class Arbitrable extends StandardContract {
       case 'http':
         break
       case 'ipfs':
-        ipfsID = getURISuffix(metaEvidenceUri)
+        const ipfsID = getURISuffix(metaEvidenceUri)
         metaEvidenceUri = `${process.env.IPFS_GATEWAY_URI}/${ipfsID}`
         metaEvidencePreValidated = true
         break
       default:
-        throw new Error(`Unrecognized protocol ${protocol}`)
+        throw new Error(`Unrecognized protocol ${JSONProtocol}`)
     }
 
     // TODO handle different protocols than HTTP (e.g. ipfs://)
@@ -114,17 +100,15 @@ class Arbitrable extends StandardContract {
     if (metaEvidence.fileURI) {
       const fileProtocol = getURIProtocol(metaEvidence.fileURI)
       let filePreValidated = false
-      switch (JSONProtocol) {
+      switch (fileProtocol) {
         case 'http':
           break
         case 'ipfs':
           filePreValidated = true
           break
         default:
-          throw new Error(`Unrecognized protocol ${protocol}`)
+          throw new Error(`Unrecognized protocol ${fileProtocol}`)
       }
-
-      let fileValidation = true
 
       if (!filePreValidated) {
         const fileResponse = await axios.get(metaEvidence.fileURI)
@@ -135,10 +119,17 @@ class Arbitrable extends StandardContract {
             }. Returned status code ${fileResponse.status}`
           )
 
-        if (!validMultihash(metaEvidence.fileHash, fileResponse.data)) {
+        if (
+          !validMultihash(
+            metaEvidence.fileHash || getURISuffix(metaEvidence.fileURI),
+            fileResponse.data
+          )
+        ) {
           fileHashValid = false
           if (options.strictHashes)
-            throw new Error(`Hash Validation Error: File hash validation failed`)
+            throw new Error(
+              `Hash Validation Error: File hash validation failed`
+            )
         }
       }
     }
@@ -148,14 +139,6 @@ class Arbitrable extends StandardContract {
       metaEvidenceHashValid,
       fileHashValid
     }
-  }
-
-  /**
-   * Get the evidence submitted in a dispute.
-   * @returns {object[]} An array of evidence objects.
-   */
-  getEvidence = async () => {
-    // TODO
   }
 }
 
