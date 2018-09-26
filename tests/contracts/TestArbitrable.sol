@@ -22,4 +22,8 @@ contract TestArbitrable {
   function emitMetaEvidence(uint _metaEvidenceID, string _evidence) public {
     emit MetaEvidence(_metaEvidenceID, _evidence);
   }
+
+  function emitEvidence(address _arbitrator, uint _disputeID, address _party, string _evidence) public {
+    emit Evidence(_arbitrator, _disputeID, _party, _evidence);
+  }
 }
