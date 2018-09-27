@@ -26,9 +26,9 @@ class Arbitrable extends StandardContract {
   /**
    */
   getEvidence = async (
-     contractAddress = isRequired('contractAddress'),
-     metaEvidenceID = 0,
-     options = {}
+    contractAddress = isRequired('contractAddress'),
+    metaEvidenceID = 0,
+    options = {}
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
 
@@ -40,8 +40,7 @@ class Arbitrable extends StandardContract {
       options.filters || {}
     )
 
-    if (evidenceLogs.length < 1)
-      return []
+    if (evidenceLogs.length === 0) return []
 
     return Promise.all(
       evidenceLogs.map(async evidenceLog => {
@@ -49,7 +48,29 @@ class Arbitrable extends StandardContract {
         let evidenceURI = args._evidence
 
         const { uri, preValidated } = getHttpUri(evidenceURI)
-        const evidence = await httpRequest('GET', uri)
+        const evidenceResponse = await httpRequest('GET', uri)
+        if (evidenceResponse.status !== 200)
+        throw new Error(
+          errorConstants.HTTP_ERROR(
+            `Unable to fetch file at ${
+              uri
+            }. Returned status code ${evidenceResponse.status}`
+          )
+        )
+
+        const { selfHash, ...evidence } = evidenceResponse.data
+
+        let evidenceHashValid = true
+        if (
+          !preValidated &&
+          !validMultihash(selfHash || getURISuffix(evidenceURI), evidence)
+        ) {
+          evidenceHashValid = false
+          if (options.strictHashes)
+            throw new Error(
+              errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)
+            )
+        }
 
         let fileHashValid = true
         // validate file hash
@@ -75,9 +96,9 @@ class Arbitrable extends StandardContract {
             ) {
               fileHashValid = false
               if (options.strictHashes)
-                throw new Error(errorConstants.VALIDATION_ERROR(
-                  `File hash validation failed`
-                ))
+                throw new Error(
+                  errorConstants.VALIDATION_ERROR(`Evidence file hash validation failed`)
+                )
             }
           }
         }
@@ -91,6 +112,8 @@ class Arbitrable extends StandardContract {
         }).timestamp
 
         return {
+          fileHashValid,
+          evidenceHashValid,
           ...evidence.body,
           ...{ submittedBy: evidenceLog.args._party, submittedAt }
         }
@@ -124,14 +147,18 @@ class Arbitrable extends StandardContract {
     )
 
     if (!metaEvidenceLog[0])
-      throw new Error(errorConstants.CONTRACT_ERROR(
-        `No MetaEvidence log for ${contractAddress} with metaEvidenceID ${metaEvidenceID}`
-      ))
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `No MetaEvidence log for ${contractAddress} with metaEvidenceID ${metaEvidenceID}`
+        )
+      )
 
     if (metaEvidenceLog.length > 1)
-      throw new Error(errorConstants.CONTRACT_ERROR(
-        `More than one MetaEvidence returned for metaEvidenceID ${metaEvidenceID}`
-      ))
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `More than one MetaEvidence returned for metaEvidenceID ${metaEvidenceID}`
+        )
+      )
 
     const args = await metaEvidenceLog[0].returnValues
     let metaEvidenceUri = args._evidence
@@ -142,11 +169,13 @@ class Arbitrable extends StandardContract {
 
     // TODO smart error handling
     if (httpResponse.status !== 200)
-      throw new Error(errorConstants.HTTP_ERROR(
-        `Unable to fetch MetaEvidence at ${metaEvidenceUri}. Returned status code ${
-          httpResponse.status
-        }`
-      ))
+      throw new Error(
+        errorConstants.HTTP_ERROR(
+          `Unable to fetch MetaEvidence at ${metaEvidenceUri}. Returned status code ${
+            httpResponse.status
+          }`
+        )
+      )
     const { selfHash, ...metaEvidence } = httpResponse.data
 
     let metaEvidenceHashValid = true
@@ -156,9 +185,9 @@ class Arbitrable extends StandardContract {
     ) {
       metaEvidenceHashValid = false
       if (options.strictHashes)
-        throw new Error(errorConstants.VALIDATION_ERROR(
-          `MetaEvidence hash validation failed`
-        ))
+        throw new Error(
+          errorConstants.VALIDATION_ERROR(`MetaEvidence hash validation failed`)
+        )
     }
 
     let fileHashValid = true
@@ -169,9 +198,13 @@ class Arbitrable extends StandardContract {
       if (!preValidated) {
         const fileResponse = await axios.get(uri)
         if (fileResponse.status !== 200)
-          throw new Error(errorConstants.HTTP_ERROR(
-            `Unable to fetch file at ${metaEvidence.fileURI}. Returned status code ${fileResponse.status}`
-          ))
+          throw new Error(
+            errorConstants.HTTP_ERROR(
+              `Unable to fetch file at ${
+                metaEvidence.fileURI
+              }. Returned status code ${fileResponse.status}`
+            )
+          )
 
         if (
           !validMultihash(
@@ -181,9 +214,9 @@ class Arbitrable extends StandardContract {
         ) {
           fileHashValid = false
           if (options.strictHashes)
-            throw new Error(errorConstants.VALIDATION_ERROR(
-              `File hash validation failed`
-            ))
+            throw new Error(
+              errorConstants.VALIDATION_ERROR(`MetaEvidence file hash validation failed`)
+            )
         }
       }
     }
