@@ -1,11 +1,10 @@
 import ArbitrableJSONInterface from 'kleros-interaction/build/contracts/Arbitrable'
-import axios from 'axios'
 
 import * as errorConstants from '../constants/error'
 import EventListener from '../utils/EventListener'
 import isRequired from '../utils/isRequired'
-import { validMultihash } from '../utils/hash'
 import { getHttpUri, getURISuffix } from '../utils/uri'
+import { validateFileFromURI } from '../utils/validation'
 
 import StandardContract from './StandardContract'
 
@@ -27,7 +26,6 @@ class Arbitrable extends StandardContract {
    */
   getEvidence = async (
     contractAddress = isRequired('contractAddress'),
-    metaEvidenceID = 0,
     options = {}
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
@@ -45,77 +43,40 @@ class Arbitrable extends StandardContract {
     return Promise.all(
       evidenceLogs.map(async evidenceLog => {
         const args = await evidenceLog.returnValues
-        let evidenceURI = args._evidence
+        const evidenceURI = args._evidence
 
-        const { uri, preValidated } = getHttpUri(evidenceURI)
-        const evidenceResponse = await httpRequest('GET', uri)
-        if (evidenceResponse.status !== 200)
-        throw new Error(
-          errorConstants.HTTP_ERROR(
-            `Unable to fetch file at ${
-              uri
-            }. Returned status code ${evidenceResponse.status}`
-          )
+        const { file: evidenceJSON, isValid: evidenceValid } = await validateFileFromURI(
+          evidenceURI,
+          {
+            evidence: true,
+            strictHashes: options.strictHashes
+          }
         )
 
-        const { selfHash, ...evidence } = evidenceResponse.data
-
-        let evidenceHashValid = true
-        if (
-          !preValidated &&
-          !validMultihash(selfHash || getURISuffix(evidenceURI), evidence)
-        ) {
-          evidenceHashValid = false
-          if (options.strictHashes)
-            throw new Error(
-              errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)
-            )
-        }
-
-        let fileHashValid = true
-        // validate file hash
-        if (evidence.fileURI) {
-          const { uri, preValidated } = getHttpUri(evidenceURI)
-
-          if (!preValidated) {
-            const fileResponse = await axios.get(uri)
-            if (fileResponse.status !== 200)
-              throw new Error(
-                errorConstants.HTTP_ERROR(
-                  `Unable to fetch file at ${
-                    metaEvidence.fileURI
-                  }. Returned status code ${fileResponse.status}`
-                )
-              )
-
-            if (
-              !validMultihash(
-                metaEvidence.fileHash || getURISuffix(metaEvidence.fileURI),
-                fileResponse.data
-              )
-            ) {
-              fileHashValid = false
-              if (options.strictHashes)
-                throw new Error(
-                  errorConstants.VALIDATION_ERROR(`Evidence file hash validation failed`)
-                )
+        const { isValid: fileValid } = evidenceJSON.fileURI ?
+          await validateFileFromURI(
+            evidenceJSON.fileURI,
+            {
+              evidence: true,
+              strictHashes: options.strictHashes,
+              hash: evidenceJSON.fileHash
             }
-          }
-        }
+          ) :
+          { isValid: null}
 
-        const submittedAt = new Promise((resolve, reject) => {
+        const submittedAt = (await new Promise((resolve, reject) => {
           this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) => {
             if (error) reject(error)
 
             resolve(result)
           })
-        }).timestamp
+        })).timestamp
 
         return {
-          fileHashValid,
-          evidenceHashValid,
-          ...evidence.body,
-          ...{ submittedBy: evidenceLog.args._party, submittedAt }
+          evidenceValid,
+          fileValid,
+          ...evidenceJSON,
+          ...{ submittedBy: args._party, submittedAt }
         }
       })
     )
@@ -161,70 +122,32 @@ class Arbitrable extends StandardContract {
       )
 
     const args = await metaEvidenceLog[0].returnValues
-    let metaEvidenceUri = args._evidence
+    const metaEvidenceUri = args._evidence
 
-    const { uri, preValidated } = getHttpUri(metaEvidenceUri)
-
-    const httpResponse = await axios.get(uri)
-
-    // TODO smart error handling
-    if (httpResponse.status !== 200)
-      throw new Error(
-        errorConstants.HTTP_ERROR(
-          `Unable to fetch MetaEvidence at ${metaEvidenceUri}. Returned status code ${
-            httpResponse.status
-          }`
-        )
-      )
-    const { selfHash, ...metaEvidence } = httpResponse.data
-
-    let metaEvidenceHashValid = true
-    if (
-      !preValidated &&
-      !validMultihash(selfHash || getURISuffix(metaEvidenceUri), metaEvidence)
-    ) {
-      metaEvidenceHashValid = false
-      if (options.strictHashes)
-        throw new Error(
-          errorConstants.VALIDATION_ERROR(`MetaEvidence hash validation failed`)
-        )
-    }
-
-    let fileHashValid = true
-    // validate file hash
-    if (metaEvidence.fileURI) {
-      const { uri, preValidated } = getHttpUri(metaEvidence.fileURI)
-
-      if (!preValidated) {
-        const fileResponse = await axios.get(uri)
-        if (fileResponse.status !== 200)
-          throw new Error(
-            errorConstants.HTTP_ERROR(
-              `Unable to fetch file at ${
-                metaEvidence.fileURI
-              }. Returned status code ${fileResponse.status}`
-            )
-          )
-
-        if (
-          !validMultihash(
-            metaEvidence.fileHash || getURISuffix(metaEvidence.fileURI),
-            fileResponse.data
-          )
-        ) {
-          fileHashValid = false
-          if (options.strictHashes)
-            throw new Error(
-              errorConstants.VALIDATION_ERROR(`MetaEvidence file hash validation failed`)
-            )
-        }
+    const { file: metaEvidenceJSON, isValid: metaEvidenceValid } = await validateFileFromURI(
+      metaEvidenceUri,
+      {
+        evidence: true,
+        strictHashes: options.strictHashes
       }
-    }
+    )
+
+    // validate file hash
+    const { isValid: fileValid } = metaEvidenceJSON.fileURI ?
+      await validateFileFromURI(
+        metaEvidenceJSON.fileURI,
+        {
+          evidence: true,
+          strictHashes: options.strictHashes,
+          hash: metaEvidenceJSON.fileHash
+        }
+      ) :
+      { isValid: null }
 
     return {
-      ...metaEvidence,
-      metaEvidenceHashValid,
-      fileHashValid
+      ...metaEvidenceJSON,
+      metaEvidenceValid,
+      fileValid
     }
   }
 }

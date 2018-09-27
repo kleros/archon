@@ -1,8 +1,9 @@
 import multihash from 'multihashes'
+import axios from 'axios'
 
-import { getHttpUri, getURISuffix } from './utils/uri'
+import { getHttpUri, getURISuffix } from './uri'
 
-
+import * as errorConstants from '../constants/error'
 import hashFns from '../constants/hash'
 
 /**
@@ -21,6 +22,11 @@ import hashFns from '../constants/hash'
  *    strictHashes: true // If true error will be thrown if hash is invalid
  * }
  * @return {object} The file as well as the validity of the hashes
+ * @example
+ * {
+ *   file: {},
+ *   isValid: true
+ * }
  */
 export const validateFileFromURI = async (fileURI, options = {}) => {
   // A file is considered prevalidated if it is an IPFS uri
@@ -43,25 +49,26 @@ export const validateFileFromURI = async (fileURI, options = {}) => {
   let selfHash = null
   // If we are validating evidence check for optional selfHash key
   if (options.evidence && typeof fileContent === 'object') {
-    { _selfHash, ..._fileContent } = fileContent
+    const { selfHash: _selfHash, ..._fileContent } = fileContent
     fileContent = _fileContent
     selfHash = _selfHash
   }
 
-  return validateFile(fileContent, options.hash || selfHash || getURISuffix(fileURI))
-}
+  let isValid = true
 
-export const validateFile = (file, hash) => {
-  let fileHashValid = true
   if (
-    !preValidated &&
     !validMultihash(options.hash || selfHash || getURISuffix(fileURI), fileContent)
   ) {
-    evidenceHashValid = false
+    isValid = false
     if (options.strictHashes)
       throw new Error(
         errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)
       )
+  }
+
+  return {
+    file: fileContent,
+    isValid
   }
 }
 
