@@ -1,10 +1,10 @@
 import multihash from 'multihashes'
 import axios from 'axios'
 
-import { getHttpUri, getURISuffix } from './uri'
-
 import * as errorConstants from '../constants/error'
 import hashFns from '../constants/hash'
+
+import { getHttpUri, getURISuffix } from './uri'
 
 /**
  * Validate a file. The file must include the hash as the suffix of the URI,
@@ -21,7 +21,7 @@ import hashFns from '../constants/hash'
  *    hashingAlgorithm: (file) => {...}, // A custom hashing algorithm for computing unsupported hashes.
  *    strictHashes: true // If true error will be thrown if hash is invalid
  * }
- * @return {object} The file as well as the validity of the hashes
+ * @returns {object} The file as well as the validity of the hashes
  * @example
  * {
  *   file: {},
@@ -39,9 +39,9 @@ export const validateFileFromURI = async (fileURI, options = {}) => {
   if (fileResponse.status !== 200)
     throw new Error(
       errorConstants.HTTP_ERROR(
-        `Unable to fetch file at ${
-          uri
-        }. Returned status code ${evidenceResponse.status}`
+        `Unable to fetch file at ${uri}. Returned status code ${
+          fileResponse.status
+        }`
       )
     )
 
@@ -57,7 +57,10 @@ export const validateFileFromURI = async (fileURI, options = {}) => {
   let isValid = true
 
   if (
-    !validMultihash(options.hash || selfHash || getURISuffix(fileURI), fileContent)
+    !validMultihash(
+      options.hash || selfHash || getURISuffix(fileURI),
+      fileContent
+    )
   ) {
     isValid = false
     if (options.strictHashes)

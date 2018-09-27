@@ -372,6 +372,7 @@ describe('MetaEvidence', () => {
         { strictHashes: true }
       )
     } catch (err) {
+      expect(err).toBeTruthy()
       errored = true
     }
     expect(errored).toBeTruthy()
@@ -427,6 +428,7 @@ describe('MetaEvidence', () => {
         { strictHashes: true }
       )
     } catch (err) {
+      expect(err).toBeTruthy()
       errored = true
     }
     expect(errored).toBeTruthy()
