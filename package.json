@@ -26,6 +26,7 @@
   "private": false,
   "scripts": {
     "docs": "esdoc",
+    "ganache": "ganache-cli",
     "prettify": "kleros-scripts prettify",
     "lint": "kleros-scripts lint:js --config ./.eslintrc.js",
     "test": "jest --config ./jest.config.js",
