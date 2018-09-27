@@ -1,9 +1,10 @@
 import fs from 'fs'
 import path from 'path'
+
 import Web3 from 'web3'
 import solc from 'solc'
 
-export const _deplyTestArbitrableContract = async (provider) => {
+export const _deplyTestArbitrableContract = async provider => {
   // compile contract
   const inputFile = fs.readFileSync(
     path.resolve(__dirname, './contracts/TestArbitrable.sol')

@@ -3,7 +3,6 @@ import ArbitrableJSONInterface from 'kleros-interaction/build/contracts/Arbitrab
 import * as errorConstants from '../constants/error'
 import EventListener from '../utils/EventListener'
 import isRequired from '../utils/isRequired'
-import { getHttpUri, getURISuffix } from '../utils/uri'
 import { validateFileFromURI } from '../utils/validation'
 
 import StandardContract from './StandardContract'
@@ -23,6 +22,10 @@ class Arbitrable extends StandardContract {
     new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
 
   /**
+   * Fetch all Evidence submitted to the contract.
+   * @param {string} contractAddress - The address of the arbitrable contract.
+   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes
+   * @returns {object[]} An array of evidence objects
    */
   getEvidence = async (
     contractAddress = isRequired('contractAddress'),
@@ -45,24 +48,21 @@ class Arbitrable extends StandardContract {
         const args = await evidenceLog.returnValues
         const evidenceURI = args._evidence
 
-        const { file: evidenceJSON, isValid: evidenceValid } = await validateFileFromURI(
-          evidenceURI,
-          {
-            evidence: true,
-            strictHashes: options.strictHashes
-          }
-        )
+        const {
+          file: evidenceJSON,
+          isValid: evidenceValid
+        } = await validateFileFromURI(evidenceURI, {
+          evidence: true,
+          strictHashes: options.strictHashes
+        })
 
-        const { isValid: fileValid } = evidenceJSON.fileURI ?
-          await validateFileFromURI(
-            evidenceJSON.fileURI,
-            {
+        const { isValid: fileValid } = evidenceJSON.fileURI
+          ? await validateFileFromURI(evidenceJSON.fileURI, {
               evidence: true,
               strictHashes: options.strictHashes,
               hash: evidenceJSON.fileHash
-            }
-          ) :
-          { isValid: null}
+            })
+          : { isValid: null }
 
         const submittedAt = (await new Promise((resolve, reject) => {
           this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) => {
@@ -124,25 +124,22 @@ class Arbitrable extends StandardContract {
     const args = await metaEvidenceLog[0].returnValues
     const metaEvidenceUri = args._evidence
 
-    const { file: metaEvidenceJSON, isValid: metaEvidenceValid } = await validateFileFromURI(
-      metaEvidenceUri,
-      {
-        evidence: true,
-        strictHashes: options.strictHashes
-      }
-    )
+    const {
+      file: metaEvidenceJSON,
+      isValid: metaEvidenceValid
+    } = await validateFileFromURI(metaEvidenceUri, {
+      evidence: true,
+      strictHashes: options.strictHashes
+    })
 
     // validate file hash
-    const { isValid: fileValid } = metaEvidenceJSON.fileURI ?
-      await validateFileFromURI(
-        metaEvidenceJSON.fileURI,
-        {
+    const { isValid: fileValid } = metaEvidenceJSON.fileURI
+      ? await validateFileFromURI(metaEvidenceJSON.fileURI, {
           evidence: true,
           strictHashes: options.strictHashes,
           hash: metaEvidenceJSON.fileHash
-        }
-      ) :
-      { isValid: null }
+        })
+      : { isValid: null }
 
     return {
       ...metaEvidenceJSON,

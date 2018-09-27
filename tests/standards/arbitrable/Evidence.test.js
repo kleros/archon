@@ -59,14 +59,24 @@ describe('Evidence', () => {
       .reply(200, evidence2)
     // emit evidence with evidence = fakeURI
     let receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/${hash1}`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/${hash1}`
+      )
       .send({
         from: accounts[0],
         gas: 500000
       })
     expect(receipt.transactionHash).toBeTruthy()
     receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/${hash2}`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/${hash2}`
+      )
       .send({
         from: accounts[0],
         gas: 500000
@@ -125,14 +135,24 @@ describe('Evidence', () => {
       .reply(200, evidence1)
     // emit evidence with evidence = fakeURI
     let receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/${hash1}`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/${hash1}`
+      )
       .send({
         from: accounts[0],
         gas: 500000
       })
     expect(receipt.transactionHash).toBeTruthy()
     receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/${hash2}`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/${hash2}`
+      )
       .send({
         from: accounts[0],
         gas: 500000
@@ -182,7 +202,12 @@ describe('Evidence', () => {
       .reply(200, testFile)
     // emit evidence with evidence = fakeURI
     const receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/${evidenceHash}`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/${evidenceHash}`
+      )
       .send({
         from: accounts[0],
         gas: 500000
@@ -229,10 +254,15 @@ describe('Evidence', () => {
       .reply(200, evidenceJSON)
     nock(fakeHost)
       .get(`/${fileHash}`)
-      .reply(200, { title: "badFile" })
+      .reply(200, { title: 'badFile' })
     // emit evidence with evidence = fakeURI
     const receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/${evidenceHash}`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/${evidenceHash}`
+      )
       .send({
         from: accounts[0],
         gas: 500000
@@ -283,7 +313,12 @@ describe('Evidence', () => {
       .reply(200, testFile)
     // emit evidence with evidence = fakeURI
     const receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/${evidenceHash}`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/${evidenceHash}`
+      )
       .send({
         from: accounts[0],
         gas: 500000
@@ -331,10 +366,15 @@ describe('Evidence', () => {
       .reply(200, evidenceJSON)
     nock(fakeHost)
       .get(`/${fileHash}`)
-      .reply(200, {"title": "badFile"})
+      .reply(200, { title: 'badFile' })
     // emit evidence with evidence = fakeURI
     const receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/${evidenceHash}`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/${evidenceHash}`
+      )
       .send({
         from: accounts[0],
         gas: 500000
@@ -372,7 +412,12 @@ describe('Evidence', () => {
 
     // emit evidence with evidence = fakeURI
     const receipt = await arbitrableContract.methods
-      .emitEvidence("0x0000000000000000000000000000000000000000", 0, accounts[0], `${fakeHost}/test`)
+      .emitEvidence(
+        '0x0000000000000000000000000000000000000000',
+        0,
+        accounts[0],
+        `${fakeHost}/test`
+      )
       .send({
         from: accounts[0],
         gas: 500000
