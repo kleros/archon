@@ -147,6 +147,47 @@ class Arbitrable extends StandardContract {
       fileValid
     }
   }
+
+  /**
+   * Fetch the ruling for a dispute.
+   * @param {string} contractAddress - The address of the arbitrable contract.
+   * @param {string} arbitratorAddress - The address of the arbitrator contract.
+   * @param {number} disputeID - The index of the dispute.
+   * @param {object} options - Optional parameters. Includes fromBlock and toBlock.
+   * @returns {number} The number denoting the ruling.
+   */
+  getRuling = async (
+    contractAddress,
+    arbitratorAddress,
+    disputeID,
+    options = {}
+  ) => {
+    const contractInstance = this._loadContractInstance(contractAddress)
+
+    const rulingLog = await EventListener.getEventLogs(
+      contractInstance,
+      'Ruling',
+      options.fromBlock || 0,
+      options.toBlock || 'latest',
+      {
+        _arbitrator: arbitratorAddress,
+        _disputeID: disputeID,
+        ...options.filters
+      }
+    )
+
+    if (rulingLog.length === 0) return null
+    else if (rulingLog.length > 1)
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `There is more than one ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`
+        )
+      )
+
+    const args = await rulingLog[0].returnValues
+
+    return args._ruling
+  }
 }
 
 export default Arbitrable
