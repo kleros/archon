@@ -142,11 +142,16 @@ class Arbitrable extends StandardContract {
       : { isValid: null }
 
     // validate file hash
-    const { isValid: interfaceValid } = metaEvidenceJSON.evidenceDisplayInterfaceURL
-      ? await validateFileFromURI(metaEvidenceJSON.evidenceDisplayInterfaceURL, {
-          strictHashes: options.strictHashes,
-          hash: metaEvidenceJSON.evidenceDisplayInterfaceHash
-        })
+    const {
+      isValid: interfaceValid
+    } = metaEvidenceJSON.evidenceDisplayInterfaceURL
+      ? await validateFileFromURI(
+          metaEvidenceJSON.evidenceDisplayInterfaceURL,
+          {
+            strictHashes: options.strictHashes,
+            hash: metaEvidenceJSON.evidenceDisplayInterfaceHash
+          }
+        )
       : { isValid: null }
 
     return {

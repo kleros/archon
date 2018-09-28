@@ -1,1 +1,1 @@
-export const DisputeStatus = ["Waiting", "Appealable", "Solved"]
+export const DisputeStatus = ['Waiting', 'Appealable', 'Solved']
