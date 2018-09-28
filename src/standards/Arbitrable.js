@@ -141,10 +141,19 @@ class Arbitrable extends StandardContract {
         })
       : { isValid: null }
 
+    // validate file hash
+    const { isValid: interfaceValid } = metaEvidenceJSON.evidenceDisplayInterfaceURL
+      ? await validateFileFromURI(metaEvidenceJSON.evidenceDisplayInterfaceURL, {
+          strictHashes: options.strictHashes,
+          hash: metaEvidenceJSON.evidenceDisplayInterfaceHash
+        })
+      : { isValid: null }
+
     return {
       ...metaEvidenceJSON,
       metaEvidenceValid,
-      fileValid
+      fileValid,
+      interfaceValid
     }
   }
 
@@ -157,9 +166,9 @@ class Arbitrable extends StandardContract {
    * @returns {number} The number denoting the ruling.
    */
   getRuling = async (
-    contractAddress,
-    arbitratorAddress,
-    disputeID,
+    contractAddress = isRequired('contractAddress'),
+    arbitratorAddress = isRequired('arbitratorAddress'),
+    disputeID = isRequired('disputeID'),
     options = {}
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
