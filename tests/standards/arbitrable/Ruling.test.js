@@ -5,14 +5,6 @@ import Arbitrable from '../../../src/standards/Arbitrable'
 
 const provider = new Web3.providers.HttpProvider('http://localhost:8545')
 
-/**
- * Deploy a basic Arbitrable contract
- * @param {string[]} arguments - The argument array for the Arbitrable Contract
- * @example
- * ["0x211f01e59b425253c0a0e9a7bf612605b42ce82c", "0x0"] // [arbitratorAddress, extraData]
- * @returns {object} web3 contract object
- */
-
 describe('Ruling', () => {
   let web3
   let arbitrableInstance
