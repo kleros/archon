@@ -28,3 +28,28 @@ export const _deplyTestArbitrableContract = async provider => {
       gas: 500000
     })
 }
+
+export const _deplyTestArbitratorContract = async provider => {
+  // compile contract
+  const inputFile = fs.readFileSync(
+    path.resolve(__dirname, './contracts/TestArbitrator.sol')
+  )
+  const compiledContract = solc.compile(inputFile.toString(), 1)
+  const bytecode = compiledContract.contracts[':TestArbitrator'].bytecode
+  const abi = JSON.parse(
+    compiledContract.contracts[':TestArbitrator'].interface
+  )
+  // web3 contract
+  const web3 = new Web3(provider)
+  const accounts = await web3.eth.getAccounts()
+  const contract = new web3.eth.Contract(abi)
+  // deploy
+  return contract
+    .deploy({
+      data: bytecode
+    })
+    .send({
+      from: accounts[0],
+      gas: 500000
+    })
+}

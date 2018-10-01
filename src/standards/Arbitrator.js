@@ -34,7 +34,7 @@ class Arbitrator extends StandardContract {
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
 
-    return contractInstance.arbitrationCost(extraData)
+    return contractInstance.methods.arbitrationCost(extraData).call()
   }
 
   /**
@@ -51,7 +51,7 @@ class Arbitrator extends StandardContract {
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
 
-    return contractInstance.appealCost(disputeID, extraData)
+    return contractInstance.methods.appealCost(disputeID, extraData).call()
   }
 
   /**
@@ -66,7 +66,7 @@ class Arbitrator extends StandardContract {
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
 
-    return contractInstance.currentRuling(disputeID)
+    return contractInstance.methods.currentRuling(disputeID).call()
   }
 
   /**
@@ -81,7 +81,7 @@ class Arbitrator extends StandardContract {
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
 
-    return contractInstance.appealCost(disputeID)
+    return contractInstance.methods.disputeStatus(disputeID).call()
   }
 
   /**
@@ -155,6 +155,13 @@ class Arbitrator extends StandardContract {
     appealNumber = isRequired('appealNumber'),
     options = {}
   ) => {
+    if (appealNumber < 1)
+      throw new Error(
+        errorConstants.PARAMETER_ERROR(
+          `Appeal Number must be >= 1`
+        )
+      )
+
     const contractInstance = this._loadContractInstance(contractAddress)
 
     const appealDecisionLog = await EventListener.getEventLogs(
