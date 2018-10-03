@@ -43,41 +43,43 @@ class Arbitrable extends StandardContract {
 
     if (evidenceLogs.length === 0) return []
 
-    return evidenceLogs.map(async evidenceLog => {
-      const args = await evidenceLog.returnValues
-      const evidenceURI = args._evidence
+    return Promise.all(
+      evidenceLogs.map(async evidenceLog => {
+        const args = await evidenceLog.returnValues
+        const evidenceURI = args._evidence
 
-      const {
-        file: evidenceJSON,
-        isValid: evidenceValid
-      } = await validateFileFromURI(evidenceURI, {
-        evidence: true,
-        strictHashes: options.strictHashes
-      })
-
-      const { isValid: fileValid } = evidenceJSON.fileURI
-        ? await validateFileFromURI(evidenceJSON.fileURI, {
-            evidence: true,
-            strictHashes: options.strictHashes,
-            hash: evidenceJSON.fileHash
-          })
-        : { isValid: null }
-
-      const submittedAt = (await new Promise((resolve, reject) => {
-        this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) => {
-          if (error) reject(error)
-
-          resolve(result)
+        const {
+          file: evidenceJSON,
+          isValid: evidenceValid
+        } = await validateFileFromURI(evidenceURI, {
+          evidence: true,
+          strictHashes: options.strictHashes
         })
-      })).timestamp
 
-      return {
-        evidenceValid,
-        fileValid,
-        ...evidenceJSON,
-        ...{ submittedBy: args._party, submittedAt }
-      }
-    })
+        const { isValid: fileValid } = evidenceJSON.fileURI
+          ? await validateFileFromURI(evidenceJSON.fileURI, {
+              evidence: true,
+              strictHashes: options.strictHashes,
+              hash: evidenceJSON.fileHash
+            })
+          : { isValid: null }
+
+        const submittedAt = (await new Promise((resolve, reject) => {
+          this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) => {
+            if (error) reject(error)
+
+            resolve(result)
+          })
+        })).timestamp
+
+        return {
+          evidenceValid,
+          fileValid,
+          ...evidenceJSON,
+          ...{ submittedBy: args._party, submittedAt }
+        }
+      })
+    )
   }
 
   /**

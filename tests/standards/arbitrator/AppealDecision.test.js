@@ -1,6 +1,4 @@
 import Web3 from 'web3'
-import multihash from 'multihashes'
-import nock from 'nock'
 
 import { _deplyTestArbitratorContract } from '../../utils.js'
 import Arbitrator from '../../../src/standards/Arbitrator'
@@ -19,16 +17,17 @@ describe('AppealDecision', () => {
   })
 
   it('Fetch Appeal Decision log -- appeal 1', async () => {
-    const disputeID = 0;
-    const arbitrableContractAddress = '0x0000000000000000000000000000000000000000'
+    const disputeID = 0
+    const arbitrableContractAddress =
+      '0x0000000000000000000000000000000000000000'
 
-    const arbitratorContract = await _deplyTestArbitratorContract(provider)
+    const arbitratorContract = await _deplyTestArbitratorContract(
+      provider,
+      accounts[0]
+    )
 
     const receipt = await arbitratorContract.methods
-      .emitAppealDecision(
-        disputeID,
-        arbitrableContractAddress,
-      )
+      .emitAppealDecision(disputeID, arbitrableContractAddress)
       .send({
         from: accounts[0],
         gas: 500000
@@ -41,23 +40,26 @@ describe('AppealDecision', () => {
       1
     )
 
-    expect(appealCreationLog.arbitrableContract).toEqual(arbitrableContractAddress)
+    expect(appealCreationLog.arbitrableContract).toEqual(
+      arbitrableContractAddress
+    )
     expect(appealCreationLog.transactionHash).toEqual(receipt.transactionHash)
     expect(appealCreationLog.blockNumber).toBeTruthy()
     expect(appealCreationLog.logIndex).toBe(0)
     expect(appealCreationLog.appealedAt).toBeTruthy()
   })
   it('Missing log', async () => {
-    const disputeID = 0;
-    const arbitrableContractAddress = '0x0000000000000000000000000000000000000000'
+    const disputeID = 0
+    const arbitrableContractAddress =
+      '0x0000000000000000000000000000000000000000'
 
-    const arbitratorContract = await _deplyTestArbitratorContract(provider)
+    const arbitratorContract = await _deplyTestArbitratorContract(
+      provider,
+      accounts[0]
+    )
 
     const receipt = await arbitratorContract.methods
-      .emitAppealDecision(
-        disputeID,
-        arbitrableContractAddress,
-      )
+      .emitAppealDecision(disputeID, arbitrableContractAddress)
       .send({
         from: accounts[0],
         gas: 500000
@@ -66,7 +68,7 @@ describe('AppealDecision', () => {
 
     let errored = false
     try {
-      const appealCreationLog = await arbitratorInstance.getAppealDecision(
+      await arbitratorInstance.getAppealDecision(
         arbitratorContract.options.address,
         disputeID,
         2
@@ -79,16 +81,17 @@ describe('AppealDecision', () => {
     expect(errored).toBeTruthy()
   })
   it('Invalid appeal number', async () => {
-    const disputeID = 0;
-    const arbitrableContractAddress = '0x0000000000000000000000000000000000000000'
+    const disputeID = 0
+    const arbitrableContractAddress =
+      '0x0000000000000000000000000000000000000000'
 
-    const arbitratorContract = await _deplyTestArbitratorContract(provider)
+    const arbitratorContract = await _deplyTestArbitratorContract(
+      provider,
+      accounts[0]
+    )
 
     const receipt = await arbitratorContract.methods
-      .emitAppealDecision(
-        disputeID,
-        arbitrableContractAddress,
-      )
+      .emitAppealDecision(disputeID, arbitrableContractAddress)
       .send({
         from: accounts[0],
         gas: 500000
@@ -97,7 +100,7 @@ describe('AppealDecision', () => {
 
     let errored = false
     try {
-      const appealCreationLog = await arbitratorInstance.getAppealDecision(
+      await arbitratorInstance.getAppealDecision(
         arbitratorContract.options.address,
         disputeID,
         0

@@ -157,9 +157,7 @@ class Arbitrator extends StandardContract {
   ) => {
     if (appealNumber < 1)
       throw new Error(
-        errorConstants.PARAMETER_ERROR(
-          `Appeal Number must be >= 1`
-        )
+        errorConstants.PARAMETER_ERROR(`Appeal Number must be >= 1`)
       )
 
     const contractInstance = this._loadContractInstance(contractAddress)
