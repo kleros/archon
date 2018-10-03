@@ -1,6 +1,4 @@
 import Web3 from 'web3'
-import multihash from 'multihashes'
-import nock from 'nock'
 
 import { _deplyTestArbitratorContract } from '../../utils.js'
 import Arbitrator from '../../../src/standards/Arbitrator'
@@ -24,12 +22,13 @@ describe('AppealDecision', () => {
   })
   it('Get ArbitrationCost', async () => {
     const _arbitrationCost = 100000
-    const arbitratorContract = await _deplyTestArbitratorContract(provider)
+    const arbitratorContract = await _deplyTestArbitratorContract(
+      provider,
+      accounts[0]
+    )
 
     const receipt = await arbitratorContract.methods
-      .setArbitrationCost(
-        _arbitrationCost
-      )
+      .setArbitrationCost(_arbitrationCost)
       .send({
         from: accounts[0],
         gas: 500000
@@ -44,12 +43,13 @@ describe('AppealDecision', () => {
   })
   it('Get getAppealCost', async () => {
     const _appealCost = 100000
-    const arbitratorContract = await _deplyTestArbitratorContract(provider)
+    const arbitratorContract = await _deplyTestArbitratorContract(
+      provider,
+      accounts[0]
+    )
 
     const receipt = await arbitratorContract.methods
-      .setAppealCost(
-        _appealCost,
-      )
+      .setAppealCost(_appealCost)
       .send({
         from: accounts[0],
         gas: 500000
@@ -65,12 +65,13 @@ describe('AppealDecision', () => {
   })
   it('Get getCurrentRuling', async () => {
     const _currentRuling = 1
-    const arbitratorContract = await _deplyTestArbitratorContract(provider)
+    const arbitratorContract = await _deplyTestArbitratorContract(
+      provider,
+      accounts[0]
+    )
 
     const receipt = await arbitratorContract.methods
-      .setCurrentRuling(
-        _currentRuling,
-      )
+      .setCurrentRuling(_currentRuling)
       .send({
         from: accounts[0],
         gas: 500000
@@ -86,12 +87,13 @@ describe('AppealDecision', () => {
   })
   it('Get getDisputeStatus', async () => {
     const _disputeStatus = 1
-    const arbitratorContract = await _deplyTestArbitratorContract(provider)
+    const arbitratorContract = await _deplyTestArbitratorContract(
+      provider,
+      accounts[0]
+    )
 
     const receipt = await arbitratorContract.methods
-      .setDisputeStatus(
-        _disputeStatus,
-      )
+      .setDisputeStatus(_disputeStatus)
       .send({
         from: accounts[0],
         gas: 500000
@@ -105,5 +107,4 @@ describe('AppealDecision', () => {
 
     expect(disputeStatus).toEqual(`${_disputeStatus}`)
   })
-
 })

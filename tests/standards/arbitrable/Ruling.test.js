@@ -18,7 +18,10 @@ describe('Ruling', () => {
 
   it('get ruling on dispute', async () => {
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     const arbitratorAddress = '0x0000000000000000000000000000000000000000'
@@ -42,7 +45,10 @@ describe('Ruling', () => {
   })
   it('get ruling on dispute -- no ruling yet', async () => {
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     const arbitratorAddress = '0x0000000000000000000000000000000000000000'
@@ -57,7 +63,10 @@ describe('Ruling', () => {
   })
   it('get ruling on dispute -- multiple rulings same dispute', async () => {
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     const arbitratorAddress = '0x0000000000000000000000000000000000000000'

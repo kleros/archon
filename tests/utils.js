@@ -4,7 +4,7 @@ import path from 'path'
 import Web3 from 'web3'
 import solc from 'solc'
 
-export const _deplyTestArbitrableContract = async provider => {
+export const _deplyTestArbitrableContract = async (provider, account) => {
   // compile contract
   const inputFile = fs.readFileSync(
     path.resolve(__dirname, './contracts/TestArbitrable.sol')
@@ -16,7 +16,6 @@ export const _deplyTestArbitrableContract = async provider => {
   )
   // web3 contract
   const web3 = new Web3(provider)
-  const accounts = await web3.eth.getAccounts()
   const contract = new web3.eth.Contract(abi)
   // deploy
   return contract
@@ -24,12 +23,12 @@ export const _deplyTestArbitrableContract = async provider => {
       data: bytecode
     })
     .send({
-      from: accounts[0],
+      from: account,
       gas: 500000
     })
 }
 
-export const _deplyTestArbitratorContract = async provider => {
+export const _deplyTestArbitratorContract = async (provider, account) => {
   // compile contract
   const inputFile = fs.readFileSync(
     path.resolve(__dirname, './contracts/TestArbitrator.sol')
@@ -41,15 +40,15 @@ export const _deplyTestArbitratorContract = async provider => {
   )
   // web3 contract
   const web3 = new Web3(provider)
-  const accounts = await web3.eth.getAccounts()
   const contract = new web3.eth.Contract(abi)
+
   // deploy
   return contract
     .deploy({
       data: bytecode
     })
     .send({
-      from: accounts[0],
+      from: account,
       gas: 500000
     })
 }

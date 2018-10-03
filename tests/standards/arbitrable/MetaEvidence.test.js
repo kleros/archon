@@ -30,7 +30,10 @@ describe('MetaEvidence', () => {
     const hash = multihash.toB58String(encoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     const fakeHost = 'http://fake-address'
@@ -66,7 +69,10 @@ describe('MetaEvidence', () => {
     const hash = multihash.toB58String(encoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     const fakeHost = 'http://fake-address'
@@ -113,7 +119,10 @@ describe('MetaEvidence', () => {
     const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     nock(fakeHost)
@@ -163,7 +172,10 @@ describe('MetaEvidence', () => {
     const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     nock(fakeHost)
@@ -214,7 +226,10 @@ describe('MetaEvidence', () => {
     const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     nock(fakeHost)
@@ -265,7 +280,10 @@ describe('MetaEvidence', () => {
     const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     nock(fakeHost)
@@ -304,7 +322,10 @@ describe('MetaEvidence', () => {
     metaEvidenceJSON.selfHash = hash
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     const fakeHost = 'http://fake-address'
@@ -340,7 +361,10 @@ describe('MetaEvidence', () => {
     const hash = multihash.toB58String(encoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     const fakeHost = 'http://fake-address'
@@ -394,7 +418,10 @@ describe('MetaEvidence', () => {
     const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     nock(fakeHost)
@@ -450,7 +477,10 @@ describe('MetaEvidence', () => {
     const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     nock(fakeHost)
@@ -500,7 +530,10 @@ describe('MetaEvidence', () => {
     const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     nock(fakeHost)
@@ -550,7 +583,10 @@ describe('MetaEvidence', () => {
     const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
 
     // deploy arbitrable contract to test with
-    const arbitrableContract = await _deplyTestArbitrableContract(provider)
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
     expect(arbitrableContract.options.address).toBeTruthy()
 
     nock(fakeHost)
@@ -558,7 +594,7 @@ describe('MetaEvidence', () => {
       .reply(200, metaEvidenceJSON)
     nock(fakeHost)
       .get(`/test`)
-      .reply(200, {type: "other"})
+      .reply(200, { type: 'other' })
     // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
     const receipt = await arbitrableContract.methods
       .emitMetaEvidence(0, `${fakeHost}/${metaEvidenceHash}`)
