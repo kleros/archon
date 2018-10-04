@@ -1,4 +1,7 @@
+import packageJSON from '../package.json'
 import isRequired from './utils/isRequired'
+import * as validationUtils from './utils/validation'
+
 import { Arbitrable, Arbitrator } from './standards'
 
 /**
@@ -6,6 +9,10 @@ import { Arbitrable, Arbitrator } from './standards'
  * as defined in ERC 792 and ___insert_evidence_standard_ERC___.
  */
 class Archon {
+  modules = { Arbitrable, Arbitrator }
+  version = packageJSON.version
+  utils = { ...validationUtils }
+
   /**
    * Instantiates a new Archon instance that provides the public interface
    * to Kleros contracts and library. All params are required. To use an individual

@@ -6,9 +6,6 @@
 # Testing
 /coverage/
 
-# Documentation
-/docs/
-
 # Production
 /umd/
 /es/

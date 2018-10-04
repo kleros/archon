@@ -1,0 +1,175 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>archon.utils &#8212; archon.js 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Archon" href="archon.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="archon.html" title="Archon"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">archon.js 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="admonition note" id="utils">
+<p class="first admonition-title">Note</p>
+<p class="last">Archon depends on web3 1.0. This version of web3 is still in Beta so usage is subject to change unexpectedly with updates to the underlying library. _.</p>
+</div>
+<div class="section" id="archon-utils">
+<h1>archon.utils<a class="headerlink" href="#archon-utils" title="Permalink to this headline">¶</a></h1>
+<p>This package provides utility functions that can be used to validate hashes of <code class="docutils literal notranslate"><span class="pre">Evidence</span></code> and <code class="docutils literal notranslate"><span class="pre">MetaEvidence</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If using <code class="docutils literal notranslate"><span class="pre">ipfs://...</span></code> URIs the environment variable <code class="docutils literal notranslate"><span class="pre">IPFS_GATEWAY_URI</span></code> must be set so that data can be fetched and validated from the IPFS network.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="validatefilefromuri">
+<h2>validateFileFromURI()<a class="headerlink" href="#validatefilefromuri" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span><span class="nx">fileURI</span><span class="p">,</span> <span class="nx">options</span><span class="o">=</span><span class="p">{});</span>
+</pre></div>
+</div>
+<p>Takes a the URI of the file and validates the hash. In order for to validate the hash,
+the original <code class="docutils literal notranslate"><span class="pre">multihash</span></code> must be included as:</p>
+<ol class="arabic simple">
+<li>The suffix of the URI (e.g. <code class="docutils literal notranslate"><span class="pre">https://file-uri/QmUQMJbfiQYX7k6SWt8xMpR7g4vwtAYY1BTeJ8UY8JWRs9</span></code>)</li>
+<li>As a member of the <code class="docutils literal notranslate"><span class="pre">options</span></code> parameter (e.g. <code class="docutils literal notranslate"><span class="pre">options.hash</span> <span class="pre">=</span> <span class="pre">'https://file-uri/QmUQMJbfiQYX7k6SWt8xMpR7g4vwtAYY1BTeJ8UY8JWRs9'</span></code>)</li>
+<li>In the resulting file JSON using the key <code class="docutils literal notranslate"><span class="pre">selfHash</span></code></li>
+</ol>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">fileURI:</th><td class="field-body"><ul class="first simple">
+<li><code class="docutils literal notranslate"><span class="pre">String</span></code>: The URI where the file can be fetched. Currently only support protocols: <code class="docutils literal notranslate"><span class="pre">http://</span></code>, <code class="docutils literal notranslate"><span class="pre">ipfs://</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">options:</th><td class="field-body"><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">Object</span></code>: Optional parameters.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Object</span></code> - The file as well as if the file is valid</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nx">file</span><span class="o">:</span> <span class="p">{},</span>
+  <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// From a JSON interface object</span>
+<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
+  <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="p">{</span>
+    <span class="nx">hash</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+<span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">file</span><span class="o">:</span> <span class="p">{},</span>
+  <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">archon.utils</a><ul>
+<li><a class="reference internal" href="#validatefilefromuri">validateFileFromURI()</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#returns">Returns</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="archon.html"
+                        title="previous chapter">Archon</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/archon-utils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="archon.html" title="Archon"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">archon.js 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kleros.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
