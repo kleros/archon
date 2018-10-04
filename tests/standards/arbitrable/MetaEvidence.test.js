@@ -2,6 +2,7 @@ import Web3 from 'web3'
 import multihash from 'multihashes'
 import nock from 'nock'
 
+import { functions as hashFunctions } from '../../../src/constants/hash'
 import { _deplyTestArbitrableContract } from '../../utils.js'
 import Arbitrable from '../../../src/standards/Arbitrable'
 
@@ -23,6 +24,7 @@ describe('MetaEvidence', () => {
       title: 'test title',
       description: 'test description'
     }
+
     const encoded = multihash.encode(
       Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
       'keccak-256'

@@ -59,7 +59,7 @@
 the original <code class="docutils literal notranslate"><span class="pre">multihash</span></code> must be included as:</p>
 <ol class="arabic simple">
 <li>The suffix of the URI (e.g. <code class="docutils literal notranslate"><span class="pre">https://file-uri/QmUQMJbfiQYX7k6SWt8xMpR7g4vwtAYY1BTeJ8UY8JWRs9</span></code>)</li>
-<li>As a member of the <code class="docutils literal notranslate"><span class="pre">options</span></code> parameter (e.g. <code class="docutils literal notranslate"><span class="pre">options.hash</span> <span class="pre">=</span> <span class="pre">'https://file-uri/QmUQMJbfiQYX7k6SWt8xMpR7g4vwtAYY1BTeJ8UY8JWRs9'</span></code>)</li>
+<li>As a member of the <code class="docutils literal notranslate"><span class="pre">options</span></code> parameter (e.g. <code class="docutils literal notranslate"><span class="pre">options.hash</span> <span class="pre">=</span> <span class="pre">'QmUQMJbfiQYX7k6SWt8xMpR7g4vwtAYY1BTeJ8UY8JWRs9'</span></code>)</li>
 <li>In the resulting file JSON using the key <code class="docutils literal notranslate"><span class="pre">selfHash</span></code></li>
 </ol>
 <div class="section" id="parameters">
@@ -80,12 +80,36 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </tr>
 </tbody>
 </table>
+<p>The options parameter can include:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="8%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>hash</td>
+<td>string</td>
+<td>The original hash to compare the file against.</td>
+</tr>
+<tr class="row-odd"><td>strictHashes</td>
+<td>bool</td>
+<td>If true, an error will throw if hash validations fail.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="returns">
 <h3>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">Object</span></code> - The file as well as if the file is valid</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nx">file</span><span class="o">:</span> <span class="p">{},</span>
+  <span class="nx">file</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">file</span> <span class="nx">data</span> <span class="nx">or</span> <span class="nx">JSON</span><span class="o">&gt;</span><span class="p">,</span>
   <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
 <span class="p">}</span>
 </pre></div>
@@ -108,6 +132,180 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </div>
 </div>
 </div>
+<hr class="docutils" />
+<div class="section" id="validmultihash">
+<h2>validMultihash()<a class="headerlink" href="#validmultihash" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span><span class="nx">multihashHex</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">customHashFn</span><span class="o">=</span><span class="kc">null</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Verify if the <code class="docutils literal notranslate"><span class="pre">multihash</span></code> of a file matches the file contents.</p>
+<p>Supported hashing algorithms:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Multicode</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>sha3-512</td>
+<td>0x14</td>
+</tr>
+<tr class="row-odd"><td>sha3-384</td>
+<td>0x15</td>
+</tr>
+<tr class="row-even"><td>sha3-256</td>
+<td>0x16</td>
+</tr>
+<tr class="row-odd"><td>sha3-224</td>
+<td>0x17</td>
+</tr>
+<tr class="row-even"><td>keccak-224</td>
+<td>0x1A</td>
+</tr>
+<tr class="row-odd"><td>keccak-256</td>
+<td>0x1B</td>
+</tr>
+<tr class="row-even"><td>keccak-384</td>
+<td>0x1C</td>
+</tr>
+<tr class="row-odd"><td>keccak-512</td>
+<td>0x1D</td>
+</tr>
+</tbody>
+</table>
+<p>If a different hashing algorithm was used, pass it in the desired function with <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
+<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
+<div class="section" id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">multihashHex:</th><td class="field-body"><ul class="first simple">
+<li><code class="docutils literal notranslate"><span class="pre">String</span></code>: The base58 multihash hex string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">file:</th><td class="field-body"><ul class="first simple">
+<li><code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: The raw File or JSON object we are verifying the hash of.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">customHashFn:</th><td class="field-body"><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">Function</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;optional&gt;</span></code> A custom hashing algorithm used to generate original hash.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Bool</span></code> - If the provided hash and file are valid.</p>
+</div>
+<div class="section" id="id3">
+<h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// From a JSON interface object</span>
+<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
+  <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="p">{}</span>
+<span class="p">)</span>
+<span class="o">&gt;</span> <span class="kc">true</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="hashfile">
+<h2>hashFile()<a class="headerlink" href="#hashfile" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hashFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">multicode</span><span class="p">,</span> <span class="nx">customHashFn</span><span class="o">=</span><span class="kc">null</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Generate the base58 multihash hex of a file</p>
+<p>Supported multicodes:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Multicode</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>sha3-512</td>
+<td>0x14</td>
+</tr>
+<tr class="row-odd"><td>sha3-384</td>
+<td>0x15</td>
+</tr>
+<tr class="row-even"><td>sha3-256</td>
+<td>0x16</td>
+</tr>
+<tr class="row-odd"><td>sha3-224</td>
+<td>0x17</td>
+</tr>
+<tr class="row-even"><td>keccak-224</td>
+<td>0x1A</td>
+</tr>
+<tr class="row-odd"><td>keccak-256</td>
+<td>0x1B</td>
+</tr>
+<tr class="row-even"><td>keccak-384</td>
+<td>0x1C</td>
+</tr>
+<tr class="row-odd"><td>keccak-512</td>
+<td>0x1D</td>
+</tr>
+</tbody>
+</table>
+<p>If you would like to use a different hashing algorithm, pass the multicode with the desired <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
+<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
+<div class="section" id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">file:</th><td class="field-body"><ul class="first simple">
+<li><code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: The raw File or JSON object to hash</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">multicode:</th><td class="field-body"><ul class="first simple">
+<li><code class="docutils literal notranslate"><span class="pre">Number</span></code>: The multihash hashing algorithm identifier.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">customHashFn:</th><td class="field-body"><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">Function</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;optional&gt;</span></code> A custom hashing algorithm used to generate the hash.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">String</span></code> - base58 multihash of file.</p>
+</div>
+<div class="section" id="id7">
+<h3>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// From a JSON interface object</span>
+<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hashFile</span><span class="p">(</span>
+  <span class="p">{},</span>
+  <span class="mh">0x1B</span> <span class="c1">// 27 =&gt; keccak-256</span>
+<span class="p">)</span>
+<span class="o">&gt;</span> <span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -123,6 +321,18 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <li><a class="reference internal" href="#parameters">Parameters</a></li>
 <li><a class="reference internal" href="#returns">Returns</a></li>
 <li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validmultihash">validMultihash()</a><ul>
+<li><a class="reference internal" href="#id1">Parameters</a></li>
+<li><a class="reference internal" href="#id2">Returns</a></li>
+<li><a class="reference internal" href="#id3">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hashfile">hashFile()</a><ul>
+<li><a class="reference internal" href="#id5">Parameters</a></li>
+<li><a class="reference internal" href="#id6">Returns</a></li>
+<li><a class="reference internal" href="#id7">Example</a></li>
 </ul>
 </li>
 </ul>

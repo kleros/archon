@@ -2,7 +2,8 @@ import multihash from 'multihashes'
 import axios from 'axios'
 
 import * as errorConstants from '../constants/error'
-import hashFns from '../constants/hash'
+import { functions as hashFunctions } from '../constants/hash'
+import isRequired from './isRequired'
 
 import { getHttpUri, getURISuffix } from './uri'
 
@@ -14,21 +15,12 @@ import { getHttpUri, getURISuffix } from './uri'
  * @example
  * "https://fake-domain/files/QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv"
  * @param {object} options - The optional paramaters that can be used to validate the file.
- * @example
- * {
- *    evidence: true, // If true we will follow rules that apply to the evidence standard. Should be true for both metaEvidence and evidence.
- *    hash: "QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv", // The hash to validate against.
- *    hashingAlgorithm: (file) => {...}, // A custom hashing algorithm for computing unsupported hashes.
- *    strictHashes: true // If true error will be thrown if hash is invalid
- * }
  * @returns {object} The file as well as the validity of the hashes
- * @example
- * {
- *   file: {},
- *   isValid: true
- * }
  */
-export const validateFileFromURI = async (fileURI, options = {}) => {
+export const validateFileFromURI = async (
+  fileURI = isRequired('fileURI'),
+  options = {}
+) => {
   // A file is considered prevalidated if it is an IPFS uri
   // NOTE IPFS uri's are converted to HTTP using a gateway
   const { uri, preValidated } = getHttpUri(fileURI)
@@ -48,7 +40,7 @@ export const validateFileFromURI = async (fileURI, options = {}) => {
   let fileContent = fileResponse.data
   let selfHash = null
   // If we are validating evidence check for optional selfHash key
-  if (options.evidence && typeof fileContent === 'object') {
+  if (typeof fileContent === 'object') {
     const { selfHash: _selfHash, ..._fileContent } = fileContent
     fileContent = _fileContent
     selfHash = _selfHash
@@ -77,23 +69,55 @@ export const validateFileFromURI = async (fileURI, options = {}) => {
 
 /**
  * Validate a multihash.
- * @param {string} hashHex - The hexadecimal hash.
+ * @param {string} multihashHex - The hexadecimal hash.
  * @param {object|string} originalObject - The object we are validating against.
  * @param {fn} customHashFn - <optional> A custom hash function used for file.
  * @returns {bool} If the hashes match.
  */
-export const validMultihash = (hashHex, originalObject, customHashFn) => {
-  if (typeof originalObject === 'object')
-    originalObject = JSON.stringify(originalObject)
+export const validMultihash = (
+  multihashHex = isRequired('multihashHex'),
+  file = isRequired('file'),
+  customHashFn
+) => {
+  if (typeof file === 'object')
+    file = JSON.stringify(file)
+
   // Decode hash to get hashing algorithm
-  const decodedHash = multihash.decode(multihash.fromB58String(hashHex))
-  const hashFn = customHashFn || hashFns[decodedHash.name]
+  const decodedHash = multihash.decode(multihash.fromB58String(multihashHex))
+  const hashFn = customHashFn || hashFunctions[decodedHash.code]
   if (!hashFn)
     throw new Error(
-      `Hash validation error: No hash function for type ${decodedHash.name}`
+      `Hash validation error: No hash function for multicode ${decodedHash.code}`
     )
   // Hash the original object
-  const objectHash = hashFn(originalObject)
-
+  let objectHash = hashFn(file)
+  if (objectHash.indexOf('0x') !== 0)
+    objectHash = '0x' + objectHash
   return objectHash === decodedHash.digest.toString()
+}
+
+/**
+ * Create a base58 multihash from a file.
+ * @param {object|string} file - The object we are hashing.
+ * @param {number} multicode - The multicode of the hashing algorithm.
+ * @param {fn} customHashFn - <optional> A custom hash function used for file.
+ * @returns {string} base58 multihash.
+ */
+export const hashFile = (
+  file = isRequired('file'),
+  multicode = isRequired('multicode'),
+  customHashFn
+) => {
+  if (typeof file === 'object')
+    file = JSON.stringify(file)
+
+  const hashFn = options.customHashFn || hashFunctions[multicode]
+  if (!hashFn)
+    throw new Error(`Hashing Error: Unsupported multicode ${multicode}`)
+
+  const encoded = multihash.encode(
+    Buffer.from(hashFn(file), multicode)
+  )
+
+  return multihash.toB58String(encoded)
 }

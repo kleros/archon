@@ -3,7 +3,7 @@ import ArbitrableJSONInterface from 'kleros-interaction/build/contracts/Arbitrab
 import * as errorConstants from '../constants/error'
 import EventListener from '../utils/EventListener'
 import isRequired from '../utils/isRequired'
-import { validateFileFromURI } from '../utils/validation'
+import { validateFileFromURI } from '../utils/hashing'
 
 import StandardContract from './StandardContract'
 

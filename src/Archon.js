@@ -1,6 +1,6 @@
 import packageJSON from '../package.json'
 import isRequired from './utils/isRequired'
-import * as validationUtils from './utils/validation'
+import * as hashingUtils from './utils/hashing'
 
 import { Arbitrable, Arbitrator } from './standards'
 
@@ -11,7 +11,7 @@ import { Arbitrable, Arbitrator } from './standards'
 class Archon {
   modules = { Arbitrable, Arbitrator }
   version = packageJSON.version
-  utils = { ...validationUtils }
+  utils = { ...hashingUtils }
 
   /**
    * Instantiates a new Archon instance that provides the public interface
