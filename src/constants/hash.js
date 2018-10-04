@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import sha3 from 'js-sha3'
 
 export const functions = {

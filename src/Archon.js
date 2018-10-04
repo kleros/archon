@@ -1,7 +1,7 @@
 import packageJSON from '../package.json'
+
 import isRequired from './utils/isRequired'
 import * as hashingUtils from './utils/hashing'
-
 import { Arbitrable, Arbitrator } from './standards'
 
 /**

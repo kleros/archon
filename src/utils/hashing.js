@@ -3,8 +3,8 @@ import axios from 'axios'
 
 import * as errorConstants from '../constants/error'
 import { functions as hashFunctions } from '../constants/hash'
-import isRequired from './isRequired'
 
+import isRequired from './isRequired'
 import { getHttpUri, getURISuffix } from './uri'
 
 /**
@@ -12,8 +12,6 @@ import { getHttpUri, getURISuffix } from './uri'
  * or the hash can be passed via the options parameter or using the Evidence standard
  * self hash.
  * @param {string} fileURI - The URI of where the file data can be fetched
- * @example
- * "https://fake-domain/files/QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv"
  * @param {object} options - The optional paramaters that can be used to validate the file.
  * @returns {object} The file as well as the validity of the hashes
  */
@@ -70,7 +68,7 @@ export const validateFileFromURI = async (
 /**
  * Validate a multihash.
  * @param {string} multihashHex - The hexadecimal hash.
- * @param {object|string} originalObject - The object we are validating against.
+ * @param {object|string} file - The object we are validating against.
  * @param {fn} customHashFn - <optional> A custom hash function used for file.
  * @returns {bool} If the hashes match.
  */
@@ -79,20 +77,20 @@ export const validMultihash = (
   file = isRequired('file'),
   customHashFn
 ) => {
-  if (typeof file === 'object')
-    file = JSON.stringify(file)
+  if (typeof file === 'object') file = JSON.stringify(file)
 
   // Decode hash to get hashing algorithm
   const decodedHash = multihash.decode(multihash.fromB58String(multihashHex))
   const hashFn = customHashFn || hashFunctions[decodedHash.code]
   if (!hashFn)
     throw new Error(
-      `Hash validation error: No hash function for multicode ${decodedHash.code}`
+      `Hash validation error: No hash function for multicode ${
+        decodedHash.code
+      }`
     )
   // Hash the original object
   let objectHash = hashFn(file)
-  if (objectHash.indexOf('0x') !== 0)
-    objectHash = '0x' + objectHash
+  if (objectHash.indexOf('0x') !== 0) objectHash = '0x' + objectHash
   return objectHash === decodedHash.digest.toString()
 }
 
@@ -108,16 +106,13 @@ export const hashFile = (
   multicode = isRequired('multicode'),
   customHashFn
 ) => {
-  if (typeof file === 'object')
-    file = JSON.stringify(file)
+  if (typeof file === 'object') file = JSON.stringify(file)
 
-  const hashFn = options.customHashFn || hashFunctions[multicode]
+  const hashFn = customHashFn || hashFunctions[multicode]
   if (!hashFn)
     throw new Error(`Hashing Error: Unsupported multicode ${multicode}`)
 
-  const encoded = multihash.encode(
-    Buffer.from(hashFn(file), multicode)
-  )
+  const encoded = multihash.encode(Buffer.from(hashFn(file), multicode))
 
   return multihash.toB58String(encoded)
 }

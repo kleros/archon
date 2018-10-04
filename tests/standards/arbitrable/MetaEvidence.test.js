@@ -2,7 +2,6 @@ import Web3 from 'web3'
 import multihash from 'multihashes'
 import nock from 'nock'
 
-import { functions as hashFunctions } from '../../../src/constants/hash'
 import { _deplyTestArbitrableContract } from '../../utils.js'
 import Arbitrable from '../../../src/standards/Arbitrable'
 
