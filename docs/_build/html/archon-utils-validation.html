@@ -101,8 +101,7 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// From a JSON interface object</span>
-<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
   <span class="s1">&#39;&#39;</span><span class="p">,</span>
   <span class="p">{</span>
     <span class="nx">hash</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
@@ -161,6 +160,14 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, IPFS uses <code class="docutils literal notranslate"><span class="pre">sha3-256</span></code>. Many ethereum hashes are <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Solidity uses a different implementation of the <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code> algorithm. Hashes generated from smart contracts will need a <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> to verify.</p>
+</div>
 <p>If a different hashing algorithm was used, pass it in the desired function with <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
 <p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
 <div class="section" id="id1">
@@ -193,8 +200,7 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </div>
 <div class="section" id="id3">
 <h2>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// From a JSON interface object</span>
-<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
   <span class="s1">&#39;&#39;</span><span class="p">,</span>
   <span class="p">{}</span>
 <span class="p">)</span>
@@ -248,6 +254,14 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, IPFS uses <code class="docutils literal notranslate"><span class="pre">sha3-256</span></code>. Many ethereum hashes are <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Solidity uses a non-standard implementation of the <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code> algorithm. Hashes generated from smart contracts will need a <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> to verify.</p>
+</div>
 <p>If you would like to use a different hashing algorithm, pass the multicode with the desired <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
 <p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
 <div class="section" id="id5">
@@ -280,8 +294,7 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </div>
 <div class="section" id="id7">
 <h2>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// From a JSON interface object</span>
-<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hashFile</span><span class="p">(</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hashFile</span><span class="p">(</span>
   <span class="p">{},</span>
   <span class="mh">0x1B</span> <span class="c1">// 27 =&gt; keccak-256</span>
 <span class="p">)</span>

@@ -47,7 +47,6 @@ Example
 
 .. code-block:: javascript
 
-    // From a JSON interface object
     archon.utils.validateFileFromURI(
       '',
       {
@@ -85,6 +84,11 @@ keccak-384      0x1C
 keccak-512      0x1D
 ==============  =========
 
+.. note:: By default, IPFS uses ``sha3-256``. Many ethereum hashes are ``keccak-256``.
+
+.. warning:: Solidity uses a different implementation of the ``keccak-256`` algorithm. Hashes generated from smart contracts will need a ``customHashFn`` to verify.
+
+
 If a different hashing algorithm was used, pass it in the desired function with ``customHashFn``. The function should expect a single string parameter.
 
 A full list of possible algorithms and multicodes can be found `here
@@ -110,8 +114,7 @@ Example
 
 .. code-block:: javascript
 
-    // From a JSON interface object
-    archon.utils.validateFileFromURI(
+    archon.utils.validMultihash(
       '',
       {}
     )
@@ -143,6 +146,10 @@ keccak-384      0x1C
 keccak-512      0x1D
 ==============  =========
 
+.. note:: By default, IPFS uses ``sha3-256``. Many ethereum hashes are ``keccak-256``.
+
+.. warning:: Solidity uses a non-standard implementation of the ``keccak-256`` algorithm. Hashes generated from smart contracts will need a ``customHashFn`` to verify.
+
 If you would like to use a different hashing algorithm, pass the multicode with the desired ``customHashFn``. The function should expect a single string parameter.
 
 A full list of possible algorithms and multicodes can be found `here
@@ -168,7 +175,6 @@ Example
 
 .. code-block:: javascript
 
-    // From a JSON interface object
     archon.utils.hashFile(
       {},
       0x1B // 27 => keccak-256
