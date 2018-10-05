@@ -1,9 +1,11 @@
+import fs from 'fs'
+import path from "path"
 import Web3 from 'web3'
-import multihash from 'multihashes'
 import nock from 'nock'
 
 import { _deplyTestArbitrableContract } from '../../utils.js'
 import Arbitrable from '../../../src/standards/Arbitrable'
+import { multihashFile, validateFileFromURI, validMultihash } from '../../../src/utils/hashing'
 
 const provider = new Web3.providers.HttpProvider('http://localhost:8545')
 
@@ -24,11 +26,7 @@ describe('MetaEvidence', () => {
       description: 'test description'
     }
 
-    const encoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const hash = multihash.toB58String(encoded)
+    const hash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -54,20 +52,15 @@ describe('MetaEvidence', () => {
       arbitrableContract.options.address,
       0
     )
-    expect(metaEvidence.title).toEqual(metaEvidenceJSON.title)
-    expect(metaEvidence.description).toEqual(metaEvidenceJSON.description)
     expect(metaEvidence.metaEvidenceValid).toBeTruthy()
+    expect(metaEvidence.metaEvidenceJSON).toEqual(metaEvidenceJSON)
   })
   it('invalid metaEvidence -- hash in uri', async () => {
     const metaEvidenceJSON = {
       title: 'test title',
       description: 'test description'
     }
-    const encoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const hash = multihash.toB58String(encoded)
+    const hash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -100,11 +93,7 @@ describe('MetaEvidence', () => {
       type: 'file',
       data: '0x0'
     })
-    const fileEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(testFile)),
-      'keccak-256'
-    )
-    const fileHash = multihash.toB58String(fileEncoded)
+    const fileHash = multihashFile(testFile, 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -113,11 +102,7 @@ describe('MetaEvidence', () => {
       description: 'test description',
       fileURI: `${fakeHost}/${fileHash}`
     }
-    const metaEvidenceEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -153,11 +138,7 @@ describe('MetaEvidence', () => {
       type: 'file',
       data: '0x0'
     })
-    const fileEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(testFile)),
-      'keccak-256'
-    )
-    const fileHash = multihash.toB58String(fileEncoded)
+    const fileHash = multihashFile(testFile, 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -166,11 +147,7 @@ describe('MetaEvidence', () => {
       description: 'test description',
       fileURI: `${fakeHost}/${fileHash}`
     }
-    const metaEvidenceEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -206,11 +183,7 @@ describe('MetaEvidence', () => {
       type: 'file',
       data: '0x0'
     })
-    const fileEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(testFile)),
-      'keccak-256'
-    )
-    const fileHash = multihash.toB58String(fileEncoded)
+    const fileHash = multihashFile(testFile, 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -220,11 +193,7 @@ describe('MetaEvidence', () => {
       fileURI: `${fakeHost}/file`,
       fileHash
     }
-    const metaEvidenceEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -260,11 +229,7 @@ describe('MetaEvidence', () => {
       type: 'file',
       data: '0x0'
     })
-    const fileEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(testFile)),
-      'keccak-256'
-    )
-    const fileHash = multihash.toB58String(fileEncoded)
+    const fileHash = multihashFile(testFile, 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -274,11 +239,7 @@ describe('MetaEvidence', () => {
       fileURI: `${fakeHost}/file`,
       fileHash
     }
-    const metaEvidenceEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -314,11 +275,7 @@ describe('MetaEvidence', () => {
       title: 'test title',
       description: 'test description'
     }
-    const encoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const hash = multihash.toB58String(encoded)
+    const hash = multihashFile(metaEvidenceJSON, 0x1B)
 
     metaEvidenceJSON.selfHash = hash
 
@@ -346,8 +303,8 @@ describe('MetaEvidence', () => {
       arbitrableContract.options.address,
       0
     )
-    expect(metaEvidence.title).toEqual(metaEvidenceJSON.title)
-    expect(metaEvidence.description).toEqual(metaEvidenceJSON.description)
+    expect(metaEvidence.metaEvidenceJSON.title).toEqual(metaEvidenceJSON.title)
+    expect(metaEvidence.metaEvidenceJSON.description).toEqual(metaEvidenceJSON.description)
     expect(metaEvidence.metaEvidenceValid).toBeTruthy()
   })
   it('invalid metaEvidence -- strictHashes', async () => {
@@ -355,11 +312,7 @@ describe('MetaEvidence', () => {
       title: 'test title',
       description: 'test description'
     }
-    const encoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const hash = multihash.toB58String(encoded)
+    const hash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -399,11 +352,7 @@ describe('MetaEvidence', () => {
       type: 'file',
       data: '0x0'
     })
-    const fileEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(testFile)),
-      'keccak-256'
-    )
-    const fileHash = multihash.toB58String(fileEncoded)
+    const fileHash = multihashFile(testFile, 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -412,11 +361,7 @@ describe('MetaEvidence', () => {
       description: 'test description',
       fileURI: `${fakeHost}/${fileHash}`
     }
-    const metaEvidenceEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -458,11 +403,7 @@ describe('MetaEvidence', () => {
       type: 'file',
       data: '0x0'
     })
-    const fileEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(testFile)),
-      'keccak-256'
-    )
-    const fileHash = multihash.toB58String(fileEncoded)
+    const fileHash = multihashFile(testFile, 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -471,11 +412,7 @@ describe('MetaEvidence', () => {
       description: 'test description',
       evidenceDisplayInterfaceURL: `${fakeHost}/${fileHash}`
     }
-    const metaEvidenceEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -510,11 +447,7 @@ describe('MetaEvidence', () => {
       type: 'file',
       data: '0x0'
     })
-    const fileEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(testFile)),
-      'keccak-256'
-    )
-    const fileHash = multihash.toB58String(fileEncoded)
+    const fileHash = multihashFile(testFile, 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -524,11 +457,7 @@ describe('MetaEvidence', () => {
       evidenceDisplayInterfaceURL: `${fakeHost}/test`,
       evidenceDisplayInterfaceHash: fileHash
     }
-    const metaEvidenceEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -563,11 +492,7 @@ describe('MetaEvidence', () => {
       type: 'file',
       data: '0x0'
     })
-    const fileEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(testFile)),
-      'keccak-256'
-    )
-    const fileHash = multihash.toB58String(fileEncoded)
+    const fileHash = multihashFile(testFile, 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -577,11 +502,7 @@ describe('MetaEvidence', () => {
       evidenceDisplayInterfaceURL: `${fakeHost}/test`,
       evidenceDisplayInterfaceHash: fileHash
     }
-    const metaEvidenceEncoded = multihash.encode(
-      Buffer.from(web3.utils.keccak256(JSON.stringify(metaEvidenceJSON))),
-      'keccak-256'
-    )
-    const metaEvidenceHash = multihash.toB58String(metaEvidenceEncoded)
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
 
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
@@ -610,5 +531,29 @@ describe('MetaEvidence', () => {
       0
     )
     expect(metaEvidence.interfaceValid).toBeFalsy()
+  })
+  it.only('test -- get hashes', async () => {
+    var file = fs.readFileSync(path.resolve(__dirname, "./exampleEvidence.txt")).toString()
+
+    var nonStandardSha3Hash = multihashFile(
+      file,
+      0x1B, // keccak-256
+      Web3.utils.soliditySha3 // custom hash function
+    );
+
+    console.log(nonStandardSha3Hash); // 0x........
+
+    // Use the standard keccak-256 hashing algorithm
+    console.log(validMultihash(
+      file,
+      nonStandardSha3Hash
+    )) // false
+
+    // Use the solidity sha3 implementation
+    console.log(validMultihash(
+      file,
+      nonStandardSha3Hash,
+      Web3.utils.soliditySha3
+    )) // true
   })
 })

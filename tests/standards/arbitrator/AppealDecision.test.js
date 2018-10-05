@@ -45,7 +45,6 @@ describe('AppealDecision', () => {
     )
     expect(appealCreationLog.transactionHash).toEqual(receipt.transactionHash)
     expect(appealCreationLog.blockNumber).toBeTruthy()
-    expect(appealCreationLog.logIndex).toBe(0)
     expect(appealCreationLog.appealedAt).toBeTruthy()
   })
   it('Missing log', async () => {

@@ -4,9 +4,19 @@
 archon.js - Ethereum Arbitration Standard API
 =================================
 
-archon.js is a `web3.js <https://web3js.readthedocs.io/en/1.0/index.html>` backed api that provides functionality for interacting with
-smart contracts that follow the Arbitration Standard `ERC 792 <https://github.com/ethereum/EIPs/issues/792>`
-and the related Evidence Standard `ERC TBD`.
+Archon is a javascript library written to make it easy to interact with Arbitrable and
+Arbitrator contacts. In particular, Archon can be used to take care of a lot of the hash validation
+work that is part of the Evidence Standard (ERC ___).
+
+Archon can be used with all Arbitrable and Arbitrator contracts that follow the
+ERC 792 standard and has the functionality to interact with all standardized methods.
+
+To get up to speed on the standards please reference:
+
+ERC 792 Arbitration Standard
+ERC ___ Evidence Standard
+Implementation of an Arbitrable Contract
+Implementation of an Arbitrator Contract
 
 Contents:
 
@@ -17,6 +27,7 @@ Contents:
    :caption: User Documentation
 
    getting-started
+   hashing
 
 .. toctree::
     :maxdepth: 2

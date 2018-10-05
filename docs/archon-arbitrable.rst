@@ -50,8 +50,8 @@ the validity of the ``JSON`` and evidence file, and submission information.
 .. code-block:: javascript
 
     {
-      evidenceValid: <Bool>, // validity of evidence found at evidenceJSON.fileURI
-      fileValid: <Bool>, // validity of evidenceJSON
+      evidenceValid: <Bool>, // validity of evidenceJSON
+      fileValid: <Bool>, // validity of evidence found at evidenceJSON.fileURI
       evidenceJSON: <Object>,
       submittedBy: <String>,
       submittedAt: <Number> // epoch timestamp in seconds
@@ -124,7 +124,7 @@ filters       object  Additional filters for event logs.
 Returns
 -------
 
-``Object[]`` - An array of objects containing the ``MetaEvidenceJSON`` and the validity of the the hashes
+``Object`` - An objects containing the ``MetaEvidenceJSON`` and the validity of the the hashes
 
 .. code-block:: javascript
 
@@ -148,13 +148,12 @@ Example
         strictHashes: false
       }
     )
-    > [{
+    > {
         metaEvidenceValid: true,
         fileValid: true,
         interfaceValid: false,
         metaEvidenceJSON: {}
       }
-    ]
 
 -----------------------------------------------------------------------------
 

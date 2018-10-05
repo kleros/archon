@@ -9,6 +9,8 @@ export const getHttpUri = uri => {
   switch (protocol) {
     case 'http':
       break
+    case 'https':
+      break
     case 'ipfs':
       const ipfsID = getURISuffix(uri)
       uri = `${process.env.IPFS_GATEWAY_URI}/${ipfsID}`

@@ -122,12 +122,12 @@ Example
 
 -----------------------------------------------------------------------------
 
-hashFile()
+multihashFile()
 =====================
 
 .. code-block:: javascript
 
-    archon.utils.hashFile(file, multicode, customHashFn=null);
+    archon.utils.multihashFile(file, multicode, customHashFn=null);
 
 Generate the base58 multihash hex of a file
 
@@ -175,7 +175,7 @@ Example
 
 .. code-block:: javascript
 
-    archon.utils.hashFile(
+    archon.utils.multihashFile(
       {},
       0x1B // 27 => keccak-256
     )
