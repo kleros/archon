@@ -37,8 +37,8 @@ Returns
 .. code-block:: javascript
 
     {
-      file: <file data or JSON>,
-      isValid: true
+      file: <String|Object>,
+      isValid: <Bool>
     }
 
 -------
@@ -84,7 +84,7 @@ keccak-384      0x1C
 keccak-512      0x1D
 ==============  =========
 
-.. note:: By default, IPFS uses ``sha3-256``. Many ethereum hashes are ``keccak-256``.
+.. tip:: By default, IPFS uses ``sha3-256``. Many ethereum hashes are ``keccak-256``.
 
 .. warning:: Solidity uses a different implementation of the ``keccak-256`` algorithm. Hashes generated from smart contracts will need a ``customHashFn`` to verify.
 
@@ -146,7 +146,7 @@ keccak-384      0x1C
 keccak-512      0x1D
 ==============  =========
 
-.. note:: By default, IPFS uses ``sha3-256``. Many ethereum hashes are ``keccak-256``.
+.. tip:: By default, IPFS uses ``sha3-256``. Many ethereum hashes are ``keccak-256``.
 
 .. warning:: Solidity uses a non-standard implementation of the ``keccak-256`` algorithm. Hashes generated from smart contracts will need a ``customHashFn`` to verify.
 

@@ -98,7 +98,7 @@ See :ref:`archon.utils <utils>` for more.
 
 ------------------------------------------------------------------------------
 
-new Archon
+new Archon()
 ============
 
     The instance of Archon
@@ -119,7 +119,7 @@ Instantiate Archon as an object to have access to all initialized modules.
 
 ------------------------------------------------------------------------------
 
-archon.setProvider
+archon.setProvider()
 =====================
 
 .. code-block:: javascript

@@ -89,9 +89,13 @@ export const validMultihash = (
       }`
     )
   // Hash the original object
-  let objectHash = hashFn(file)
-  if (objectHash.indexOf('0x') !== 0) objectHash = '0x' + objectHash
-  return objectHash === decodedHash.digest.toString()
+  let fileHash = hashFn(file)
+  if (fileHash.indexOf('0x') !== 0) fileHash = '0x' + fileHash
+  // ensure they both have the same prefix
+  let decodedHashHex = decodedHash.digest.toString()
+  if (decodedHashHex.indexOf('0x') !== 0) decodedHashHex = '0x' + decodedHashHex
+
+  return fileHash === decodedHashHex
 }
 
 /**
@@ -112,7 +116,9 @@ export const hashFile = (
   if (!hashFn)
     throw new Error(`Hashing Error: Unsupported multicode ${multicode}`)
 
-  const encoded = multihash.encode(Buffer.from(hashFn(file), multicode))
+  let fileHash = hashFn(file)
+
+  const encoded = multihash.encode(Buffer.from(fileHash, multicode))
 
   return multihash.toB58String(encoded)
 }

@@ -2,9 +2,9 @@
 
 .. include:: include_announcement.rst
 
-========
+============
 archon.utils
-========
+============
 
 This package provides utility functions that can be used to validate hashes of ``Evidence`` and ``MetaEvidence``
 

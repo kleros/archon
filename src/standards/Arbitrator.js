@@ -135,8 +135,7 @@ class Arbitrator extends StandardContract {
       createdAt,
       arbitrableContract: args._arbitrable,
       blockNumber: creationLog.blockNumber,
-      transactionHash: creationLog.transactionHash,
-      logIndex: creationLog.logIndex
+      transactionHash: creationLog.transactionHash
     }
   }
 
@@ -191,8 +190,7 @@ class Arbitrator extends StandardContract {
       appealedAt,
       arbitrableContract: args._arbitrable,
       blockNumber: appealLog.blockNumber,
-      transactionHash: appealLog.transactionHash,
-      logIndex: appealLog.logIndex
+      transactionHash: appealLog.transactionHash
     }
   }
 }

@@ -75,7 +75,7 @@ class Arbitrable extends StandardContract {
         return {
           evidenceValid,
           fileValid,
-          ...evidenceJSON,
+          evidenceJSON,
           ...{ submittedBy: args._party, submittedAt }
         }
       })
