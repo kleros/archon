@@ -226,9 +226,9 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </div>
 </div>
 <hr class="docutils" />
-<div class="section" id="hashfile">
-<h2>hashFile()<a class="headerlink" href="#hashfile" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hashFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">multicode</span><span class="p">,</span> <span class="nx">customHashFn</span><span class="o">=</span><span class="kc">null</span><span class="p">);</span>
+<div class="section" id="multihashfile">
+<h2>multihashFile()<a class="headerlink" href="#multihashfile" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">multicode</span><span class="p">,</span> <span class="nx">customHashFn</span><span class="o">=</span><span class="kc">null</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Generate the base58 multihash hex of a file</p>
@@ -310,7 +310,7 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </div>
 <div class="section" id="id7">
 <h3>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hashFile</span><span class="p">(</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
   <span class="p">{},</span>
   <span class="mh">0x1B</span> <span class="c1">// 27 =&gt; keccak-256</span>
 <span class="p">)</span>
@@ -342,7 +342,7 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <li><a class="reference internal" href="#id3">Example</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#hashfile">hashFile()</a><ul>
+<li><a class="reference internal" href="#multihashfile">multihashFile()</a><ul>
 <li><a class="reference internal" href="#id5">Parameters</a></li>
 <li><a class="reference internal" href="#id6">Returns</a></li>
 <li><a class="reference internal" href="#id7">Example</a></li>

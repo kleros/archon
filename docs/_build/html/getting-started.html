@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Archon" href="archon.html" />
+    <link rel="next" title="Hashing Examples" href="hashing.html" />
     <link rel="prev" title="archon.js - Ethereum Arbitration Standard API" href="index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,7 +28,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="archon.html" title="Archon"
+          <a href="hashing.html" title="Hashing Examples"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="archon.js - Ethereum Arbitration Standard API"
@@ -48,6 +48,38 @@
 </div>
 <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic simple">
+<li>Install Archon from NPM</li>
+</ol>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">yarn</span> <span class="nx">add</span> <span class="nx">eth</span><span class="o">-</span><span class="nx">archon</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Import Archon into your project</li>
+</ol>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;Archon&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Initialize an instance of Archon using an Ethereum Provider.</li>
+</ol>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;https://mainnet.infura.io&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A provider is needed so that the codebase knows how to connect to the ethereum network. You can use a connection to your own node, or to a hosted node such as infura. <code class="docutils literal notranslate"><span class="pre">web3.js</span></code> will make RPC calls to the provider to fetch data from the blockchain.</p>
+</div>
+<ol class="arabic simple" start="4">
+<li>Set an environment variable for your IPFS gateway &lt;optional&gt;</li>
+</ol>
+<p>If you are using IPFS URI’s (ipfs://) you need to specify a trusted gateway so that
+the data can be fetched from the IPFS network.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">IPFS_GATEWAY_URI</span> <span class="o">=</span> <span class="s2">&quot;https://cloudflare-ipfs.com/ipfs/&quot;</span>
+</pre></div>
+</div>
+<p>Now you are all set! Use your <code class="docutils literal notranslate"><span class="pre">archon</span></code> object to interact with <code class="docutils literal notranslate"><span class="pre">arbitrable</span></code>
+and <code class="docutils literal notranslate"><span class="pre">arbitrator</span></code> contracts on the blockchain.</p>
 </div>
 
 
@@ -60,8 +92,8 @@
   <p class="topless"><a href="index.html"
                         title="previous chapter">archon.js - Ethereum Arbitration Standard API</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="archon.html"
-                        title="next chapter">Archon</a></p>
+  <p class="topless"><a href="hashing.html"
+                        title="next chapter">Hashing Examples</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -92,7 +124,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="archon.html" title="Archon"
+          <a href="hashing.html" title="Hashing Examples"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="archon.js - Ethereum Arbitration Standard API"

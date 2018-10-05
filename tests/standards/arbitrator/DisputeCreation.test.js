@@ -44,7 +44,6 @@ describe('DisputeCreation', () => {
     )
     expect(disputeCreationLog.transactionHash).toEqual(receipt.transactionHash)
     expect(disputeCreationLog.blockNumber).toBeTruthy()
-    expect(disputeCreationLog.logIndex).toBe(0)
     expect(disputeCreationLog.createdAt).toBeTruthy()
   })
   it('No log', async () => {

@@ -44,15 +44,28 @@
 </div>
 <div class="section" id="archon-js-ethereum-arbitration-standard-api">
 <h1>archon.js - Ethereum Arbitration Standard API<a class="headerlink" href="#archon-js-ethereum-arbitration-standard-api" title="Permalink to this headline">¶</a></h1>
-<p>archon.js is a <cite>web3.js &lt;https://web3js.readthedocs.io/en/1.0/index.html&gt;</cite> backed api that provides functionality for interacting with
-smart contracts that follow the Arbitration Standard <cite>ERC 792 &lt;https://github.com/ethereum/EIPs/issues/792&gt;</cite>
-and the related Evidence Standard <cite>ERC TBD</cite>.</p>
+<p>Archon is a javascript library written to make it easy to interact with Arbitrable and
+Arbitrator contacts. In particular, Archon can be used to take care of a lot of the hash validation
+work that is part of the Evidence Standard (ERC ___).</p>
+<p>Archon can be used with all Arbitrable and Arbitrator contracts that follow the
+ERC 792 standard and has the functionality to interact with all standardized methods.</p>
+<p>To get up to speed on the standards please reference:</p>
+<p>ERC 792 Arbitration Standard
+ERC ___ Evidence Standard
+Implementation of an Arbitrable Contract
+Implementation of an Arbitrator Contract</p>
 <p>Contents:</p>
 <p><a class="reference internal" href="genindex.html"><span class="std std-ref">Keyword Index</span></a>, <a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">User Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hashing.html">Hashing Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hashing.html#hash-and-validate-hosted-evidence">Hash and Validate Hosted Evidence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hashing.html#hash-and-validate-local-evidence">Hash and Validate Local Evidence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hashing.html#custom-hash-function-solidity-keccak-256">Custom Hash Function – Solidity keccak-256</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -85,7 +98,7 @@ and the related Evidence Standard <cite>ERC TBD</cite>.</p>
 <li class="toctree-l1"><a class="reference internal" href="archon-utils.html">archon.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="archon-utils.html#validatefilefromuri">validateFileFromURI()</a></li>
 <li class="toctree-l2"><a class="reference internal" href="archon-utils.html#validmultihash">validMultihash()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="archon-utils.html#hashfile">hashFile()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archon-utils.html#multihashfile">multihashFile()</a></li>
 </ul>
 </li>
 </ul>

@@ -155,7 +155,7 @@ class Arbitrable extends StandardContract {
       : { isValid: null }
 
     return {
-      ...metaEvidenceJSON,
+      metaEvidenceJSON,
       metaEvidenceValid,
       fileValid,
       interfaceValid

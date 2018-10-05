@@ -117,8 +117,8 @@
 <p><code class="docutils literal notranslate"><span class="pre">Object[]</span></code> - An array of objects containing the <code class="docutils literal notranslate"><span class="pre">EvidenceJSON</span></code>,
 the validity of the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> and evidence file, and submission information.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nx">evidenceValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// validity of evidence found at evidenceJSON.fileURI</span>
-  <span class="nx">fileValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// validity of evidenceJSON</span>
+  <span class="nx">evidenceValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// validity of evidenceJSON</span>
+  <span class="nx">fileValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// validity of evidence found at evidenceJSON.fileURI</span>
   <span class="nx">evidenceJSON</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span><span class="p">,</span>
   <span class="nx">submittedBy</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span>
   <span class="nx">submittedAt</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span> <span class="c1">// epoch timestamp in seconds</span>
@@ -226,7 +226,7 @@ external interface used to render the evidence found at <code class="docutils li
 </div>
 <div class="section" id="id2">
 <h3>Returns<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Object[]</span></code> - An array of objects containing the <code class="docutils literal notranslate"><span class="pre">MetaEvidenceJSON</span></code> and the validity of the the hashes</p>
+<p><code class="docutils literal notranslate"><span class="pre">Object</span></code> - An objects containing the <code class="docutils literal notranslate"><span class="pre">MetaEvidenceJSON</span></code> and the validity of the the hashes</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nx">metaEvidenceValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span>
   <span class="nx">fileValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span>
@@ -245,13 +245,12 @@ external interface used to render the evidence found at <code class="docutils li
     <span class="nx">strictHashes</span><span class="o">:</span> <span class="kc">false</span>
   <span class="p">}</span>
 <span class="p">)</span>
-<span class="o">&gt;</span> <span class="p">[{</span>
+<span class="o">&gt;</span> <span class="p">{</span>
     <span class="nx">metaEvidenceValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">fileValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">interfaceValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
     <span class="nx">metaEvidenceJSON</span><span class="o">:</span> <span class="p">{}</span>
   <span class="p">}</span>
-<span class="p">]</span>
 </pre></div>
 </div>
 </div>

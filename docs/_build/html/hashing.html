@@ -1,0 +1,206 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Hashing Examples &#8212; archon.js 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Archon" href="archon.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="archon.html" title="Archon"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">archon.js 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Archon depends on web3 1.0. This version of web3 is still in Beta so usage is subject to change unexpectedly with updates to the underlying library. _.</p>
+</div>
+<div class="section" id="hashing-examples">
+<h1>Hashing Examples<a class="headerlink" href="#hashing-examples" title="Permalink to this headline">¶</a></h1>
+<p>Here are some examples of evidence hashing and validation using archon. To see
+the full specification of Evidence and MetaEvidence see ERC ___ &lt;link&gt;</p>
+<hr class="docutils" />
+<div class="section" id="hash-and-validate-hosted-evidence">
+<h2>Hash and Validate Hosted Evidence<a class="headerlink" href="#hash-and-validate-hosted-evidence" title="Permalink to this headline">¶</a></h2>
+<p>In this example we will use an example evidence file hosted here:
+‘<a class="reference external" href="https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt">https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt</a>’</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;exampleEvidence.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">evidenceHash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
+    <span class="nx">data</span><span class="p">,</span>
+    <span class="mh">0x1B</span> <span class="c1">// keccak-256</span>
+  <span class="p">);</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">evidenceHash</span><span class="p">);</span> <span class="c1">// 0x........</span>
+
+  <span class="k">return</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
+    <span class="s1">&#39;https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt&#39;</span><span class="p">,</span>
+    <span class="p">{</span> <span class="nx">hash</span><span class="o">:</span> <span class="nx">evidenceHash</span> <span class="p">}</span>
+  <span class="p">)</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">isValid</span><span class="p">)</span> <span class="c1">// true</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="hash-and-validate-local-evidence">
+<h2>Hash and Validate Local Evidence<a class="headerlink" href="#hash-and-validate-local-evidence" title="Permalink to this headline">¶</a></h2>
+<p>In this example we will use an example evidence file hosted here:
+‘<a class="reference external" href="https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt">https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt</a>’</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;exampleEvidence.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">evidenceHash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
+    <span class="nx">data</span><span class="p">,</span>
+    <span class="mh">0x1B</span> <span class="c1">// keccak-256</span>
+  <span class="p">);</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">evidenceHash</span><span class="p">);</span> <span class="c1">// 0x........</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
+    <span class="nx">data</span><span class="p">,</span>
+    <span class="nx">evidenceHash</span>
+  <span class="p">))</span> <span class="c1">// true</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-hash-function-solidity-keccak-256">
+<h2>Custom Hash Function – Solidity keccak-256<a class="headerlink" href="#custom-hash-function-solidity-keccak-256" title="Permalink to this headline">¶</a></h2>
+<p>Solidity uses a non standard implementation of the keccak-256 hashing algorithm.
+Therefore if we are using hashes produced by a smart contract we might need to
+validate using a custom hashing function.</p>
+<p>In this example we will use an example evidence file hosted here:
+‘<a class="reference external" href="https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt">https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt</a>’</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="nx">vat</span> <span class="nx">Web3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;web3&#39;</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;exampleEvidence.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">nonStandardSha3Hash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
+    <span class="nx">data</span><span class="p">,</span>
+    <span class="mh">0x1B</span><span class="p">,</span> <span class="c1">// keccak-256</span>
+    <span class="nx">Web3</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">soliditySha3</span> <span class="c1">// custom hash function</span>
+  <span class="p">);</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">nonStandardSha3Hash</span><span class="p">);</span> <span class="c1">// 0x........</span>
+
+  <span class="c1">// Use the standard keccak-256 hashing algorithm</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
+    <span class="nx">data</span><span class="p">,</span>
+    <span class="nx">nonStandardSha3Hash</span>
+  <span class="p">))</span> <span class="c1">// false</span>
+
+  <span class="c1">// Use the solidity sha3 implementation</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
+    <span class="nx">data</span><span class="p">,</span>
+    <span class="nx">nonStandardSha3Hash</span><span class="p">,</span>
+    <span class="nx">Web3</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">soliditySha3</span>
+  <span class="p">))</span> <span class="c1">// true</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hashing Examples</a><ul>
+<li><a class="reference internal" href="#hash-and-validate-hosted-evidence">Hash and Validate Hosted Evidence</a></li>
+<li><a class="reference internal" href="#hash-and-validate-local-evidence">Hash and Validate Local Evidence</a></li>
+<li><a class="reference internal" href="#custom-hash-function-solidity-keccak-256">Custom Hash Function – Solidity keccak-256</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="getting-started.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="archon.html"
+                        title="next chapter">Archon</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/hashing.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="archon.html" title="Archon"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="Getting Started"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">archon.js 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kleros.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
