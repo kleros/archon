@@ -1,6 +1,6 @@
 export const getURISuffix = uri => uri.split('/').pop()
 
-export const getURIProtocol = uri => uri.split(':')[0].toLowerCase()
+export const getURIProtocol = uri => uri.replace('/', '').substr(0, 4)
 
 export const getHttpUri = uri => {
   const protocol = getURIProtocol(uri)
@@ -8,8 +8,6 @@ export const getHttpUri = uri => {
   let preValidated = false
   switch (protocol) {
     case 'http':
-      break
-    case 'https':
       break
     case 'ipfs':
       const ipfsID = getURISuffix(uri)

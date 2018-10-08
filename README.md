@@ -1,11 +1,10 @@
 # Archon
 
 <p align="center">
-  <a href="https://badge.fury.io/js/kleros-api"><img src="https://badge.fury.io/js/kleros-api.svg" alt="NPM Version"></a>
-  <a href="https://travis-ci.org/kleros/kleros-api"><img src="https://travis-ci.org/kleros/kleros-api.svg?branch=master" alt="Build Status"></a>
-  <a href="https://coveralls.io/github/kleros/kleros-api?branch=master"><img src="https://coveralls.io/repos/github/kleros/kleros-api/badge.svg?branch=master" alt="Coverage Status"></a>
-  <a href="https://david-dm.org/kleros/kleros-api"><img src="https://david-dm.org/kleros/kleros-api.svg" alt="Dependencies"></a>
-  <a href="https://david-dm.org/kleros/kleros-api?type=dev"><img src="https://david-dm.org/kleros/kleros-api/dev-status.svg" alt="Dev Dependencies"></a>
+  <a href="https://badge.fury.io/js/eth-archon"><img src="https://badge.fury.io/js/eth-archon.svg" alt="NPM Version"></a>
+  <a href="https://travis-ci.org/kleros/eth-archon"><img src="https://travis-ci.org/kleros/eth-archon.svg?branch=master" alt="Build Status"></a>
+  <a href="https://david-dm.org/kleros/eth-archon"><img src="https://david-dm.org/kleros/eth-archon.svg" alt="Dependencies"></a>
+  <a href="https://david-dm.org/kleros/eth-archon?type=dev"><img src="https://david-dm.org/kleros/eth-archon/dev-status.svg" alt="Dev Dependencies"></a>
   <a href="https://github.com/facebook/jest"><img src="https://img.shields.io/badge/tested_with-jest-99424f.svg" alt="Tested with Jest"></a>
   <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>
   <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" alt="Styled with Prettier"></a>
@@ -15,24 +14,28 @@
 
 > Archon provides functionality for Arbitrator and Arbitrable Ethereum smart contracts as defined in ERC 792.
 
+
+## Documentation
+
+See full documentation at https://archon.readthedocs.io/en/latest/index.html
+
 ## Installation
 
-TODO
+```
+npm install eth-archon
+```
 
 ## Basic Usage
 
-TODO
+```
+var Archon = require('eth-archon');
 
-## Development
+var archon = new Archon('ws://some.local-or-remote.node:8546');
 
-TOTO
-
-## Setup
-
-We assume that you have node and yarn installed.
-
-```sh
-yarn install
+> archon.arbitrator
+> archon.arbitrable
+> archon.utils
+> archon.version
 ```
 
 ## Test

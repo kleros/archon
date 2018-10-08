@@ -14,7 +14,7 @@ Hash and Validate Hosted Evidence
 =================================
 
 In this example we will use an example evidence file hosted here:
-'https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt'
+https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt
 
 .. code-block:: javascript
 
@@ -43,7 +43,7 @@ Hash and Validate Local Evidence
 =================================
 
 In this example we will use an example evidence file hosted here:
-'https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt'
+https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt
 
 .. code-block:: javascript
 

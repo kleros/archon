@@ -103,7 +103,7 @@ new Archon()
 
 .. code-block:: javascript
 
-    new Archon(ethereumProvider, ipfsGatewayURI='https://gateway.ipfs.io/ipfs/')
+    new Archon(ethereumProvider, ipfsGatewayURI='https://gateway.ipfs.io/ipfs')
 
 
 ----------
@@ -203,4 +203,4 @@ Example
     var archon = new Archon('http://localhost:8545');
 
     // change IPFS gateway
-    archon.setIpfsGateway('https://cloudflare-ipfs.com/ipfs/');
+    archon.setIpfsGateway('https://cloudflare-ipfs.com/ipfs');

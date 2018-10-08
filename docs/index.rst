@@ -1,8 +1,8 @@
 .. include:: include_announcement.rst
 
-=================================
-archon.js - Ethereum Arbitration Standard API
-=================================
+=============================================
+archon - Ethereum Arbitration Standard API
+=============================================
 
 Archon is a javascript library written to make it easy to interact with Arbitrable and
 Arbitrator contacts. In particular, Archon can be used to take care of a lot of the hash validation
@@ -13,10 +13,17 @@ ERC 792 standard and has the functionality to interact with all standardized met
 
 To get up to speed on the standards please reference:
 
-ERC 792 Arbitration Standard
+`ERC 792 Arbitration Standard
+<https://github.com/ethereum/EIPs/issues/792/>`_.
+
 ERC ___ Evidence Standard
-Implementation of an Arbitrable Contract
-Implementation of an Arbitrator Contract
+
+`Implementation of an Arbitrable Contract
+<https://github.com/kleros/kleros-interaction/blob/master/contracts/standard/arbitration/ArbitrableTransaction.sol/>`_.
+
+
+`Implementation of an Arbitrator Contract
+<https://github.com/kleros/kleros-interaction/blob/master/contracts/standard/arbitration/CentralizedArbitrator.sol/>`_.
 
 Contents:
 

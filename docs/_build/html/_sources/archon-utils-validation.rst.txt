@@ -16,7 +16,7 @@ the original ``multihash`` must be included as:
 Parameters
 ----------
 
-:fileURI: - ``String``: The URI where the file can be fetched. Currently only support protocols: ``http://``, ``ipfs://``
+:fileURI: - ``String``: The URI where the file can be fetched. Currently only support protocols: ``http(s)://``, ``/ipfs/``
 :options: - ``Object``: Optional parameters.
 
 The options parameter can include:
@@ -48,13 +48,15 @@ Example
 .. code-block:: javascript
 
     archon.utils.validateFileFromURI(
-      '',
+      'https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt',
       {
-        hash: ''
+        hash: 'Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj'
       }
-    )
+    ).then(data => {
+      console.log(data)
+    })
     > {
-      file: {},
+      file: 'This is an example evidence file. Here we could have...',
       isValid: true
     }
 

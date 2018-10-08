@@ -64,26 +64,27 @@ Example
 .. code-block:: javascript
 
     archon.arbitrable.getEvidence(
-      '',
+      '0x91697c78d48e9c83b71727ddd41ccdc95bb2f012',
       {
         strictHashes: true
       }
-    )
+    ).then(data => {
+      console.log(data)
+    })
     > [{
         evidenceValid: true,
         fileValid: true,
-        evidenceJSON: {},
-        submittedBy: '0x00000000',
-        submittedAt:
+        evidenceJSON: {"fileURI": "/ipfs/...", ...},
+        submittedBy: '0x8254175f6a6E0FE1f63e0eeb0ae487cCf3950BFb',
+        submittedAt: 1539022733
       },
       {
         evidenceValid: true,
         fileValid: true,
-        evidenceJSON: {},
-        submittedBy: '0x00000000',
-        submittedAt:
-      }
-    ]
+        evidenceJSON: {"fileURI": "/ipfs/...", ...},
+        submittedBy: '0xc55a13e36d93371a5b036a21d913a31CD2804ba4',
+        submittedAt: 1539025000
+      }]
 
 -----------------------------------------------------------------------------
 
@@ -142,17 +143,19 @@ Example
 .. code-block:: javascript
 
     archon.arbitrable.getMetaEvidence(
-      '',
+      '0x91697c78d48e9c83b71727ddd41ccdc95bb2f012',
       1,
       {
         strictHashes: false
       }
-    )
+    ).then(data => {
+      console.log(data)
+    })
     > {
         metaEvidenceValid: true,
         fileValid: true,
         interfaceValid: false,
-        metaEvidenceJSON: {}
+        metaEvidenceJSON: {"fileURI": "/ipfs/...", ...}
       }
 
 -----------------------------------------------------------------------------
@@ -198,8 +201,10 @@ Example
 .. code-block:: javascript
 
     archon.arbitrable.getRuling(
-      '',
-      '',
+      '0x91697c78d48e9c83b71727ddd41ccdc95bb2f012',
+      '0x211f01e59b425253c0a0e9a7bf612605b42ce82c',
       1
-    )
+    ).then(data => {
+      console.log(data)
+    })
     > 2

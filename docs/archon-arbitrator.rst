@@ -56,7 +56,11 @@ Example
 
 .. code-block:: javascript
 
-    archon.arbitrator.getArbitrationCost('')
+    archon.arbitrator.getArbitrationCost(
+      '0x211f01e59b425253c0a0e9a7bf612605b42ce82c'
+    ).then(data => {
+      console.log(data)
+    })
     > 150000000000000000
 
 -----------------------------------------------------------------------------
@@ -92,7 +96,11 @@ Example
 
 .. code-block:: javascript
 
-    archon.arbitrator.getAppealCost('')
+    archon.arbitrator.getAppealCost(
+      '0x211f01e59b425253c0a0e9a7bf612605b42ce82c'
+    ).then(data => {
+      console.log(data)
+    })
     > 150000000000000000
 
 -----------------------------------------------------------------------------
@@ -125,7 +133,12 @@ Example
 
 .. code-block:: javascript
 
-    archon.arbitrator.getCurrentRuling('', 15)
+    archon.arbitrator.getCurrentRuling(
+      '0x211f01e59b425253c0a0e9a7bf612605b42ce82c',
+      15
+    ).then(data => {
+      console.log(data)
+    })
     > 2
 
 -----------------------------------------------------------------------------
@@ -160,7 +173,12 @@ Example
 
 .. code-block:: javascript
 
-    archon.arbitrator.getDisputeStatus('', 15)
+    archon.arbitrator.getDisputeStatus(
+      '0x211f01e59b425253c0a0e9a7bf612605b42ce82c',
+      15
+    ).then(data => {
+      console.log(data)
+    })
     > 0
 
 -----------------------------------------------------------------------------
@@ -213,11 +231,16 @@ Example
 
 .. code-block:: javascript
 
-    archon.arbitrator.getDisputeCreation('', 15)
+    archon.arbitrator.getDisputeCreation(
+      '0x211f01e59b425253c0a0e9a7bf612605b42ce82c',
+      15
+    ).then(data => {
+      console.log(data)
+    })
     > {
-      createdAt,
-      arbitrableContract: "0x00000000",
-      blockNumber: 6459276,
+      createdAt: 1539000000,
+      arbitrableContract: "0x91697c78d48e9c83b71727ddd41ccdc95bb2f012",
+      blockNumber: 6459000,
       transactionHash: "0x340fdc6e32ef24eb14f9ccbd2ec614a8d0c7121e8d53f574529008f468481990"
     }
 
@@ -272,10 +295,16 @@ Example
 
 .. code-block:: javascript
 
-    archon.arbitrator.getAppealDecision('', 15, 1)
+    archon.arbitrator.getAppealDecision(
+      '0x211f01e59b425253c0a0e9a7bf612605b42ce82c',
+      15,
+      1
+    ).then(data => {
+      console.log(data)
+    })
     > {
-      appealedAt,
-      arbitrableContract: "0x00000000",
+      appealedAt: 1539025733,
+      arbitrableContract: "0x91697c78d48e9c83b71727ddd41ccdc95bb2f012",
       blockNumber: 6459276,
       transactionHash: "0x340fdc6e32ef24eb14f9ccbd2ec614a8d0c7121e8d53f574529008f468481990"
     }

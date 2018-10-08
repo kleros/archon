@@ -25,12 +25,12 @@ class Archon {
    */
   constructor(
     ethereumProvider,
-    ipfsGatewayURI = 'https://gateway.ipfs.io/ipfs/'
+    ipfsGatewayURI = 'https://gateway.ipfs.io/ipfs'
   ) {
     this.arbitrator = new Arbitrator(ethereumProvider)
     this.arbitrable = new Arbitrable(ethereumProvider)
 
-    process.env.IPFS_GATEWAY_URI = ipfsGatewayURI
+    this.setIpfsGateway(ipfsGatewayURI)
   }
 
   /**
@@ -47,6 +47,10 @@ class Archon {
    * @param {string} ipfsGatewayURI - The ipfs gateway URI.
    */
   setIpfsGateway = (ipfsGatewayURI = isRequired('ipfsGatewayURI')) => {
+    // remove trailing /
+    if (ipfsGatewayURI.lastIndexOf('/') === ipfsGatewayURI.length - 1)
+      ipfsGatewayURI = ipfsGatewayURI.substr(0, ipfsGatewayURI.length - 1)
+
     process.env.IPFS_GATEWAY_URI = ipfsGatewayURI
   }
 }
