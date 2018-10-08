@@ -1,6 +1,6 @@
-====
+======
 Archon
-====
+======
 
     Class
 
@@ -50,7 +50,7 @@ Example
 ------------------------------------------------------------------------------
 
 Archon.version
-============
+==============
 
     Property of Archon class and instance of archon
 
@@ -179,13 +179,13 @@ Example
 ------------------------------------------------------------------------------
 
 archon.setIpfsGateway()
-=====================
+=======================
 
 .. code-block:: javascript
 
     archon.setIpfsGateway(ipfsGatewayURI)
 
-Will change the ``IPFS`` gateway
+Will change the ``IPFS`` gateway environment variable.
 
 ----------
 Parameters
