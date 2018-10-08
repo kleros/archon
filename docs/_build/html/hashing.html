@@ -55,23 +55,23 @@ the full specification of Evidence and MetaEvidence see ERC ___ &lt;link&gt;</p>
 <h2>Hash and Validate Hosted Evidence<a class="headerlink" href="#hash-and-validate-hosted-evidence" title="Permalink to this headline">¶</a></h2>
 <p>In this example we will use an example evidence file hosted here:
 ‘<a class="reference external" href="https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt">https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt</a>’</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
 
-<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;exampleEvidence.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">evidenceHash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
-    <span class="nx">data</span><span class="p">,</span>
-    <span class="mh">0x1B</span> <span class="c1">// keccak-256</span>
-  <span class="p">);</span>
+<span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s2">&quot;exampleEvidence.txt&quot;</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
 
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">evidenceHash</span><span class="p">);</span> <span class="c1">// 0x........</span>
+<span class="kd">var</span> <span class="nx">evidenceHash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
+  <span class="nx">file</span><span class="p">,</span>
+  <span class="mh">0x1B</span> <span class="c1">// keccak-256</span>
+<span class="p">);</span>
 
-  <span class="k">return</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
-    <span class="s1">&#39;https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt&#39;</span><span class="p">,</span>
-    <span class="p">{</span> <span class="nx">hash</span><span class="o">:</span> <span class="nx">evidenceHash</span> <span class="p">}</span>
-  <span class="p">)</span>
-<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">isValid</span><span class="p">)</span> <span class="c1">// true</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">evidenceHash</span><span class="p">);</span> <span class="c1">// Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj</span>
+
+<span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
+  <span class="s1">&#39;https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt&#39;</span><span class="p">,</span>
+  <span class="p">{</span> <span class="nx">hash</span><span class="o">:</span> <span class="nx">evidenceHash</span> <span class="p">}</span>
+<span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">isValid</span><span class="p">);</span> <span class="c1">// true</span>
 <span class="p">})</span>
 </pre></div>
 </div>
@@ -81,22 +81,22 @@ the full specification of Evidence and MetaEvidence see ERC ___ &lt;link&gt;</p>
 <h2>Hash and Validate Local Evidence<a class="headerlink" href="#hash-and-validate-local-evidence" title="Permalink to this headline">¶</a></h2>
 <p>In this example we will use an example evidence file hosted here:
 ‘<a class="reference external" href="https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt">https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt</a>’</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
 
-<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;exampleEvidence.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">evidenceHash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
-    <span class="nx">data</span><span class="p">,</span>
-    <span class="mh">0x1B</span> <span class="c1">// keccak-256</span>
-  <span class="p">);</span>
+<span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s2">&quot;exampleEvidence.txt&quot;</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
 
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">evidenceHash</span><span class="p">);</span> <span class="c1">// 0x........</span>
+<span class="kd">var</span> <span class="nx">evidenceHash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
+  <span class="nx">file</span><span class="p">,</span>
+  <span class="mh">0x1B</span> <span class="c1">// keccak-256</span>
+<span class="p">);</span>
 
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
-    <span class="nx">data</span><span class="p">,</span>
-    <span class="nx">evidenceHash</span>
-  <span class="p">))</span> <span class="c1">// true</span>
-<span class="p">})</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">evidenceHash</span><span class="p">);</span> <span class="c1">// Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
+  <span class="nx">evidenceHash</span>
+  <span class="nx">file</span><span class="p">,</span>
+<span class="p">);</span> <span class="c1">// true</span>
 </pre></div>
 </div>
 </div>
@@ -105,34 +105,29 @@ the full specification of Evidence and MetaEvidence see ERC ___ &lt;link&gt;</p>
 <p>Solidity uses a non standard implementation of the keccak-256 hashing algorithm.
 Therefore if we are using hashes produced by a smart contract we might need to
 validate using a custom hashing function.</p>
-<p>In this example we will use an example evidence file hosted here:
-‘<a class="reference external" href="https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt">https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt</a>’</p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
-<span class="nx">vat</span> <span class="nx">Web3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;web3&#39;</span><span class="p">)</span>
-<span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Web3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;web3&#39;</span><span class="p">)</span>
 
-<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;exampleEvidence.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">nonStandardSha3Hash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
-    <span class="nx">data</span><span class="p">,</span>
-    <span class="mh">0x1B</span><span class="p">,</span> <span class="c1">// keccak-256</span>
-    <span class="nx">Web3</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">soliditySha3</span> <span class="c1">// custom hash function</span>
-  <span class="p">);</span>
+<span class="kd">var</span> <span class="nx">nonStandardSha3Hash</span> <span class="o">=</span> <span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
+  <span class="s1">&#39;12345&#39;</span><span class="p">,</span>
+  <span class="mh">0x1B</span><span class="p">,</span> <span class="c1">// keccak-256</span>
+  <span class="nx">Web3</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">soliditySha3</span> <span class="c1">// custom hash function</span>
+<span class="p">);</span>
 
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">nonStandardSha3Hash</span><span class="p">);</span> <span class="c1">// 0x........</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">nonStandardSha3Hash</span><span class="p">);</span> <span class="c1">// 4ZqgPBxZrZkSXnTBm8G162mXVCNNbWrZa25CcvfGtQV1pRHH6X8vfLi89RKTA4c6tyfQsD5vzGvJozs24XvcLysiC3U6b</span>
 
-  <span class="c1">// Use the standard keccak-256 hashing algorithm</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
-    <span class="nx">data</span><span class="p">,</span>
-    <span class="nx">nonStandardSha3Hash</span>
-  <span class="p">))</span> <span class="c1">// false</span>
+<span class="c1">// Use the standard keccak-256 hashing algorithm</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
+  <span class="s1">&#39;12345&#39;</span><span class="p">,</span>
+  <span class="nx">nonStandardSha3Hash</span>
+<span class="p">))</span> <span class="c1">// false</span>
 
-  <span class="c1">// Use the solidity sha3 implementation</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
-    <span class="nx">data</span><span class="p">,</span>
-    <span class="nx">nonStandardSha3Hash</span><span class="p">,</span>
-    <span class="nx">Web3</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">soliditySha3</span>
-  <span class="p">))</span> <span class="c1">// true</span>
-<span class="p">})</span>
+<span class="c1">// Use the solidity sha3 implementation</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
+  <span class="s1">&#39;12345&#39;</span><span class="p">,</span>
+  <span class="nx">nonStandardSha3Hash</span><span class="p">,</span>
+  <span class="nx">Web3</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">soliditySha3</span>
+<span class="p">))</span> <span class="c1">// true</span>
 </pre></div>
 </div>
 </div>

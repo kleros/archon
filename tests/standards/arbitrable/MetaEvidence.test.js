@@ -1,11 +1,10 @@
-import fs from 'fs'
-import path from "path"
+/* eslint-disable prettier/prettier */
 import Web3 from 'web3'
 import nock from 'nock'
 
 import { _deplyTestArbitrableContract } from '../../utils.js'
 import Arbitrable from '../../../src/standards/Arbitrable'
-import { multihashFile, validateFileFromURI, validMultihash } from '../../../src/utils/hashing'
+import { multihashFile } from '../../../src/utils/hashing'
 
 const provider = new Web3.providers.HttpProvider('http://localhost:8545')
 
@@ -304,7 +303,9 @@ describe('MetaEvidence', () => {
       0
     )
     expect(metaEvidence.metaEvidenceJSON.title).toEqual(metaEvidenceJSON.title)
-    expect(metaEvidence.metaEvidenceJSON.description).toEqual(metaEvidenceJSON.description)
+    expect(metaEvidence.metaEvidenceJSON.description).toEqual(
+      metaEvidenceJSON.description
+    )
     expect(metaEvidence.metaEvidenceValid).toBeTruthy()
   })
   it('invalid metaEvidence -- strictHashes', async () => {
@@ -531,29 +532,5 @@ describe('MetaEvidence', () => {
       0
     )
     expect(metaEvidence.interfaceValid).toBeFalsy()
-  })
-  it.only('test -- get hashes', async () => {
-    var file = fs.readFileSync(path.resolve(__dirname, "./exampleEvidence.txt")).toString()
-
-    var nonStandardSha3Hash = multihashFile(
-      file,
-      0x1B, // keccak-256
-      Web3.utils.soliditySha3 // custom hash function
-    );
-
-    console.log(nonStandardSha3Hash); // 0x........
-
-    // Use the standard keccak-256 hashing algorithm
-    console.log(validMultihash(
-      file,
-      nonStandardSha3Hash
-    )) // false
-
-    // Use the solidity sha3 implementation
-    console.log(validMultihash(
-      file,
-      nonStandardSha3Hash,
-      Web3.utils.soliditySha3
-    )) // true
   })
 })

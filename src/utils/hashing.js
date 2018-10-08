@@ -78,7 +78,6 @@ export const validMultihash = (
   customHashFn
 ) => {
   if (typeof file === 'object') file = JSON.stringify(file)
-
   // Decode hash to get hashing algorithm
   const decodedHash = multihash.decode(multihash.fromB58String(multihashHex))
 
@@ -114,13 +113,13 @@ export const multihashFile = (
 ) => {
   if (typeof file === 'object') file = JSON.stringify(file)
 
-  const hashFn = hashFunctions[multicode] || customHashFn || hashFunctions[multicode]
+  const hashFn = customHashFn || hashFunctions[multicode]
   if (!hashFn)
     throw new Error(`Hashing Error: Unsupported multicode ${multicode}`)
 
   let fileHash = hashFn(file)
-  console.log(fileHash)
-  const encoded = multihash.encode(Buffer.from(fileHash.substring(2)), multicode)
+
+  const encoded = multihash.encode(Buffer.from(fileHash), multicode)
 
   return multihash.toB58String(encoded)
 }
