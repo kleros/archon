@@ -41,6 +41,14 @@ class Archon {
     this.arbitrator.setProvider(provider)
     this.arbitrable.setProvider(provider)
   }
+
+  /**
+   * Set the IPFS gateway enviornemnt variable
+   * @param {string} ipfsGatewayURI - The ipfs gateway URI.
+   */
+  setIpfsGateway = (ipfsGatewayURI = isRequired('ipfsGatewayURI')) => {
+    process.env.IPFS_GATEWAY_URI = ipfsGatewayURI
+  }
 }
 
 export default Archon
