@@ -110,8 +110,9 @@ new Archon()
 Parameters
 ----------
 
-:ethereumProvider: - ``String|Object``: The provider object or URI of the Ethereum provider.
-:ipfsGatewayURI: - ``String``: The URI of a trusted ``IPFS`` gateway for fetching files from the IPFS network.
+1) ``ethereumProvider`` - ``String|Object``: The provider object or URI of the Ethereum provider.
+
+2) ``ipfsGatewayURI`` - ``String``: The URI of a trusted ``IPFS`` gateway for fetching files from the IPFS network.
 
 -------
 Example
@@ -151,7 +152,7 @@ Will change the ethereum provider.
 Parameters
 ----------
 
-1. :myProvider: - ``Object|String``: A provider object or URI.
+1. ``myProvider`` - ``Object|String``: A provider object or URI.
 
 -------
 Returns
@@ -191,7 +192,7 @@ Will change the ``IPFS`` gateway environment variable.
 Parameters
 ----------
 
-1. ``Object`` - ``ipfsGatewayURI``: .
+1. ``ipfsGatewayURI`` - ``Object``: A URI to a trusted IPFS gateway .
 
 -------
 Example
@@ -203,4 +204,4 @@ Example
     var archon = new Archon('http://localhost:8545');
 
     // change IPFS gateway
-    archon.setIpfsGateway('https://cloudflare-ipfs.com/ipfs');
+    archon.setIpfsGateway('https://cloudflare-ipfs.com/');

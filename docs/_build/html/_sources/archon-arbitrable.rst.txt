@@ -25,8 +25,9 @@ Fetch and validate evidence via the Arbitrable smart contract ``Evidence`` event
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrable contract.
-:options: - ``Object``: Optional parameters.
+1) ``contractAddress`` - ``String``: The address of the arbitrable contract.
+
+2) ``options`` - ``Object``: Optional parameters.
 
 The options parameter can include:
 
@@ -106,9 +107,11 @@ external interface used to render the evidence found at ``MetaEvidenceJSON.evide
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrable contract.
-:metaEvidenceID: - ``Number``: The unique identifier of the MetaEvidence event log.
-:options: - ``Object``: Optional parameters.
+1) ``contractAddress`` - ``String``: The address of the arbitrable contract.
+
+2) ``metaEvidenceID`` - ``Number``: The unique identifier of the MetaEvidence event log.
+
+3) ``options`` - ``Object``: Optional parameters.
 
 The options parameter can include:
 
@@ -173,10 +176,13 @@ Fetch the ruling of a dispute from the ``Ruling`` event log.
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrable contract.
-:arbitratorAddress: - ``String``: The address of the arbitrator contract.
-:disputeID: - ``Number``: The unique identifier of the dispute.
-:options: - ``Object``: Optional parameters.
+1) ``contractAddress`` - ``String``: The address of the arbitrable contract.
+
+2) ``arbitratorAddress`` - ``String``: The address of the arbitrator contract.
+
+3) ``disputeID`` - ``Number``: The unique identifier of the dispute.
+
+4) ``options`` - ``Object``: Optional parameters.
 
 The options parameter can include:
 

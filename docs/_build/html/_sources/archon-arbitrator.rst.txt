@@ -41,8 +41,9 @@ Get the arbitration cost based from ``extraData``.
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrator contract.
-:extraData: - ``String``: Hex string representing some bytes used by arbitrator for customization of dispute resolution.
+1) ``contractAddress`` - ``String``: The address of the arbitrator contract.
+
+2) ``extraData`` - ``String``: Hex string representing some bytes used by arbitrator for customization of dispute resolution.
 
 -------
 Returns
@@ -80,9 +81,11 @@ Get the cost of an appeal for a specific dispute base on ``extraData``.
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrator contract.
-:disputeID: - ``Number``: The unique identifier of the dispute.
-:extraData: - ``String``: Hex string representing some bytes used by arbitrator for customization of dispute resolution.
+1) ``contractAddress`` - ``String``: The address of the arbitrator contract.
+
+2) ``disputeID`` - ``Number``: The unique identifier of the dispute.
+
+3) ``extraData`` - ``String``: Hex string representing some bytes used by arbitrator for customization of dispute resolution.
 
 -------
 Returns
@@ -118,8 +121,9 @@ Get the current ruling of a dispute.
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrator contract.
-:disputeID: - ``Number``: The unique identifier of the dispute.
+1) ``contractAddress`` - ``String``: The address of the arbitrator contract.
+
+2) ``disputeID`` - ``Number``: The unique identifier of the dispute.
 
 -------
 Returns
@@ -158,8 +162,9 @@ Get the status of the dispute.
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrator contract.
-:disputeID: - ``Number``: The unique identifier of the dispute.
+1) ``contractAddress`` - ``String``: The address of the arbitrator contract.
+
+2) ``disputeID`` - ``Number``: The unique identifier of the dispute.
 
 -------
 Returns
@@ -196,9 +201,11 @@ Fetch the dispute creation event log and return data about the dispute creation.
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrator contract.
-:disputeID: - ``Number``: The unique identifier of the dispute.
-:options: - ``Object``: Optional parameters.
+1) ``contractAddress`` - ``String``: The address of the arbitrator contract.
+
+2) ``disputeID`` - ``Number``: The unique identifier of the dispute.
+
+3) ``options`` - ``Object``: Optional parameters.
 
 The options parameter can include:
 
@@ -259,10 +266,13 @@ Fetch the appeal decision event log and return data about the appeal.
 Parameters
 ----------
 
-:contractAddress: - ``String``: The address of the arbitrator contract.
-:disputeID: - ``Number``: The unique identifier of the dispute.
-:appealNumber: - ``Number``: The appeal number. Must be >= 1
-:options: - ``Object``: Optional parameters.
+1) ``contractAddress`` - ``String``: The address of the arbitrator contract.
+
+2) ``disputeID`` - ``Number``: The unique identifier of the dispute.
+
+3) ``appealNumber`` - ``Number``: The appeal number. Must be >= 1
+
+4) ``options`` - ``Object``: Optional parameters.
 
 The options parameter can include:
 

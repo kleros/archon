@@ -16,8 +16,9 @@ the original ``multihash`` must be included as:
 Parameters
 ----------
 
-:fileURI: - ``String``: The URI where the file can be fetched. Currently only support protocols: ``http(s)://``, ``/ipfs/``
-:options: - ``Object``: Optional parameters.
+1) ``fileURI`` - ``String``: The URI where the file can be fetched. Currently only support protocols: ``http(s)://``, ``/ipfs/``
+
+2) ``options`` - ``Object``: Optional parameters.
 
 The options parameter can include:
 
@@ -78,9 +79,11 @@ Verify if the ``multihash`` of a file matches the file contents.
 Parameters
 ----------
 
-:multihashHex: - ``String``: The base58 multihash hex string.
-:file: - ``Object|String``: The raw File or JSON object we are verifying the hash of.
-:customHashFn: - ``Function``: ``<optional>`` A custom hashing algorithm used to generate original hash.
+1) ``multihashHex`` - ``String``: The base58 multihash hex string.
+
+2) ``file`` - ``Object|String``: The raw File or JSON object we are verifying the hash of.
+
+3) ``customHashFn`` - ``Function``: ``<optional>`` A custom hashing algorithm used to generate original hash.
 
 -------
 Returns
@@ -95,8 +98,8 @@ Example
 .. code-block:: javascript
 
     archon.utils.validMultihash(
-      '',
-      {}
+      'Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj',
+      'This is an example evidence file. Here we could have some document...'
     )
     > true
 
@@ -117,9 +120,11 @@ Generate the base58 multihash hex of a file
 Parameters
 ----------
 
-:file: - ``Object|String``: The raw File or JSON object to hash
-:multicode: - ``Number``: The multihash hashing algorithm identifier.
-:customHashFn: - ``Function``: ``<optional>`` A custom hashing algorithm used to generate the hash.
+1) ``file`` - ``Object|String``: The raw File or JSON object to hash
+
+2) ``multicode`` - ``Number``: The multihash hashing algorithm identifier.
+
+3) ``customHashFn`` - ``Function``: ``<optional>`` A custom hashing algorithm used to generate the hash.
 
 -------
 Returns
@@ -134,7 +139,7 @@ Example
 .. code-block:: javascript
 
     archon.utils.multihashFile(
-      {},
+      'This is an example evidence file. Here we could have some document...',
       0x1B // 27 => keccak-256
     )
-    > ""
+    > "Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj"

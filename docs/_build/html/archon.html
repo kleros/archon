@@ -127,23 +127,10 @@
 </div>
 <div class="section" id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">ethereumProvider:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
-<li><code class="docutils literal notranslate"><span class="pre">String|Object</span></code>: The provider object or URI of the Ethereum provider.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">ipfsGatewayURI:</th><td class="field-body"><ul class="first last simple">
-<li><code class="docutils literal notranslate"><span class="pre">String</span></code>: The URI of a trusted <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> gateway for fetching files from the IPFS network.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">ethereumProvider</span></code> - <code class="docutils literal notranslate"><span class="pre">String|Object</span></code>: The provider object or URI of the Ethereum provider.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ipfsGatewayURI</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The URI of a trusted <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> gateway for fetching files from the IPFS network.</li>
+</ol>
 </div>
 <div class="section" id="id3">
 <h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
@@ -178,18 +165,7 @@
 <div class="section" id="id4">
 <h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
-<li><table class="first docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">myProvider:</th><td class="field-body"><ul class="first last">
-<li><code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: A provider object or URI.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
+<li><code class="docutils literal notranslate"><span class="pre">myProvider</span></code> - <code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: A provider object or URI.</li>
 </ol>
 </div>
 <div class="section" id="id5">
@@ -222,7 +198,7 @@
 <div class="section" id="id7">
 <h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
-<li><code class="docutils literal notranslate"><span class="pre">Object</span></code> - <code class="docutils literal notranslate"><span class="pre">ipfsGatewayURI</span></code>: .</li>
+<li><code class="docutils literal notranslate"><span class="pre">ipfsGatewayURI</span></code> - <code class="docutils literal notranslate"><span class="pre">Object</span></code>: A URI to a trusted IPFS gateway .</li>
 </ol>
 </div>
 <div class="section" id="id8">
@@ -231,7 +207,7 @@
 <span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">);</span>
 
 <span class="c1">// change IPFS gateway</span>
-<span class="nx">archon</span><span class="p">.</span><span class="nx">setIpfsGateway</span><span class="p">(</span><span class="s1">&#39;https://cloudflare-ipfs.com/ipfs&#39;</span><span class="p">);</span>
+<span class="nx">archon</span><span class="p">.</span><span class="nx">setIpfsGateway</span><span class="p">(</span><span class="s1">&#39;https://cloudflare-ipfs.com/&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>

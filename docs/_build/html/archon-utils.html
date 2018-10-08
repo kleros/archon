@@ -68,22 +68,10 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </ol>
 <div class="section" id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">fileURI:</th><td class="field-body"><ul class="first simple">
-<li><code class="docutils literal notranslate"><span class="pre">String</span></code>: The URI where the file can be fetched. Currently only support protocols: <code class="docutils literal notranslate"><span class="pre">http(s)://</span></code>, <code class="docutils literal notranslate"><span class="pre">/ipfs/</span></code></li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">options:</th><td class="field-body"><ul class="first last simple">
-<li><code class="docutils literal notranslate"><span class="pre">Object</span></code>: Optional parameters.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">fileURI</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The URI where the file can be fetched. Currently only support protocols: <code class="docutils literal notranslate"><span class="pre">http(s)://</span></code>, <code class="docutils literal notranslate"><span class="pre">/ipfs/</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> - <code class="docutils literal notranslate"><span class="pre">Object</span></code>: Optional parameters.</li>
+</ol>
 <p>The options parameter can include:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -198,27 +186,11 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
 <div class="section" id="id1">
 <h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">multihashHex:</th><td class="field-body"><ul class="first simple">
-<li><code class="docutils literal notranslate"><span class="pre">String</span></code>: The base58 multihash hex string.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">file:</th><td class="field-body"><ul class="first simple">
-<li><code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: The raw File or JSON object we are verifying the hash of.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">customHashFn:</th><td class="field-body"><ul class="first last simple">
-<li><code class="docutils literal notranslate"><span class="pre">Function</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;optional&gt;</span></code> A custom hashing algorithm used to generate original hash.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">multihashHex</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The base58 multihash hex string.</li>
+<li><code class="docutils literal notranslate"><span class="pre">file</span></code> - <code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: The raw File or JSON object we are verifying the hash of.</li>
+<li><code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> - <code class="docutils literal notranslate"><span class="pre">Function</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;optional&gt;</span></code> A custom hashing algorithm used to generate original hash.</li>
+</ol>
 </div>
 <div class="section" id="id2">
 <h3>Returns<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
@@ -227,8 +199,8 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <div class="section" id="id3">
 <h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
-  <span class="s1">&#39;&#39;</span><span class="p">,</span>
-  <span class="p">{}</span>
+  <span class="s1">&#39;Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;This is an example evidence file. Here we could have some document...&#39;</span>
 <span class="p">)</span>
 <span class="o">&gt;</span> <span class="kc">true</span>
 </pre></div>
@@ -292,27 +264,11 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
 <div class="section" id="id5">
 <h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">file:</th><td class="field-body"><ul class="first simple">
-<li><code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: The raw File or JSON object to hash</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">multicode:</th><td class="field-body"><ul class="first simple">
-<li><code class="docutils literal notranslate"><span class="pre">Number</span></code>: The multihash hashing algorithm identifier.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">customHashFn:</th><td class="field-body"><ul class="first last simple">
-<li><code class="docutils literal notranslate"><span class="pre">Function</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;optional&gt;</span></code> A custom hashing algorithm used to generate the hash.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">file</span></code> - <code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: The raw File or JSON object to hash</li>
+<li><code class="docutils literal notranslate"><span class="pre">multicode</span></code> - <code class="docutils literal notranslate"><span class="pre">Number</span></code>: The multihash hashing algorithm identifier.</li>
+<li><code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> - <code class="docutils literal notranslate"><span class="pre">Function</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;optional&gt;</span></code> A custom hashing algorithm used to generate the hash.</li>
+</ol>
 </div>
 <div class="section" id="id6">
 <h3>Returns<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
@@ -321,10 +277,10 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <div class="section" id="id7">
 <h3>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
-  <span class="p">{},</span>
+  <span class="s1">&#39;This is an example evidence file. Here we could have some document...&#39;</span><span class="p">,</span>
   <span class="mh">0x1B</span> <span class="c1">// 27 =&gt; keccak-256</span>
 <span class="p">)</span>
-<span class="o">&gt;</span> <span class="s2">&quot;&quot;</span>
+<span class="o">&gt;</span> <span class="s2">&quot;Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj&quot;</span>
 </pre></div>
 </div>
 </div>
