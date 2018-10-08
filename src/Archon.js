@@ -20,10 +20,17 @@ class Archon {
    * @param {string} ethereumProvider - The Web3.js Provider instance you would like the
    *                 Kleros.js library to use for interacting with the
    *                 Ethereum network.
+   * @param {string} ipfsGatewayURI - The URI of a trusted IPFS gateway in order to fetch
+   *                 files from the IPFS network. Defaults to "https://gateway.ipfs.io"
    */
-  constructor(ethereumProvider) {
+  constructor(
+    ethereumProvider,
+    ipfsGatewayURI = 'https://gateway.ipfs.io/ipfs/'
+  ) {
     this.arbitrator = new Arbitrator(ethereumProvider)
     this.arbitrable = new Arbitrable(ethereumProvider)
+
+    process.env.IPFS_GATEWAY_URI = ipfsGatewayURI
   }
 
   /**

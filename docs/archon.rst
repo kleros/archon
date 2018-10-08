@@ -101,7 +101,21 @@ See :ref:`archon.utils <utils>` for more.
 new Archon()
 ============
 
-    The instance of Archon
+.. code-block:: javascript
+
+    new Archon(ethereumProvider, ipfsGatewayURI='https://gateway.ipfs.io/ipfs/')
+
+
+----------
+Parameters
+----------
+
+:ethereumProvider: - ``String|Object``: The provider object or URI of the Ethereum provider.
+:ipfsGatewayURI: - ``String``: The URI of a trusted ``IPFS`` gateway for fetching files from the IPFS network.
+
+-------
+Example
+-------
 
 Instantiate Archon as an object to have access to all initialized modules.
 
@@ -110,7 +124,7 @@ Instantiate Archon as an object to have access to all initialized modules.
     var Archon = require('eth-archon');
 
     // "Web3.providers.givenProvider" will be set if in an Ethereum supported browser.
-    var archon = new Archon(Web3.givenProvider || 'ws://some.local-or-remote.node:8546');
+    var archon = new Archon('ws://some.local-or-remote.node:8546');
 
     > archon.arbitrator
     > archon.arbitrable
@@ -137,7 +151,7 @@ Will change the ethereum provider.
 Parameters
 ----------
 
-1. ``Object`` - ``myProvider``: :ref:`a provider object`.
+1. :myProvider: - ``Object|String``: A provider object or URI.
 
 -------
 Returns
@@ -163,3 +177,30 @@ Example
     archon.arbitrator.setProvider('https://mainnet.infura.io/')
 
 ------------------------------------------------------------------------------
+
+archon.setIpfsGateway()
+=====================
+
+.. code-block:: javascript
+
+    archon.setIpfsGateway(ipfsGatewayURI)
+
+Will change the ``IPFS`` gateway
+
+----------
+Parameters
+----------
+
+1. ``Object`` - ``ipfsGatewayURI``: .
+
+-------
+Example
+-------
+
+.. code-block:: javascript
+
+    var Archon = require('archon');
+    var archon = new Archon('http://localhost:8545');
+
+    // change IPFS gateway
+    archon.setIpfsGateway('https://cloudflare-ipfs.com/ipfs/');
