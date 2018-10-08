@@ -35,6 +35,7 @@ Contents:
 
    getting-started
    hashing
+   ipfs
 
 .. toctree::
     :maxdepth: 2

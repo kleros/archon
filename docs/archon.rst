@@ -103,7 +103,7 @@ new Archon()
 
 .. code-block:: javascript
 
-    new Archon(ethereumProvider, ipfsGatewayURI='https://gateway.ipfs.io/ipfs')
+    new Archon(ethereumProvider, ipfsGatewayURI='https://gateway.ipfs.io')
 
 
 ----------

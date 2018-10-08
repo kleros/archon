@@ -23,10 +23,7 @@ class Archon {
    * @param {string} ipfsGatewayURI - The URI of a trusted IPFS gateway in order to fetch
    *                 files from the IPFS network. Defaults to "https://gateway.ipfs.io"
    */
-  constructor(
-    ethereumProvider,
-    ipfsGatewayURI = 'https://gateway.ipfs.io/ipfs'
-  ) {
+  constructor(ethereumProvider, ipfsGatewayURI = 'https://gateway.ipfs.io') {
     this.arbitrator = new Arbitrator(ethereumProvider)
     this.arbitrable = new Arbitrable(ethereumProvider)
 

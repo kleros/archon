@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Archon" href="archon.html" />
+    <link rel="next" title="IPFS Links and Validation" href="ipfs.html" />
     <link rel="prev" title="Getting Started" href="getting-started.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,7 +28,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="archon.html" title="Archon"
+          <a href="ipfs.html" title="IPFS Links and Validation"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="getting-started.html" title="Getting Started"
@@ -44,7 +44,7 @@
             
   <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Archon depends on Web3 1.0. This version of <code class="docutils literal notranslate"><span class="pre">web3</span></code> is still in Beta so usage may change unexpectedly and/or bugs may arise until a stable version of Web3 1.0 is released. _.</p>
+<p class="last">Archon depends on Web3 1.0. This version of <code class="docutils literal notranslate"><span class="pre">web3</span></code> is still in Beta so usage may change unexpectedly and/or bugs may arise until a stable version of Web3 1.0 is released.</p>
 </div>
 <div class="section" id="hashing-examples">
 <h1>Hashing Examples<a class="headerlink" href="#hashing-examples" title="Permalink to this headline">¶</a></h1>
@@ -100,6 +100,7 @@ the full specification of Evidence and MetaEvidence see ERC ___ &lt;link&gt;</p>
 </pre></div>
 </div>
 </div>
+<hr class="docutils" />
 <div class="section" id="custom-hash-function-solidity-keccak-256">
 <h2>Custom Hash Function – Solidity keccak-256<a class="headerlink" href="#custom-hash-function-solidity-keccak-256" title="Permalink to this headline">¶</a></h2>
 <p>Solidity uses a non standard implementation of the keccak-256 hashing algorithm.
@@ -131,6 +132,58 @@ validate using a custom hashing function.</p>
 </pre></div>
 </div>
 </div>
+<hr class="docutils" />
+<div class="section" id="supported-hashing-algorithms-and-hashcodes">
+<h2>Supported Hashing Algorithms and Hashcodes<a class="headerlink" href="#supported-hashing-algorithms-and-hashcodes" title="Permalink to this headline">¶</a></h2>
+<p>Supported hashing algorithms:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Multicode</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>sha3-512</td>
+<td>0x14</td>
+</tr>
+<tr class="row-odd"><td>sha3-384</td>
+<td>0x15</td>
+</tr>
+<tr class="row-even"><td>sha3-256</td>
+<td>0x16</td>
+</tr>
+<tr class="row-odd"><td>sha3-224</td>
+<td>0x17</td>
+</tr>
+<tr class="row-even"><td>keccak-224</td>
+<td>0x1A</td>
+</tr>
+<tr class="row-odd"><td>keccak-256</td>
+<td>0x1B</td>
+</tr>
+<tr class="row-even"><td>keccak-384</td>
+<td>0x1C</td>
+</tr>
+<tr class="row-odd"><td>keccak-512</td>
+<td>0x1D</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">By default, IPFS uses <code class="docutils literal notranslate"><span class="pre">sha3-256</span></code>. Many ethereum hashes are <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Solidity uses a different implementation of the <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code> algorithm. Hashes generated from smart contracts will need a <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> to verify.</p>
+</div>
+<p>If a different hashing algorithm was used, pass it in the desired function with <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
+<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
+</div>
 </div>
 
 
@@ -145,6 +198,7 @@ validate using a custom hashing function.</p>
 <li><a class="reference internal" href="#hash-and-validate-hosted-evidence">Hash and Validate Hosted Evidence</a></li>
 <li><a class="reference internal" href="#hash-and-validate-local-evidence">Hash and Validate Local Evidence</a></li>
 <li><a class="reference internal" href="#custom-hash-function-solidity-keccak-256">Custom Hash Function – Solidity keccak-256</a></li>
+<li><a class="reference internal" href="#supported-hashing-algorithms-and-hashcodes">Supported Hashing Algorithms and Hashcodes</a></li>
 </ul>
 </li>
 </ul>
@@ -153,8 +207,8 @@ validate using a custom hashing function.</p>
   <p class="topless"><a href="getting-started.html"
                         title="previous chapter">Getting Started</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="archon.html"
-                        title="next chapter">Archon</a></p>
+  <p class="topless"><a href="ipfs.html"
+                        title="next chapter">IPFS Links and Validation</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -185,7 +239,7 @@ validate using a custom hashing function.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="archon.html" title="Archon"
+          <a href="ipfs.html" title="IPFS Links and Validation"
              >next</a> |</li>
         <li class="right" >
           <a href="getting-started.html" title="Getting Started"

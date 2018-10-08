@@ -21,7 +21,7 @@ Getting Started
 
 .. code-block:: javascript
 
-    var archon = new Archon('https://mainnet.infura.io', 'https://gateway.ipfs.io/ipfs')
+    var archon = new Archon('https://mainnet.infura.io', 'https://gateway.ipfs.io')
 
 .. note:: A provider is needed so that the codebase knows how to connect to the ethereum network. You can use a connection to your own node, or to a hosted node such as infura. ``web3.js`` will make RPC calls to the provider to fetch data from the blockchain.
 

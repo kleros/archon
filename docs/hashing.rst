@@ -64,6 +64,8 @@ https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt
       file,
     ); // true
 
+------------------------------------------------------------------------------
+
 Custom Hash Function -- Solidity keccak-256
 ===========================================
 
@@ -96,3 +98,10 @@ validate using a custom hashing function.
       nonStandardSha3Hash,
       Web3.utils.soliditySha3
     )) // true
+
+------------------------------------------------------------------------------
+
+Supported Hashing Algorithms and Hashcodes
+==========================================
+
+.. include:: include_supported_hashes.rst

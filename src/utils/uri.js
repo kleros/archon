@@ -10,8 +10,7 @@ export const getHttpUri = uri => {
     case 'http':
       break
     case 'ipfs':
-      const ipfsID = getURISuffix(uri)
-      uri = `${process.env.IPFS_GATEWAY_URI}/${ipfsID}`
+      uri = `${process.env.IPFS_GATEWAY_URI}/${uri}`
       preValidated = true
       break
     default:

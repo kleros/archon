@@ -49,7 +49,8 @@ export const validateFileFromURI = async (
   if (
     !validMultihash(
       options.hash || selfHash || getURISuffix(fileURI),
-      fileContent
+      fileContent,
+      options.customHashFn
     )
   ) {
     isValid = false
