@@ -66,8 +66,18 @@ https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt
 
 ------------------------------------------------------------------------------
 
-Custom Hash Function -- Solidity keccak-256
-===========================================
+Custom Hash Functions
+=====================
+
+If you would like to use a custom hashing function in your multihash you can pass
+one to the hashing functions. You might want to do this in cases where you used a non-standard
+implementation of the hashing algorithm, or where there needs to be some data transformations
+before you apply the hashing algorithm, as is the case with `IPFS` hashes.
+This is only for the initial hashing algorithm in the multihash.
+
+------------------------------
+Example -- Solidity keccak-256
+------------------------------
 
 Solidity uses a non standard implementation of the keccak-256 hashing algorithm.
 Therefore if we are using hashes produced by a smart contract we might need to

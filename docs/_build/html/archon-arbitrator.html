@@ -48,11 +48,20 @@
 </div>
 <div class="section" id="archon-arbitrator">
 <h1>archon.arbitrator<a class="headerlink" href="#archon-arbitrator" title="Permalink to this headline">¶</a></h1>
-<p>This package provides the functionality to interact with Arbitrator contracts.</p>
+<p>This package provides the functionality to interact with Arbitrator contracts.
+An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span></code> contract makes rulings on disputes.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">See <a class="reference external" href="https://github.com/ethereum/EIPs/issues/792">ERC 792</a>. for more information on <code class="docutils literal notranslate"><span class="pre">Arbitrator</span></code> contracts.</p>
+</div>
 <hr class="docutils" />
 <div class="section" id="disputestatus">
 <h2>DisputeStatus<a class="headerlink" href="#disputestatus" title="Permalink to this headline">¶</a></h2>
 <p>The dispute status enum used to map a <code class="docutils literal notranslate"><span class="pre">DisputeStatus</span></code> int to plain text status.</p>
+<p>The enum is defined in the <code class="docutils literal notranslate"><span class="pre">Arbitrator</span></code> contract as follows:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span> <span class="n">DisputeStatus</span> {<span class="n">Waiting</span>, <span class="n">Appealable</span>, <span class="n">Solved</span>}
+</pre></div>
+</div>
 <div class="section" id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrator</span><span class="p">.</span><span class="nx">DisputeStatus</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>

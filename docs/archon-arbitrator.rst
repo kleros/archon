@@ -7,6 +7,9 @@ archon.arbitrator
 =================
 
 This package provides the functionality to interact with Arbitrator contracts.
+An ``Arbitrator`` contract makes rulings on disputes.
+
+.. tip:: See `ERC 792 <https://github.com/ethereum/EIPs/issues/792>`_. for more information on ``Arbitrator`` contracts.
 
 ------------------------------------------------------------------------------
 
@@ -14,6 +17,12 @@ DisputeStatus
 =====================
 
 The dispute status enum used to map a ``DisputeStatus`` int to plain text status.
+
+The enum is defined in the ``Arbitrator`` contract as follows:
+
+.. code-block:: guess
+
+    enum DisputeStatus {Waiting, Appealable, Solved}
 
 -------
 Example

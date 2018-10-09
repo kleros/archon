@@ -6,7 +6,12 @@
 archon.arbitrable
 =================
 
-This package provides the functionality to interact with Arbitrable contracts.
+This package provides the functionality to interact with ``Arbitrable`` smart contracts. An
+arbitrable contract creates a dispute and enforces the ruling made by an arbitrator.
+Arbitrable contracts are also responsible for ``Evidence`` and ``MetaEvidence``.
+
+.. tip:: See `ERC 792 <https://github.com/ethereum/EIPs/issues/792>`_. for more information on ``Arbitrable`` contracts.
+
 
 ------------------------------------------------------------------------------
 

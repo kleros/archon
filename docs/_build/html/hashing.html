@@ -101,8 +101,15 @@ the full specification of Evidence and MetaEvidence see ERC ___ &lt;link&gt;</p>
 </div>
 </div>
 <hr class="docutils" />
-<div class="section" id="custom-hash-function-solidity-keccak-256">
-<h2>Custom Hash Function – Solidity keccak-256<a class="headerlink" href="#custom-hash-function-solidity-keccak-256" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="custom-hash-functions">
+<h2>Custom Hash Functions<a class="headerlink" href="#custom-hash-functions" title="Permalink to this headline">¶</a></h2>
+<p>If you would like to use a custom hashing function in your multihash you can pass
+one to the hashing functions. You might want to do this in cases where you used a non-standard
+implementation of the hashing algorithm, or where there needs to be some data transformations
+before you apply the hashing algorithm, as is the case with <cite>IPFS</cite> hashes.
+This is only for the initial hashing algorithm in the multihash.</p>
+<div class="section" id="example-solidity-keccak-256">
+<h3>Example – Solidity keccak-256<a class="headerlink" href="#example-solidity-keccak-256" title="Permalink to this headline">¶</a></h3>
 <p>Solidity uses a non standard implementation of the keccak-256 hashing algorithm.
 Therefore if we are using hashes produced by a smart contract we might need to
 validate using a custom hashing function.</p>
@@ -130,6 +137,7 @@ validate using a custom hashing function.</p>
   <span class="nx">Web3</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">soliditySha3</span>
 <span class="p">))</span> <span class="c1">// true</span>
 </pre></div>
+</div>
 </div>
 </div>
 <hr class="docutils" />
@@ -197,7 +205,10 @@ validate using a custom hashing function.</p>
 <li><a class="reference internal" href="#">Hashing Examples</a><ul>
 <li><a class="reference internal" href="#hash-and-validate-hosted-evidence">Hash and Validate Hosted Evidence</a></li>
 <li><a class="reference internal" href="#hash-and-validate-local-evidence">Hash and Validate Local Evidence</a></li>
-<li><a class="reference internal" href="#custom-hash-function-solidity-keccak-256">Custom Hash Function – Solidity keccak-256</a></li>
+<li><a class="reference internal" href="#custom-hash-functions">Custom Hash Functions</a><ul>
+<li><a class="reference internal" href="#example-solidity-keccak-256">Example – Solidity keccak-256</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#supported-hashing-algorithms-and-hashcodes">Supported Hashing Algorithms and Hashcodes</a></li>
 </ul>
 </li>
