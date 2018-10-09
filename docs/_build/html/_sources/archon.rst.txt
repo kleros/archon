@@ -1,3 +1,5 @@
+.. _archon:
+
 ======
 Archon
 ======
@@ -178,6 +180,8 @@ Example
     archon.arbitrator.setProvider('https://mainnet.infura.io/')
 
 ------------------------------------------------------------------------------
+
+.. _set-ipfs-gateway:
 
 archon.setIpfsGateway()
 =======================

@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="archon.arbitrable" href="archon-arbitrable.html" />
-    <link rel="prev" title="IPFS Links and Validation" href="ipfs.html" /> 
+    <link rel="prev" title="Evidence Examples" href="evidence.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,7 +31,7 @@
           <a href="archon-arbitrable.html" title="archon.arbitrable"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="ipfs.html" title="IPFS Links and Validation"
+          <a href="evidence.html" title="Evidence Examples"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">eth-archon 0.1.0 documentation</a> &#187;</li> 
       </ul>
@@ -43,7 +43,7 @@
           <div class="body" role="main">
             
   <div class="section" id="archon">
-<h1>Archon<a class="headerlink" href="#archon" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Archon<a class="headerlink" href="#archon" title="Permalink to this headline">¶</a></h1>
 <blockquote>
 <div>Class</div></blockquote>
 <p>This is the main class of Archon.</p>
@@ -95,12 +95,12 @@
 </pre></div>
 </div>
 <p>Contains the version of the <code class="docutils literal notranslate"><span class="pre">archon</span></code> container object.</p>
-<div class="section" id="id1">
-<h3>Returns<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">String</span></code>: The current version.</p>
 </div>
-<div class="section" id="id2">
-<h3>Example<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">version</span><span class="p">;</span>
 <span class="o">&gt;</span> <span class="s2">&quot;1.0.0&quot;</span>
 </pre></div>
@@ -132,8 +132,8 @@
 <li><code class="docutils literal notranslate"><span class="pre">ipfsGatewayURI</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The URI of a trusted <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> gateway for fetching files from the IPFS network.</li>
 </ol>
 </div>
-<div class="section" id="id3">
-<h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>Instantiate Archon as an object to have access to all initialized modules.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
 
@@ -162,18 +162,18 @@
 <p class="first admonition-title">Note</p>
 <p class="last">If called on the <code class="docutils literal notranslate"><span class="pre">archon</span></code> class it will update the provider for all submodules. <code class="docutils literal notranslate"><span class="pre">archon.arbitrable</span></code>, <code class="docutils literal notranslate"><span class="pre">archon.arbitrator</span></code>, etc.</p>
 </div>
-<div class="section" id="id4">
-<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><code class="docutils literal notranslate"><span class="pre">myProvider</span></code> - <code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: A provider object or URI.</li>
 </ol>
 </div>
-<div class="section" id="id5">
-<h3>Returns<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">Boolean</span></code></p>
 </div>
-<div class="section" id="id6">
-<h3>Example<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;archon&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">);</span>
 
@@ -186,23 +186,23 @@
 <span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrator</span><span class="p">.</span><span class="nx">setProvider</span><span class="p">(</span><span class="s1">&#39;https://mainnet.infura.io/&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
 <hr class="docutils" />
+</div>
+</div>
 <div class="section" id="archon-setipfsgateway">
-<h2>archon.setIpfsGateway()<a class="headerlink" href="#archon-setipfsgateway" title="Permalink to this headline">¶</a></h2>
+<span id="set-ipfs-gateway"></span><h2>archon.setIpfsGateway()<a class="headerlink" href="#archon-setipfsgateway" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">setIpfsGateway</span><span class="p">(</span><span class="nx">ipfsGatewayURI</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Will change the <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> gateway environment variable.</p>
-<div class="section" id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><code class="docutils literal notranslate"><span class="pre">ipfsGatewayURI</span></code> - <code class="docutils literal notranslate"><span class="pre">Object</span></code>: A URI to a trusted IPFS gateway .</li>
 </ol>
 </div>
-<div class="section" id="id8">
-<h3>Example<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id9">
+<h3>Example<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;archon&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">);</span>
 
@@ -229,25 +229,25 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#archon-version">Archon.version</a><ul>
-<li><a class="reference internal" href="#id1">Returns</a></li>
-<li><a class="reference internal" href="#id2">Example</a></li>
+<li><a class="reference internal" href="#id2">Returns</a></li>
+<li><a class="reference internal" href="#id3">Example</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#archon-utils">Archon.utils</a></li>
 <li><a class="reference internal" href="#new-archon">new Archon()</a><ul>
 <li><a class="reference internal" href="#parameters">Parameters</a></li>
-<li><a class="reference internal" href="#id3">Example</a></li>
+<li><a class="reference internal" href="#id4">Example</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#archon-setprovider">archon.setProvider()</a><ul>
-<li><a class="reference internal" href="#id4">Parameters</a></li>
-<li><a class="reference internal" href="#id5">Returns</a></li>
-<li><a class="reference internal" href="#id6">Example</a></li>
+<li><a class="reference internal" href="#id5">Parameters</a></li>
+<li><a class="reference internal" href="#id6">Returns</a></li>
+<li><a class="reference internal" href="#id7">Example</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#archon-setipfsgateway">archon.setIpfsGateway()</a><ul>
-<li><a class="reference internal" href="#id7">Parameters</a></li>
-<li><a class="reference internal" href="#id8">Example</a></li>
+<li><a class="reference internal" href="#id8">Parameters</a></li>
+<li><a class="reference internal" href="#id9">Example</a></li>
 </ul>
 </li>
 </ul>
@@ -255,8 +255,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="ipfs.html"
-                        title="previous chapter">IPFS Links and Validation</a></p>
+  <p class="topless"><a href="evidence.html"
+                        title="previous chapter">Evidence Examples</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="archon-arbitrable.html"
                         title="next chapter">archon.arbitrable</a></p>
@@ -293,7 +293,7 @@
           <a href="archon-arbitrable.html" title="archon.arbitrable"
              >next</a> |</li>
         <li class="right" >
-          <a href="ipfs.html" title="IPFS Links and Validation"
+          <a href="evidence.html" title="Evidence Examples"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">eth-archon 0.1.0 documentation</a> &#187;</li> 
       </ul>

@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Archon" href="archon.html" />
+    <link rel="next" title="Evidence Examples" href="evidence.html" />
     <link rel="prev" title="Hashing Examples" href="hashing.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -28,7 +28,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="archon.html" title="Archon"
+          <a href="evidence.html" title="Evidence Examples"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="hashing.html" title="Hashing Examples"
@@ -52,13 +52,40 @@
 and will store <code class="docutils literal notranslate"><span class="pre">Evidence</span></code> and <code class="docutils literal notranslate"><span class="pre">MetaEvidence</span></code> on <code class="docutils literal notranslate"><span class="pre">IPFS</span></code>.</p>
 <p>There are several things to keep in mind when using <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> with <code class="docutils literal notranslate"><span class="pre">Archon</span></code></p>
 <hr class="docutils" />
-<div class="section" id="using-ipfs-uris">
-<h2>Using <code class="docutils literal notranslate"><span class="pre">/ipfs/</span></code> URIs<a class="headerlink" href="#using-ipfs-uris" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ipfs-gateways">
+<h2>IPFS Gateways<a class="headerlink" href="#ipfs-gateways" title="Permalink to this headline">¶</a></h2>
+<p>Most browsers do not currently support interacting with the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network directly.
+Therefore in order to fetch data from the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network we need to use an IPFS Gateway,
+which is an <code class="docutils literal notranslate"><span class="pre">http</span></code> protocol address that returns data from the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network.</p>
+<p>It is important that you choose a gateway that you trust, as a malicious gateway can
+return invalid data. Please head the warning below:</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Archon considers data returned directly from a valid <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> URI pre-validated. This is because hash validation is built into the protocol. As we need to use gateways to interact with the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network at this time, <cite>MAKE SURE YOU SET A GATEWAY THAT YOU TRUST</cite>, or otherwise re-validate your <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> hashes yourself.</p>
+</div>
+<p>The default gateway set is <code class="docutils literal notranslate"><span class="pre">https://gateway.ipfs.io</span></code>. This is the gateway provided by the Protocol Labs staff.</p>
+<p>To set a custom gateway, use <code class="docutils literal notranslate"><span class="pre">archon.setIpfsGateway(uri)</span></code>.
+See documentation on setting a gateway <a class="reference internal" href="archon.html#set-ipfs-gateway"><span class="std std-ref">here</span></a></p>
+</div>
+<div class="section" id="ipfs-uris">
+<h2>IPFS URIs<a class="headerlink" href="#ipfs-uris" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">IPFS</span></code> URIs are recognized in any of these formats:</p>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">/ipfs/Qm...../foo/bar</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ipfs:/ipfs/Qm...../foo/bar</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">fs:/ipfs/Qm...../foo/bar</span></code></li>
+</ol>
+</div>
+<div class="section" id="gateway-uri-s-bad">
+<h2>Gateway URI’s == Bad<a class="headerlink" href="#gateway-uri-s-bad" title="Permalink to this headline">¶</a></h2>
 <p>It is not recommended that you link directly to an <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> gateway as the <code class="docutils literal notranslate"><span class="pre">fileURI</span></code>
 in Evidence or MetaEvidence. It will not be able to be verified using Archon without
 a custom hashing function. The <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> protocol does transformations on the data before hashing,
 therefore a hash can not be verified naively using the resulting <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> multihash
-and the original file contents.</p>
+and the original file contents. In addition <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> data should be able to be fetched
+by any gateway or node in the network, and a user should be able to use any gateway or node
+that they trust. Therefore hardcoding a gateway, which may not be trusted by the consumer,
+would require additional validation regardless.</p>
 <p>Archon treats all <code class="docutils literal notranslate"><span class="pre">http(s)://</span></code> URI’s the same, and will try to validate the hash
 as if they were standard hashes.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Bad:</span></code></p>
@@ -81,7 +108,7 @@ as if they were standard hashes.</p>
 <span class="o">&gt;</span> <span class="kc">true</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">Acceptable:</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">Not</span> <span class="pre">Recommended:</span></code></p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">ipfsHasher</span> <span class="o">=</span> <span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{...}</span>
 <span class="kr">const</span> <span class="nx">fileURI</span> <span class="o">=</span> <span class="s2">&quot;https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH&quot;</span>
 <span class="kr">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
@@ -109,7 +136,9 @@ as if they were standard hashes.</p>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">IPFS Links and Validation</a><ul>
-<li><a class="reference internal" href="#using-ipfs-uris">Using <code class="docutils literal notranslate"><span class="pre">/ipfs/</span></code> URIs</a></li>
+<li><a class="reference internal" href="#ipfs-gateways">IPFS Gateways</a></li>
+<li><a class="reference internal" href="#ipfs-uris">IPFS URIs</a></li>
+<li><a class="reference internal" href="#gateway-uri-s-bad">Gateway URI’s == Bad</a></li>
 </ul>
 </li>
 </ul>
@@ -118,8 +147,8 @@ as if they were standard hashes.</p>
   <p class="topless"><a href="hashing.html"
                         title="previous chapter">Hashing Examples</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="archon.html"
-                        title="next chapter">Archon</a></p>
+  <p class="topless"><a href="evidence.html"
+                        title="next chapter">Evidence Examples</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -150,7 +179,7 @@ as if they were standard hashes.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="archon.html" title="Archon"
+          <a href="evidence.html" title="Evidence Examples"
              >next</a> |</li>
         <li class="right" >
           <a href="hashing.html" title="Hashing Examples"

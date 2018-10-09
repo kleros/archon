@@ -4,7 +4,7 @@ import Web3 from 'web3'
 import {
   multihashFile,
   validMultihash
-} from '../src/utils/hashing'
+} from '../../src/utils/hashing'
 
 describe('Hashing and Validation', () => {
   it('Custom hash function', async () => {
