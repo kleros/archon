@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/kleros/archon/compare/v0.1.1...v0.2.0) (2018-10-17)
+
+
+### Features
+
+* arbitrable getDispute + doc updates ([6f48f40](https://github.com/kleros/archon/commit/6f48f40))
+* support accepted ipfs uris ([d90473c](https://github.com/kleros/archon/commit/d90473c))
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/kleros/archon/compare/v0.1.0...v0.1.1) (2018-10-08)
 
