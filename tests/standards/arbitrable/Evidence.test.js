@@ -11,6 +11,7 @@ describe('Evidence', () => {
   let web3
   let arbitrableInstance
   let accounts
+  const arbitratorAddress = 0x0000000000000000000000000000000000000000
 
   beforeAll(async () => {
     web3 = new Web3(provider)
@@ -53,7 +54,7 @@ describe('Evidence', () => {
       .get(`/${hash2}`)
       .reply(200, evidence2)
     // emit evidence with evidence = fakeURI
-    let receipt = await arbitrableContract.methods
+    const receipt1 = await arbitrableContract.methods
       .emitEvidence(
         '0x0000000000000000000000000000000000000000',
         0,
@@ -64,9 +65,9 @@ describe('Evidence', () => {
         from: accounts[0],
         gas: 500000
       })
-    expect(receipt.transactionHash).toBeTruthy()
+    expect(receipt1.transactionHash).toBeTruthy()
 
-    receipt = await arbitrableContract.methods
+    const receipt2 = await arbitrableContract.methods
       .emitEvidence(
         '0x0000000000000000000000000000000000000000',
         0,
@@ -77,25 +78,29 @@ describe('Evidence', () => {
         from: accounts[0],
         gas: 500000
       })
-    expect(receipt.transactionHash).toBeTruthy()
+    expect(receipt2.transactionHash).toBeTruthy()
 
     const evidence = await arbitrableInstance.getEvidence(
-      arbitrableContract.options.address
+      arbitrableContract.options.address,
+      arbitratorAddress,
+      0
     )
 
     expect(evidence.length).toEqual(2)
     expect(evidence[0].evidenceJSON).toEqual(evidence1)
-    expect(evidence[0].evidenceValid).toBeTruthy()
     expect(evidence[0].submittedBy).toBe(accounts[0])
     expect(evidence[0].submittedAt).toBeTruthy()
-    expect(evidence[0].evidenceValid).toBeTruthy()
+    expect(evidence[0].evidenceJSONValid).toBeTruthy()
     expect(evidence[0].fileValid).toBeFalsy()
+    expect(evidence[0].transactionHash).toEqual(receipt1.transactionHash)
+    expect(evidence[0].blockNumber).toBeTruthy()
     expect(evidence[1].evidenceJSON).toEqual(evidence2)
-    expect(evidence[1].evidenceValid).toBeTruthy()
     expect(evidence[1].submittedBy).toBe(accounts[0])
     expect(evidence[1].submittedAt).toBeTruthy()
-    expect(evidence[1].evidenceValid).toBeTruthy()
+    expect(evidence[1].evidenceJSONValid).toBeTruthy()
     expect(evidence[1].fileValid).toBeFalsy()
+    expect(evidence[1].transactionHash).toEqual(receipt2.transactionHash)
+    expect(evidence[1].blockNumber).toBeTruthy()
   })
   it('invalid evidence -- hash in uri', async () => {
     const evidence1 = {
@@ -158,11 +163,13 @@ describe('Evidence', () => {
     expect(receipt.transactionHash).toBeTruthy()
 
     const evidence = await arbitrableInstance.getEvidence(
-      arbitrableContract.options.address
+      arbitrableContract.options.address,
+      arbitratorAddress,
+      0
     )
 
-    expect(evidence[0].evidenceValid).toBeTruthy()
-    expect(evidence[1].evidenceValid).toBeFalsy()
+    expect(evidence[0].evidenceJSONValid).toBeTruthy()
+    expect(evidence[1].evidenceJSONValid).toBeFalsy()
   })
   it('validate file -- hash in uri', async () => {
     const testFile = JSON.stringify({
@@ -216,10 +223,12 @@ describe('Evidence', () => {
     expect(receipt.transactionHash).toBeTruthy()
 
     const evidence = await arbitrableInstance.getEvidence(
-      arbitrableContract.options.address
+      arbitrableContract.options.address,
+      arbitratorAddress,
+      0
     )
     expect(evidence.length).toBe(1)
-    expect(evidence[0].evidenceValid).toBeTruthy()
+    expect(evidence[0].evidenceJSONValid).toBeTruthy()
     expect(evidence[0].fileValid).toBeTruthy()
   })
   it('invalid file -- hash in uri', async () => {
@@ -274,10 +283,12 @@ describe('Evidence', () => {
     expect(receipt.transactionHash).toBeTruthy()
 
     const evidence = await arbitrableInstance.getEvidence(
-      arbitrableContract.options.address
+      arbitrableContract.options.address,
+      arbitratorAddress,
+      0
     )
     expect(evidence.length).toBe(1)
-    expect(evidence[0].evidenceValid).toBeTruthy()
+    expect(evidence[0].evidenceJSONValid).toBeTruthy()
     expect(evidence[0].fileValid).toBeFalsy()
   })
   it('validate file -- hash as fileHash', async () => {
@@ -333,10 +344,12 @@ describe('Evidence', () => {
     expect(receipt.transactionHash).toBeTruthy()
 
     const evidence = await arbitrableInstance.getEvidence(
-      arbitrableContract.options.address
+      arbitrableContract.options.address,
+      arbitratorAddress,
+      0
     )
     expect(evidence.length).toBe(1)
-    expect(evidence[0].evidenceValid).toBeTruthy()
+    expect(evidence[0].evidenceJSONValid).toBeTruthy()
     expect(evidence[0].fileValid).toBeTruthy()
   })
   it('invalid file -- hash as fileHash', async () => {
@@ -392,10 +405,12 @@ describe('Evidence', () => {
     expect(receipt.transactionHash).toBeTruthy()
 
     const evidence = await arbitrableInstance.getEvidence(
-      arbitrableContract.options.address
+      arbitrableContract.options.address,
+      arbitratorAddress,
+      0
     )
     expect(evidence.length).toBe(1)
-    expect(evidence[0].evidenceValid).toBeTruthy()
+    expect(evidence[0].evidenceJSONValid).toBeTruthy()
     expect(evidence[0].fileValid).toBeFalsy()
   })
   it('validate evidence -- selfHash', async () => {
@@ -438,9 +453,11 @@ describe('Evidence', () => {
     expect(receipt.transactionHash).toBeTruthy()
 
     const evidence = await arbitrableInstance.getEvidence(
-      arbitrableContract.options.address
+      arbitrableContract.options.address,
+      arbitratorAddress,
+      0
     )
     expect(evidence.length).toBe(1)
-    expect(evidence[0].evidenceValid).toBeTruthy()
+    expect(evidence[0].evidenceJSONValid).toBeTruthy()
   })
 })

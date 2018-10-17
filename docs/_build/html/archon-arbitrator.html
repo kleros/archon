@@ -90,7 +90,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 </div>
 <div class="section" id="returns">
 <h3>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Number</span></code> - The cost of arbitration (in WEI)</p>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;String&gt;</span></code> - Promise resolves to the cost of arbitration (in WEI)</p>
 </div>
 <div class="section" id="id1">
 <h3>Example<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
@@ -99,7 +99,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">})</span>
-<span class="o">&gt;</span> <span class="mi">150000000000000000</span>
+<span class="o">&gt;</span> <span class="s2">&quot;150000000000000000&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -125,7 +125,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 </div>
 <div class="section" id="id3">
 <h3>Returns<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Number</span></code> - The cost of arbitration (in WEI)</p>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;String&gt;</span></code> - Promise resolves to the cost of appeal (in WEI)</p>
 </div>
 <div class="section" id="id4">
 <h3>Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
@@ -134,7 +134,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">})</span>
-<span class="o">&gt;</span> <span class="mi">150000000000000000</span>
+<span class="o">&gt;</span> <span class="s2">&quot;150000000000000000&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -155,7 +155,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 </div>
 <div class="section" id="id6">
 <h3>Returns<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Number</span></code> - The current ruling of the dispute.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;String&gt;</span></code> - Promise resolves to the current ruling of the dispute.</p>
 </div>
 <div class="section" id="id7">
 <h3>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
@@ -165,7 +165,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">})</span>
-<span class="o">&gt;</span> <span class="mi">2</span>
+<span class="o">&gt;</span> <span class="s2">&quot;2&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -190,7 +190,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 </div>
 <div class="section" id="id9">
 <h3>Returns<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Number</span></code> - The status of a dispute</p>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;String&gt;</span></code> - Promise resolves to the status of a dispute as a number string.</p>
 </div>
 <div class="section" id="id10">
 <h3>Example<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
@@ -200,7 +200,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">})</span>
-<span class="o">&gt;</span> <span class="mi">0</span>
+<span class="o">&gt;</span> <span class="s2">&quot;0&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -250,7 +250,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 </div>
 <div class="section" id="id12">
 <h3>Returns<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Object</span></code> - Data from the dispute creation log.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;Object&gt;</span></code> - Promise resolves to an object with data from the dispute creation log.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nx">createdAt</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// epoch timestamp in seconds</span>
   <span class="nx">arbitrableContract</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span>
@@ -324,7 +324,7 @@ An <code class="docutils literal notranslate"><span class="pre">Arbitrator</span
 </div>
 <div class="section" id="id15">
 <h3>Returns<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Object</span></code> - Data from the dispute creation log.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;Object&gt;</span></code> - Promise resolves to an object with data from the appeal decision log.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nx">appealedAt</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// epoch timestamp in seconds</span>
   <span class="nx">arbitrableContract</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span>

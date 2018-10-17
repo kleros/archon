@@ -44,18 +44,16 @@
 </div>
 <div class="section" id="archon-ethereum-arbitration-standard-api">
 <h1>archon - Ethereum Arbitration Standard API<a class="headerlink" href="#archon-ethereum-arbitration-standard-api" title="Permalink to this headline">¶</a></h1>
-<p>Archon is a javascript library written to make it easy to interact with Arbitrable and
-Arbitrator contacts. In particular, Archon can be used to take care of a lot of the hash validation
-work that is part of the Evidence Standard (ERC ___).</p>
+<p>Archon is a javascript library written to make it easy to interact with <code class="docutils literal notranslate"><span class="pre">Arbitrable</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Arbitrator</span></code> contacts. In particular, Archon can be used to take care of a lot of the hash validation
+work that is part of the Evidence Standard (ERC 1497).</p>
 <p>Archon can be used with all Arbitrable and Arbitrator contracts that follow the
 ERC 792 standard and has the functionality to interact with all standardized methods.</p>
 <p>To get up to speed on the standards please reference:</p>
 <p><a class="reference external" href="https://github.com/ethereum/EIPs/issues/792/">ERC 792 Arbitration Standard</a>.</p>
-<p>ERC ___ Evidence Standard</p>
-<p><a class="reference external" href="https://github.com/kleros/kleros-interaction/blob/master/contracts/standard/arbitration/ArbitrableTransaction.sol/">Implementation of an Arbitrable Contract</a>.</p>
-<p><a class="reference external" href="https://github.com/kleros/kleros-interaction/blob/master/contracts/standard/arbitration/CentralizedArbitrator.sol/">Implementation of an Arbitrator Contract</a>.</p>
-<p>Contents:</p>
-<p><a class="reference internal" href="genindex.html"><span class="std std-ref">Keyword Index</span></a>, <a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p>
+<p><a class="reference external" href="https://github.com/ethereum/EIPs/issues/1497">ERC 1497 Evidence Standard</a>.</p>
+<p><a class="reference external" href="https://github.com/kleros/kleros-interaction/blob/master/contracts/standard/arbitration/Arbitrable.sol/">Implementation of an Arbitrable Contract</a>.</p>
+<p><a class="reference external" href="https://github.com/kleros/kleros-interaction/blob/master/contracts/standard/arbitration/Arbitrator.sol/">Implementation of an Arbitrator Contract</a>.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">User Documentation</span></p>
 <ul>
@@ -64,6 +62,7 @@ ERC 792 standard and has the functionality to interact with all standardized met
 <li class="toctree-l2"><a class="reference internal" href="hashing.html#hash-and-validate-hosted-evidence">Hash and Validate Hosted Evidence</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hashing.html#hash-and-validate-local-evidence">Hash and Validate Local Evidence</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hashing.html#custom-hash-functions">Custom Hash Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hashing.html#hash-validation-troubleshooting">Hash Validation Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hashing.html#supported-hashing-algorithms-and-hashcodes">Supported Hashing Algorithms and Hashcodes</a></li>
 </ul>
 </li>
@@ -75,6 +74,7 @@ ERC 792 standard and has the functionality to interact with all standardized met
 </li>
 <li class="toctree-l1"><a class="reference internal" href="evidence.html">Evidence Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="evidence.html#submit-and-fetch-evidence">Submit and Fetch Evidence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evidence.html#fetch-metaevidence-for-dispute">Fetch MetaEvidence for Dispute</a></li>
 </ul>
 </li>
 </ul>
@@ -95,6 +95,7 @@ ERC 792 standard and has the functionality to interact with all standardized met
 <li class="toctree-l2"><a class="reference internal" href="archon-arbitrable.html#getevidence">getEvidence()</a></li>
 <li class="toctree-l2"><a class="reference internal" href="archon-arbitrable.html#getmetaevidence">getMetaEvidence()</a></li>
 <li class="toctree-l2"><a class="reference internal" href="archon-arbitrable.html#getruling">getRuling()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archon-arbitrable.html#getdispute">getDispute()</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="archon-arbitrator.html">archon.arbitrator</a><ul>

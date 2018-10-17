@@ -22,4 +22,8 @@ contract TestArbitrable {
   function emitRuling(address _arbitrator, uint _disputeID, uint _ruling) public {
     emit Ruling(_arbitrator, _disputeID, _ruling);
   }
+
+  function emitDispute(address _arbitrator, uint _disputeID, uint _metaEvidenceID) public {
+    emit Dispute(_arbitrator, _disputeID, _metaEvidenceID);
+  }
 }

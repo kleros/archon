@@ -76,7 +76,7 @@ Example
 .. code-block:: javascript
 
     archon.version;
-    > "1.0.0"
+    > "0.1.0"
 
 
 

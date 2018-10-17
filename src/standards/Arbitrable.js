@@ -24,11 +24,15 @@ class Arbitrable extends StandardContract {
   /**
    * Fetch all Evidence submitted to the contract.
    * @param {string} contractAddress - The address of the arbitrable contract.
+   * @param {string} arbitratorAddress - The address of the arbitrator contract.
+   * @param {number} disputeID - The index of the dispute.
    * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes
    * @returns {object[]} An array of evidence objects
    */
   getEvidence = async (
     contractAddress = isRequired('contractAddress'),
+    arbitratorAddress = isRequired('arbitratorAddress'),
+    disputeID = isRequired('isRequired'),
     options = {}
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
@@ -38,7 +42,11 @@ class Arbitrable extends StandardContract {
       'Evidence',
       options.fromBlock || 0,
       options.toBlock || 'latest',
-      options.filters || {}
+      {
+        _arbitrator: arbitratorAddress,
+        _disputeID: disputeID,
+        ...options.filters
+      }
     )
 
     if (evidenceLogs.length === 0) return []
@@ -50,17 +58,19 @@ class Arbitrable extends StandardContract {
 
         const {
           file: evidenceJSON,
-          isValid: evidenceValid
+          isValid: evidenceJSONValid
         } = await validateFileFromURI(evidenceURI, {
           evidence: true,
-          strictHashes: options.strictHashes
+          strictHashes: options.strictHashes,
+          customHashFn: options.customHashFn
         })
 
         const { isValid: fileValid } = evidenceJSON.fileURI
           ? await validateFileFromURI(evidenceJSON.fileURI, {
               evidence: true,
               strictHashes: options.strictHashes,
-              hash: evidenceJSON.fileHash
+              hash: evidenceJSON.fileHash,
+              customHashFn: options.customHashFn
             })
           : { isValid: null }
 
@@ -73,10 +83,13 @@ class Arbitrable extends StandardContract {
         })).timestamp
 
         return {
-          evidenceValid,
+          evidenceJSONValid,
           fileValid,
           evidenceJSON,
-          ...{ submittedBy: args._party, submittedAt }
+          submittedAt,
+          submittedBy: args._party,
+          blockNumber: evidenceLog.blockNumber,
+          transactionHash: evidenceLog.transactionHash
         }
       })
     )
@@ -99,7 +112,7 @@ class Arbitrable extends StandardContract {
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
 
-    const metaEvidenceLog = await EventListener.getEventLogs(
+    const metaEvidenceLogs = await EventListener.getEventLogs(
       contractInstance,
       'MetaEvidence',
       options.fromBlock || 0,
@@ -107,29 +120,31 @@ class Arbitrable extends StandardContract {
       { _metaEvidenceID: metaEvidenceID, ...options.filters }
     )
 
-    if (!metaEvidenceLog[0])
+    if (!metaEvidenceLogs[0])
       throw new Error(
         errorConstants.CONTRACT_ERROR(
           `No MetaEvidence log for ${contractAddress} with metaEvidenceID ${metaEvidenceID}`
         )
       )
 
-    if (metaEvidenceLog.length > 1)
+    if (metaEvidenceLogs.length > 1)
       throw new Error(
         errorConstants.CONTRACT_ERROR(
           `More than one MetaEvidence returned for metaEvidenceID ${metaEvidenceID}`
         )
       )
 
-    const args = await metaEvidenceLog[0].returnValues
+    const metaEvidenceLog = metaEvidenceLogs[0]
+    const args = await metaEvidenceLog.returnValues
     const metaEvidenceUri = args._evidence
 
     const {
       file: metaEvidenceJSON,
-      isValid: metaEvidenceValid
+      isValid: metaEvidenceJSONValid
     } = await validateFileFromURI(metaEvidenceUri, {
       evidence: true,
-      strictHashes: options.strictHashes
+      strictHashes: options.strictHashes,
+      customHashFn: options.customHashFn
     })
 
     // validate file hash
@@ -137,7 +152,8 @@ class Arbitrable extends StandardContract {
       ? await validateFileFromURI(metaEvidenceJSON.fileURI, {
           evidence: true,
           strictHashes: options.strictHashes,
-          hash: metaEvidenceJSON.fileHash
+          hash: metaEvidenceJSON.fileHash,
+          customHashFn: options.customHashFn
         })
       : { isValid: null }
 
@@ -149,16 +165,19 @@ class Arbitrable extends StandardContract {
           metaEvidenceJSON.evidenceDisplayInterfaceURL,
           {
             strictHashes: options.strictHashes,
-            hash: metaEvidenceJSON.evidenceDisplayInterfaceHash
+            hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
+            customHashFn: options.customHashFn
           }
         )
       : { isValid: null }
 
     return {
       metaEvidenceJSON,
-      metaEvidenceValid,
+      metaEvidenceJSONValid,
       fileValid,
-      interfaceValid
+      interfaceValid,
+      blockNumber: metaEvidenceLog.blockNumber,
+      transactionHash: metaEvidenceLog.transactionHash
     }
   }
 
@@ -178,7 +197,7 @@ class Arbitrable extends StandardContract {
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
 
-    const rulingLog = await EventListener.getEventLogs(
+    const rulingLogs = await EventListener.getEventLogs(
       contractInstance,
       'Ruling',
       options.fromBlock || 0,
@@ -190,17 +209,97 @@ class Arbitrable extends StandardContract {
       }
     )
 
-    if (rulingLog.length === 0) return null
-    else if (rulingLog.length > 1)
+    if (rulingLogs.length === 0)
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `There is no ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`
+        )
+      )
+    else if (rulingLogs.length > 1)
       throw new Error(
         errorConstants.CONTRACT_ERROR(
           `There is more than one ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`
         )
       )
 
-    const args = await rulingLog[0].returnValues
+    const rulingLog = rulingLogs[0]
+    const args = await rulingLog.returnValues
 
-    return args._ruling
+    const ruledAt = (await new Promise((resolve, reject) => {
+      this.web3.eth.getBlock(rulingLog.blockNumber, (error, result) => {
+        if (error) reject(error)
+
+        resolve(result)
+      })
+    })).timestamp
+
+    return {
+      ruling: args._ruling,
+      ruledAt,
+      blockNumber: rulingLog.blockNumber,
+      transactionHash: rulingLog.transactionHash
+    }
+  }
+
+  /**
+   * Get the event log emitted when a dispute has been created. This event links
+   * metaEvidence to a dispute by _metaEvidenceID.
+   * @param {string} contractAddress - The address of the contract.
+   * @param {string} arbitratorAddress - The address of the arbitrator contract.
+   * @param {number} disputeID - The index of the dispute.
+   * @param {object} options - Optional parameters. Includes fromBlock and toBlock.
+   * @returns {object} The data from the event log
+   */
+  getDispute = async (
+    contractAddress = isRequired('contractAddress'),
+    arbitratorAddress = isRequired('arbitratorAddress'),
+    disputeID = isRequired('isRequired'),
+    options = {}
+  ) => {
+    const contractInstance = this._loadContractInstance(contractAddress)
+
+    const disputeLogs = await EventListener.getEventLogs(
+      contractInstance,
+      'Dispute',
+      options.fromBlock || 0,
+      options.toBlock || 'latest',
+      {
+        _arbitrator: arbitratorAddress,
+        _disputeID: disputeID,
+        ...options.filters
+      }
+    )
+
+    if (!disputeLogs[0])
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `No Dispute log for ${contractAddress} with arbitrator ${arbitratorAddress} and disputeID ${disputeID}`
+        )
+      )
+
+    if (disputeLogs.length > 1)
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `More than one Dispute returned for arbitrator ${arbitratorAddress} and disputeID ${disputeID}`
+        )
+      )
+
+    const disputeLog = disputeLogs[0]
+    const args = await disputeLog.returnValues
+    const createdAt = (await new Promise((resolve, reject) => {
+      this.web3.eth.getBlock(disputeLog.blockNumber, (error, result) => {
+        if (error) reject(error)
+
+        resolve(result)
+      })
+    })).timestamp
+
+    return {
+      metaEvidenceID: args._metaEvidenceID,
+      createdAt,
+      blockNumber: disputeLog.blockNumber,
+      transactionHash: disputeLog.transactionHash
+    }
   }
 }
 

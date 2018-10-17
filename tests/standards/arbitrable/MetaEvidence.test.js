@@ -51,8 +51,10 @@ describe('MetaEvidence', () => {
       arbitrableContract.options.address,
       0
     )
-    expect(metaEvidence.metaEvidenceValid).toBeTruthy()
+    expect(metaEvidence.metaEvidenceJSONValid).toBeTruthy()
     expect(metaEvidence.metaEvidenceJSON).toEqual(metaEvidenceJSON)
+    expect(metaEvidence.blockNumber).toBeTruthy()
+    expect(metaEvidence.transactionHash).toEqual(receipt.transactionHash)
   })
   it('invalid metaEvidence -- hash in uri', async () => {
     const metaEvidenceJSON = {
@@ -85,7 +87,7 @@ describe('MetaEvidence', () => {
       arbitrableContract.options.address,
       0
     )
-    expect(metaEvidence.metaEvidenceValid).toBeFalsy()
+    expect(metaEvidence.metaEvidenceJSONValid).toBeFalsy()
   })
   it('valid file -- hash in uri', async () => {
     const testFile = JSON.stringify({
@@ -129,7 +131,7 @@ describe('MetaEvidence', () => {
       arbitrableContract.options.address,
       0
     )
-    expect(metaEvidence.metaEvidenceValid).toBeTruthy()
+    expect(metaEvidence.metaEvidenceJSONValid).toBeTruthy()
     expect(metaEvidence.fileValid).toBeTruthy()
   })
   it('invalid file -- hash in uri', async () => {
@@ -174,7 +176,7 @@ describe('MetaEvidence', () => {
       arbitrableContract.options.address,
       0
     )
-    expect(metaEvidence.metaEvidenceValid).toBeTruthy()
+    expect(metaEvidence.metaEvidenceJSONValid).toBeTruthy()
     expect(metaEvidence.fileValid).toBeFalsy()
   })
   it('valid file -- hash as fileHash', async () => {
@@ -220,7 +222,7 @@ describe('MetaEvidence', () => {
       arbitrableContract.options.address,
       0
     )
-    expect(metaEvidence.metaEvidenceValid).toBeTruthy()
+    expect(metaEvidence.metaEvidenceJSONValid).toBeTruthy()
     expect(metaEvidence.fileValid).toBeTruthy()
   })
   it('invalid file -- hash as fileHash', async () => {
@@ -266,7 +268,7 @@ describe('MetaEvidence', () => {
       arbitrableContract.options.address,
       0
     )
-    expect(metaEvidence.metaEvidenceValid).toBeTruthy()
+    expect(metaEvidence.metaEvidenceJSONValid).toBeTruthy()
     expect(metaEvidence.fileValid).toBeFalsy()
   })
   it('valid metaEvidence -- selfHash', async () => {
@@ -306,7 +308,7 @@ describe('MetaEvidence', () => {
     expect(metaEvidence.metaEvidenceJSON.description).toEqual(
       metaEvidenceJSON.description
     )
-    expect(metaEvidence.metaEvidenceValid).toBeTruthy()
+    expect(metaEvidence.metaEvidenceJSONValid).toBeTruthy()
   })
   it('invalid metaEvidence -- strictHashes', async () => {
     const metaEvidenceJSON = {

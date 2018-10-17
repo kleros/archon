@@ -55,10 +55,10 @@ and will store <code class="docutils literal notranslate"><span class="pre">Evid
 <div class="section" id="ipfs-gateways">
 <h2>IPFS Gateways<a class="headerlink" href="#ipfs-gateways" title="Permalink to this headline">¶</a></h2>
 <p>Most browsers do not currently support interacting with the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network directly.
-Therefore in order to fetch data from the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network we need to use an IPFS Gateway,
-which is an <code class="docutils literal notranslate"><span class="pre">http</span></code> protocol address that returns data from the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network.</p>
+Therefore, in order to fetch data from the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network, we need to use an IPFS Gateway.
+Gateways are “standard” <code class="docutils literal notranslate"><span class="pre">http</span></code> URI’s that return data from the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network based on the ipfs path.</p>
 <p>It is important that you choose a gateway that you trust, as a malicious gateway can
-return invalid data. Please head the warning below:</p>
+return tampered data. Please heed the warning below:</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Archon considers data returned directly from a valid <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> URI pre-validated. This is because hash validation is built into the protocol. As we need to use gateways to interact with the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network at this time, <cite>MAKE SURE YOU SET A GATEWAY THAT YOU TRUST</cite>, or otherwise re-validate your <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> hashes yourself.</p>
@@ -89,12 +89,11 @@ would require additional validation regardless.</p>
 <p>Archon treats all <code class="docutils literal notranslate"><span class="pre">http(s)://</span></code> URI’s the same, and will try to validate the hash
 as if they were standard hashes.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Bad:</span></code></p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">fileURI</span> <span class="o">=</span> <span class="s2">&quot;https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH&quot;</span>
-<span class="kr">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">fileURI</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">fileURI</span><span class="o">:</span> <span class="s2">&quot;https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH&quot;</span>
 <span class="p">}</span>
 
-<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span><span class="nx">fileURI</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">isValid</span><span class="p">)})</span>
+<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span><span class="nx">evidenceJSON</span><span class="p">.</span><span class="nx">fileURI</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">isValid</span><span class="p">)})</span>
 <span class="o">&gt;</span> <span class="kc">false</span>
 </pre></div>
 </div>
@@ -104,19 +103,18 @@ as if they were standard hashes.</p>
 <span class="p">}</span>
 
 <span class="nx">archon</span><span class="p">.</span><span class="nx">setIpfsGateway</span><span class="p">(</span><span class="s1">&#39;https://gateway.ipfs.io&#39;</span><span class="p">)</span>
-<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span><span class="nx">fileURI</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">isValid</span><span class="p">)})</span>
+<span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span><span class="nx">evidenceJSON</span><span class="p">.</span><span class="nx">fileURI</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">isValid</span><span class="p">)})</span>
 <span class="o">&gt;</span> <span class="kc">true</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Not</span> <span class="pre">Recommended:</span></code></p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">ipfsHasher</span> <span class="o">=</span> <span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{...}</span>
-<span class="kr">const</span> <span class="nx">fileURI</span> <span class="o">=</span> <span class="s2">&quot;https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH&quot;</span>
 <span class="kr">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">fileURI</span>
+  <span class="nx">fileURI</span><span class="o">:</span> <span class="s2">&quot;https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH&quot;</span>
 <span class="p">}</span>
 
 <span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
-  <span class="nx">fileURI</span>
+  <span class="nx">evidenceJSON</span><span class="p">.</span><span class="nx">fileURI</span><span class="p">,</span>
   <span class="p">{</span> <span class="nx">customHashFn</span><span class="o">:</span> <span class="nx">ipfsHasher</span> <span class="p">}</span>
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">isValid</span><span class="p">)</span>

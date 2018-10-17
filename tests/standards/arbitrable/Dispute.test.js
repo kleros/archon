@@ -5,7 +5,7 @@ import Arbitrable from '../../../src/standards/Arbitrable'
 
 const provider = new Web3.providers.HttpProvider('http://localhost:8545')
 
-describe('Ruling', () => {
+describe('Dispute', () => {
   let web3
   let arbitrableInstance
   let accounts
@@ -16,7 +16,7 @@ describe('Ruling', () => {
     arbitrableInstance = new Arbitrable(provider)
   })
 
-  it('get ruling on dispute', async () => {
+  it('get dispute log', async () => {
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
       provider,
@@ -26,27 +26,27 @@ describe('Ruling', () => {
 
     const arbitratorAddress = '0x0000000000000000000000000000000000000000'
     const disputeID = 0
-    const ruling = 1
+    const metaEvidenceID = 1
     // emit evidence with evidence = fakeURI
     let receipt = await arbitrableContract.methods
-      .emitRuling(arbitratorAddress, disputeID, ruling)
+      .emitDispute(arbitratorAddress, disputeID, metaEvidenceID)
       .send({
         from: accounts[0],
         gas: 500000
       })
     expect(receipt.transactionHash).toBeTruthy()
 
-    const rulingData = await arbitrableInstance.getRuling(
+    const disputeData = await arbitrableInstance.getDispute(
       arbitrableContract.options.address,
       arbitratorAddress,
       disputeID
     )
-    expect(rulingData.ruling).toEqual(`${ruling}`)
-    expect(rulingData.ruledAt).toBeTruthy()
-    expect(rulingData.blockNumber).toBeTruthy()
-    expect(rulingData.transactionHash).toEqual(receipt.transactionHash)
+    expect(disputeData.metaEvidenceID).toEqual(`${metaEvidenceID}`)
+    expect(disputeData.createdAt).toBeTruthy()
+    expect(disputeData.blockNumber).toBeTruthy()
+    expect(disputeData.transactionHash).toEqual(receipt.transactionHash)
   })
-  it('get ruling on dispute -- no ruling yet', async () => {
+  it('get dispute log -- no dispute raised', async () => {
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
       provider,
@@ -59,7 +59,7 @@ describe('Ruling', () => {
 
     let errored = false
     try {
-      await arbitrableInstance.getRuling(
+      await arbitrableInstance.getDispute(
         arbitrableContract.options.address,
         arbitratorAddress,
         disputeID
@@ -70,7 +70,7 @@ describe('Ruling', () => {
     }
     expect(errored).toBeTruthy()
   })
-  it('get ruling on dispute -- multiple rulings same dispute', async () => {
+  it('get dispute log -- multiple dispute logs', async () => {
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
       provider,
@@ -80,10 +80,10 @@ describe('Ruling', () => {
 
     const arbitratorAddress = '0x0000000000000000000000000000000000000000'
     const disputeID = 0
-    const ruling = 1
+    const metaEvidenceID = 1
     // emit evidence with evidence = fakeURI
     let receipt = await arbitrableContract.methods
-      .emitRuling(arbitratorAddress, disputeID, ruling)
+      .emitDispute(arbitratorAddress, disputeID, metaEvidenceID)
       .send({
         from: accounts[0],
         gas: 500000
@@ -91,7 +91,7 @@ describe('Ruling', () => {
     expect(receipt.transactionHash).toBeTruthy()
     // emit evidence with evidence = fakeURI
     receipt = await arbitrableContract.methods
-      .emitRuling(arbitratorAddress, disputeID, ruling + 1)
+      .emitDispute(arbitratorAddress, disputeID, metaEvidenceID + 1)
       .send({
         from: accounts[0],
         gas: 500000
@@ -100,7 +100,7 @@ describe('Ruling', () => {
 
     let errored = false
     try {
-      const _ruling = await arbitrableInstance.getRuling(
+      await arbitrableInstance.getDispute(
         arbitrableContract.options.address,
         arbitratorAddress,
         disputeID

@@ -1,4 +1,7 @@
 /* eslint-disable prettier/prettier */
+import fs from 'fs'
+import path from 'path'
+
 import Web3 from 'web3'
 
 import {
@@ -23,5 +26,28 @@ describe('Hashing and Validation', () => {
     expect(
       validMultihash(nonStandardSha3Hash, hashedText, Web3.utils.soliditySha3)
     ).toBeTruthy() // true
+  })
+  it.only('Hash from a file', async () => {
+    const fileContents = JSON.parse(fs.readFileSync(path.resolve(__dirname, "./exampleMetaEvidenceBasic.json")).toString())
+
+    const evidenceHash = multihashFile(
+      JSON.stringify(fileContents),
+      0x16
+    )
+
+    expect(validMultihash(
+      evidenceHash,
+      JSON.stringify(fileContents)
+    )).toBeTruthy() // true
+  })
+  it.only('Hash from a file selfHash', async () => {
+    const fileContents = fs.readFileSync(path.resolve(__dirname, "./exampleMetaEvidenceBasicSelfHash.json")).toString()
+
+    const { selfHash, ...fileJSON } = JSON.parse(fileContents)
+
+    expect(validMultihash(
+      selfHash,
+      fileJSON
+    )).toBeTruthy() // true
   })
 })

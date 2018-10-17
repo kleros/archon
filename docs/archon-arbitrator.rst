@@ -58,7 +58,7 @@ Parameters
 Returns
 -------
 
-``Number`` - The cost of arbitration (in WEI)
+``Promise.<String>`` - Promise resolves to the cost of arbitration (in WEI)
 
 -------
 Example
@@ -71,7 +71,7 @@ Example
     ).then(data => {
       console.log(data)
     })
-    > 150000000000000000
+    > "150000000000000000"
 
 -----------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ Parameters
 Returns
 -------
 
-``Number`` - The cost of arbitration (in WEI)
+``Promise.<String>`` - Promise resolves to the cost of appeal (in WEI)
 
 -------
 Example
@@ -113,7 +113,7 @@ Example
     ).then(data => {
       console.log(data)
     })
-    > 150000000000000000
+    > "150000000000000000"
 
 -----------------------------------------------------------------------------
 
@@ -138,7 +138,7 @@ Parameters
 Returns
 -------
 
-``Number`` - The current ruling of the dispute.
+``Promise.<String>`` - Promise resolves to the current ruling of the dispute.
 
 -------
 Example
@@ -152,7 +152,7 @@ Example
     ).then(data => {
       console.log(data)
     })
-    > 2
+    > "2"
 
 -----------------------------------------------------------------------------
 
@@ -179,7 +179,7 @@ Parameters
 Returns
 -------
 
-``Number`` - The status of a dispute
+``Promise.<String>`` - Promise resolves to the status of a dispute as a number string.
 
 -------
 Example
@@ -193,7 +193,7 @@ Example
     ).then(data => {
       console.log(data)
     })
-    > 0
+    > "0"
 
 -----------------------------------------------------------------------------
 
@@ -230,7 +230,7 @@ filters       object  Additional filters for event logs.
 Returns
 -------
 
-``Object`` - Data from the dispute creation log.
+``Promise.<Object>`` - Promise resolves to an object with data from the dispute creation log.
 
 .. code-block:: javascript
 
@@ -297,7 +297,7 @@ filters       object  Additional filters for event logs.
 Returns
 -------
 
-``Object`` - Data from the dispute creation log.
+``Promise.<Object>`` - Promise resolves to an object with data from the appeal decision log.
 
 .. code-block:: javascript
 

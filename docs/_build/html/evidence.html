@@ -45,7 +45,7 @@
   <div class="section" id="evidence-examples">
 <h1>Evidence Examples<a class="headerlink" href="#evidence-examples" title="Permalink to this headline">¶</a></h1>
 <p>Here are some examples of how you can use Archon to submit and retrieve evidence.
-In these example we will assume we are using an <code class="docutils literal notranslate"><span class="pre">Arbitrable</span></code> contract that has a function:</p>
+In these examples we will assume we are using an <code class="docutils literal notranslate"><span class="pre">Arbitrable</span></code> contract that has a function:</p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">submitEvidence</span><span class="p">(</span><span class="kt">string</span> <span class="nx">_evidence</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
     <span class="p">...</span>
     <span class="nx">emit</span> <span class="nx">Evidence</span><span class="p">(</span><span class="nx">_arbitrator</span><span class="p">,</span> <span class="nx">_disputeID</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">,</span> <span class="nx">_evidence</span><span class="p">);</span>
@@ -55,20 +55,21 @@ In these example we will assume we are using an <code class="docutils literal no
 <hr class="docutils" />
 <div class="section" id="submit-and-fetch-evidence">
 <h2>Submit and Fetch Evidence<a class="headerlink" href="#submit-and-fetch-evidence" title="Permalink to this headline">¶</a></h2>
-<p>This example is meant to demonstrate how to submit evidence as per the Evidence Standard
-and how to retrieve the Evidence using <code class="docutils literal notranslate"><span class="pre">Archon</span></code> using 4 example code blocks.</p>
+<p>This example demonstrates how to submit evidence, as per the Evidence Standard,
+and how to retrieve the Evidence using <code class="docutils literal notranslate"><span class="pre">Archon</span></code>.</p>
 <p>In this example we will use an example evidence file hosted here:
 <a class="reference external" href="https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt">https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt</a></p>
 <div class="section" id="part-1-create-evidence-json-file">
 <h3>Part 1: Create Evidence JSON File<a class="headerlink" href="#part-1-create-evidence-json-file" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
 
 <span class="c1">// initialize Archon. By default it uses IPFS gateway https://gateway.ipfs.io</span>
 <span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s2">&quot;https://mainnet.infura.io&quot;</span><span class="p">);</span>
 
 <span class="c1">// First we need the hash of our evidence file. Download the file and hash it.</span>
-<span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s2">&quot;./exampleEvidence.txt&quot;</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s2">&quot;./exampleEvidence.txt&quot;</span><span class="p">)).</span><span class="nx">toString</span><span class="p">();</span>
 
 <span class="kd">var</span> <span class="nx">evidenceHash</span> <span class="o">=</span> <span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
   <span class="nx">file</span><span class="p">,</span>
@@ -82,14 +83,11 @@ and how to retrieve the Evidence using <code class="docutils literal notranslate
   <span class="nx">fileURI</span><span class="o">:</span> <span class="s2">&quot;https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt&quot;</span><span class="p">,</span>
   <span class="nx">fileHash</span><span class="o">:</span> <span class="nx">evidenceHash</span><span class="p">,</span>
   <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Example Evidence&quot;</span><span class="p">,</span>
-  <span class="nx">Description</span><span class="o">:</span> <span class="s2">&quot;This evidence shows how to properly utilize hashing and Archon to submit valid evidence!&quot;</span>
+  <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;This evidence shows how to properly utilize hashing and Archon to submit valid evidence!&quot;</span>
 <span class="p">}</span>
 
-<span class="c1">// Write our JSON to a file so we can save it with IPFS</span>
-<span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="s1">&#39;exampleEvidence.json&#39;</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">evidenceJSON</span><span class="p">),</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Saved!&#39;</span><span class="p">);</span>
-<span class="p">});</span>
+<span class="c1">// Write our JSON to a file so we can host it with IPFS</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s2">&quot;./exampleEvidence.json&quot;</span><span class="p">),</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">evidenceJSON</span><span class="p">));</span>
 </pre></div>
 </div>
 </div>
@@ -107,7 +105,8 @@ and how to retrieve the Evidence using <code class="docutils literal notranslate
 <div class="section" id="part-3-submit-the-evidence">
 <h3>Part 3: Submit the evidence<a class="headerlink" href="#part-3-submit-the-evidence" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Web3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;web3&quot;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">web3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Web3</span><span class="p">(</span><span class="s2">&quot;https://mainnet.infura.io&quot;</span><span class="p">);</span>
+<span class="c1">// You will need to submit your transaction from a node or wallet that has funds to pay gas fees.</span>
+<span class="kd">var</span> <span class="nx">web3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Web3</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">My</span> <span class="nx">Node</span> <span class="nx">URI</span><span class="o">&gt;</span><span class="p">);</span>
 
 <span class="c1">// Load the arbitrable contract to submit our evidence</span>
 <span class="c1">// See web3 docs for more information on interacting with your contract</span>
@@ -128,10 +127,12 @@ and how to retrieve the Evidence using <code class="docutils literal notranslate
 <span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s2">&quot;https://mainnet.infura.io&quot;</span><span class="p">);</span>
 
 <span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getEvidence</span><span class="p">(</span>
-  <span class="o">&lt;</span><span class="nx">My</span> <span class="nx">Contract</span> <span class="nx">Address</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">My</span> <span class="nx">Contract</span> <span class="nx">Address</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="o">&lt;</span><span class="nx">Arbitrator</span> <span class="nx">Address</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="o">&lt;</span><span class="nx">Dispute</span> <span class="nx">ID</span><span class="o">&gt;</span>
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">evidence</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">evidence</span><span class="p">)</span>
-<span class="p">})</span>
+<span class="p">});</span>
 
 <span class="o">&gt;</span> <span class="p">[{</span>
   <span class="nx">evidenceJSON</span><span class="o">:</span> <span class="p">{</span>
@@ -147,6 +148,42 @@ and how to retrieve the Evidence using <code class="docutils literal notranslate
 <span class="p">}]</span>
 </pre></div>
 </div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="fetch-metaevidence-for-dispute">
+<h2>Fetch MetaEvidence for Dispute<a class="headerlink" href="#fetch-metaevidence-for-dispute" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates how to retrieve the MetaEvidence for a dispute using <code class="docutils literal notranslate"><span class="pre">Archon</span></code>.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;eth-archon&#39;</span><span class="p">);</span>
+
+<span class="c1">// initialize Archon. By default it uses IPFS gateway https://gateway.ipfs.io</span>
+<span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s2">&quot;https://mainnet.infura.io&quot;</span><span class="p">);</span>
+
+<span class="c1">// Fetch the event log emitted by the Arbitrable contract when a dispute is raised</span>
+<span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getDispute</span><span class="p">(</span>
+  <span class="s2">&quot;0x91697c78d48e9c83b71727ddd41ccdc95bb2f012&quot;</span><span class="p">,</span> <span class="c1">// arbitrable contract address</span>
+  <span class="s2">&quot;0x211f01e59b425253c0a0e9a7bf612605b42ce82c&quot;</span><span class="p">,</span> <span class="c1">// arbitrator contract address</span>
+  <span class="mi">23</span> <span class="c1">// dispute unique identifier</span>
+<span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">disputeLog</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// use the metaEvidenceID to fetch the MetaEvidence event log</span>
+  <span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getMetaEvidence</span><span class="p">(</span>
+    <span class="s2">&quot;0x91697c78d48e9c83b71727ddd41ccdc95bb2f012&quot;</span><span class="p">,</span> <span class="c1">// arbitrable contract address</span>
+    <span class="nx">disputeLog</span><span class="p">.</span><span class="nx">metaEvidenceID</span>
+  <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">metaEvidenceData</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">metaEvidenceData</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">})</span>
+
+<span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">metaEvidenceValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">fileValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">interfaceValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">metaEvidenceJSON</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;fileURI&quot;</span><span class="o">:</span> <span class="s2">&quot;/ipfs/...&quot;</span><span class="p">,</span> <span class="p">...},</span>
+  <span class="nx">submittedAt</span><span class="o">:</span> <span class="mi">1539025000</span><span class="p">,</span>
+  <span class="nx">blockNumber</span><span class="o">:</span> <span class="mi">6503570</span><span class="p">,</span>
+  <span class="nx">transactionHash</span><span class="o">:</span> <span class="s2">&quot;0x340fdc6e32ef24eb14f9ccbd2ec614a8d0c7121e8d53f574529008f468481990&quot;</span>
+<span class="p">}</span>
+</pre></div>
 </div>
 </div>
 </div>
@@ -167,6 +204,7 @@ and how to retrieve the Evidence using <code class="docutils literal notranslate
 <li><a class="reference internal" href="#part-4-retrieve-evidence-from-the-contract">Part 4: Retrieve Evidence from the contract</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#fetch-metaevidence-for-dispute">Fetch MetaEvidence for Dispute</a></li>
 </ul>
 </li>
 </ul>

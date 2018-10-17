@@ -58,26 +58,29 @@ Arbitrable contracts are also responsible for <code class="docutils literal notr
 <hr class="docutils" />
 <div class="section" id="getevidence">
 <h2>getEvidence()<a class="headerlink" href="#getevidence" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getEvidence</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">options</span><span class="o">=</span><span class="p">{});</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getEvidence</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">arbitratorAddress</span><span class="p">,</span> <span class="nx">disputeID</span><span class="p">,</span> <span class="nx">options</span><span class="o">=</span><span class="p">{});</span>
 </pre></div>
 </div>
-<p>Fetch and validate evidence via the Arbitrable smart contract <code class="docutils literal notranslate"><span class="pre">Evidence</span></code> event logs.</p>
+<p>Fetch and validate evidence via the Arbitrable smart contract <code class="docutils literal notranslate"><span class="pre">Evidence</span></code> event logs.
+For a particular dispute.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
-<p class="last">See ERC ___ for the <code class="docutils literal notranslate"><span class="pre">EvidenceJSON</span></code> spec and information on how to correctly use the events with hashes &lt;link&gt;</p>
+<p class="last">See <a class="reference external" href="https://github.com/ethereum/EIPs/issues/1497">ERC 1497</a>. for the <code class="docutils literal notranslate"><span class="pre">EvidenceJSON</span></code> spec and information on how to correctly use the events with hashes</p>
 </div>
 <div class="section" id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><code class="docutils literal notranslate"><span class="pre">contractAddress</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The address of the arbitrable contract.</li>
+<li><code class="docutils literal notranslate"><span class="pre">arbitratorAddress</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The address of the arbitrator contract.</li>
+<li><code class="docutils literal notranslate"><span class="pre">disputeID</span></code> - <code class="docutils literal notranslate"><span class="pre">Number</span></code>: The unique identifier of the dispute in the arbitrator contract.</li>
 <li><code class="docutils literal notranslate"><span class="pre">options</span></code> - <code class="docutils literal notranslate"><span class="pre">Object</span></code>: Optional parameters.</li>
 </ol>
 <p>The options parameter can include:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="17%" />
+<col width="15%" />
 <col width="8%" />
-<col width="75%" />
+<col width="77%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Key</th>
@@ -90,15 +93,19 @@ Arbitrable contracts are also responsible for <code class="docutils literal notr
 <td>bool</td>
 <td>If true, an error will throw if hash validations fail.</td>
 </tr>
-<tr class="row-odd"><td>fromBlock</td>
+<tr class="row-odd"><td>customHashFn</td>
+<td>fn</td>
+<td>Hashing function that should be used to validate the hashes.</td>
+</tr>
+<tr class="row-even"><td>fromBlock</td>
 <td>int</td>
 <td>The block where we start searching for event logs.</td>
 </tr>
-<tr class="row-even"><td>toBlock</td>
+<tr class="row-odd"><td>toBlock</td>
 <td>int</td>
 <td>The block where we will stop searching for event logs.</td>
 </tr>
-<tr class="row-odd"><td>filters</td>
+<tr class="row-even"><td>filters</td>
 <td>object</td>
 <td>Additional filters for event logs.</td>
 </tr>
@@ -107,14 +114,16 @@ Arbitrable contracts are also responsible for <code class="docutils literal notr
 </div>
 <div class="section" id="returns">
 <h3>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Object[]</span></code> - An array of objects containing the <code class="docutils literal notranslate"><span class="pre">EvidenceJSON</span></code>,
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;Object[]&gt;</span></code> - A Promise resolving to an array of objects containing the <code class="docutils literal notranslate"><span class="pre">EvidenceJSON</span></code>,
 the validity of the <code class="docutils literal notranslate"><span class="pre">JSON</span></code> and evidence file, and submission information.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nx">evidenceValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// validity of evidenceJSON</span>
+  <span class="nx">evidenceJSONValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// validity of evidenceJSON</span>
   <span class="nx">fileValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// validity of evidence found at evidenceJSON.fileURI</span>
   <span class="nx">evidenceJSON</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span><span class="p">,</span>
-  <span class="nx">submittedBy</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span>
-  <span class="nx">submittedAt</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span> <span class="c1">// epoch timestamp in seconds</span>
+  <span class="nx">submittedBy</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// from event log</span>
+  <span class="nx">submittedAt</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// epoch timestamp in seconds</span>
+  <span class="nx">blockNumber</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">transactionHash</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span> <span class="c1">// The hash of the submission transaction</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -122,26 +131,33 @@ the validity of the <code class="docutils literal notranslate"><span class="pre"
 <div class="section" id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getEvidence</span><span class="p">(</span>
-  <span class="s1">&#39;0x91697c78d48e9c83b71727ddd41ccdc95bb2f012&#39;</span><span class="p">,</span>
+  <span class="s2">&quot;0x91697c78d48e9c83b71727ddd41ccdc95bb2f012&quot;</span><span class="p">,</span> <span class="c1">// arbitrable contract address</span>
+  <span class="s2">&quot;0x211f01e59b425253c0a0e9a7bf612605b42ce82c&quot;</span><span class="p">,</span> <span class="c1">// arbitrator contract address</span>
+  <span class="mi">1</span><span class="p">,</span> <span class="c1">// dispute ID</span>
   <span class="p">{</span>
     <span class="nx">strictHashes</span><span class="o">:</span> <span class="kc">true</span>
   <span class="p">}</span>
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">})</span>
+
 <span class="o">&gt;</span> <span class="p">[{</span>
-    <span class="nx">evidenceValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">evidenceJSONValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">fileValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">evidenceJSON</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;fileURI&quot;</span><span class="o">:</span> <span class="s2">&quot;/ipfs/...&quot;</span><span class="p">,</span> <span class="p">...},</span>
-    <span class="nx">submittedBy</span><span class="o">:</span> <span class="s1">&#39;0x8254175f6a6E0FE1f63e0eeb0ae487cCf3950BFb&#39;</span><span class="p">,</span>
-    <span class="nx">submittedAt</span><span class="o">:</span> <span class="mi">1539022733</span>
+    <span class="nx">submittedBy</span><span class="o">:</span> <span class="s2">&quot;0x8254175f6a6E0FE1f63e0eeb0ae487cCf3950BFb&quot;</span><span class="p">,</span>
+    <span class="nx">submittedAt</span><span class="o">:</span> <span class="mi">1539022733</span><span class="p">,</span>
+    <span class="nx">blockNumber</span><span class="o">:</span> <span class="mi">6503576</span><span class="p">,</span>
+    <span class="nx">transactionHash</span><span class="o">:</span> <span class="s2">&quot;0xe91603b9d4bf506972820f499bf221cdfb48cbfd426125af5ab647dca39a3f4e&quot;</span>
   <span class="p">},</span>
   <span class="p">{</span>
-    <span class="nx">evidenceValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">evidenceJSONValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">fileValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">evidenceJSON</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;fileURI&quot;</span><span class="o">:</span> <span class="s2">&quot;/ipfs/...&quot;</span><span class="p">,</span> <span class="p">...},</span>
-    <span class="nx">submittedBy</span><span class="o">:</span> <span class="s1">&#39;0xc55a13e36d93371a5b036a21d913a31CD2804ba4&#39;</span><span class="p">,</span>
-    <span class="nx">submittedAt</span><span class="o">:</span> <span class="mi">1539025000</span>
+    <span class="nx">submittedBy</span><span class="o">:</span> <span class="s2">&quot;0xc55a13e36d93371a5b036a21d913a31CD2804ba4&quot;</span><span class="p">,</span>
+    <span class="nx">submittedAt</span><span class="o">:</span> <span class="mi">1539025000</span><span class="p">,</span>
+    <span class="nx">blockNumber</span><span class="o">:</span> <span class="mi">6503570</span><span class="p">,</span>
+    <span class="nx">transactionHash</span><span class="o">:</span> <span class="s2">&quot;0x340fdc6e32ef24eb14f9ccbd2ec614a8d0c7121e8d53f574529008f468481990&quot;</span>
   <span class="p">}]</span>
 </pre></div>
 </div>
@@ -159,21 +175,21 @@ primary document file specified at <code class="docutils literal notranslate"><s
 external interface used to render the evidence found at <code class="docutils literal notranslate"><span class="pre">MetaEvidenceJSON.evidenceDisplayInterfaceURL</span></code>.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
-<p class="last">See ERC ___ for the <code class="docutils literal notranslate"><span class="pre">MetaEvidenceJSON</span></code> spec and information on how to correctly use the events with hashes &lt;link&gt;</p>
+<p class="last">See <a class="reference external" href="https://github.com/ethereum/EIPs/issues/1497">ERC 1497</a>. for the <code class="docutils literal notranslate"><span class="pre">MetaEvidenceJSON</span></code> spec and information on how to correctly use the events with hashes</p>
 </div>
-<div class="section" id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><code class="docutils literal notranslate"><span class="pre">contractAddress</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The address of the arbitrable contract.</li>
-<li><code class="docutils literal notranslate"><span class="pre">metaEvidenceID</span></code> - <code class="docutils literal notranslate"><span class="pre">Number</span></code>: The unique identifier of the MetaEvidence event log.</li>
+<li><code class="docutils literal notranslate"><span class="pre">metaEvidenceID</span></code> - <code class="docutils literal notranslate"><span class="pre">Number|String</span></code>: The unique identifier of the MetaEvidence event log.</li>
 <li><code class="docutils literal notranslate"><span class="pre">options</span></code> - <code class="docutils literal notranslate"><span class="pre">Object</span></code>: Optional parameters.</li>
 </ol>
 <p>The options parameter can include:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="17%" />
+<col width="15%" />
 <col width="8%" />
-<col width="75%" />
+<col width="77%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Key</th>
@@ -186,35 +202,46 @@ external interface used to render the evidence found at <code class="docutils li
 <td>bool</td>
 <td>If true, an error will throw if hash validations fail.</td>
 </tr>
-<tr class="row-odd"><td>fromBlock</td>
+<tr class="row-odd"><td>customHashFn</td>
+<td>fn</td>
+<td>Hashing function that should be used to validate the hashes.</td>
+</tr>
+<tr class="row-even"><td>fromBlock</td>
 <td>int</td>
 <td>The block where we start searching for event logs.</td>
 </tr>
-<tr class="row-even"><td>toBlock</td>
+<tr class="row-odd"><td>toBlock</td>
 <td>int</td>
 <td>The block where we will stop searching for event logs.</td>
 </tr>
-<tr class="row-odd"><td>filters</td>
+<tr class="row-even"><td>filters</td>
 <td>object</td>
 <td>Additional filters for event logs.</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Use <a class="reference internal" href="#getdispute"><span class="std std-ref">getDispute</span></a> to get the metaEvidenceID for a dispute.</p>
 </div>
-<div class="section" id="id2">
-<h3>Returns<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Object</span></code> - An objects containing the <code class="docutils literal notranslate"><span class="pre">MetaEvidenceJSON</span></code> and the validity of the the hashes</p>
+</div>
+<div class="section" id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;Object&gt;</span></code> - Promise resolving to an object containing the <code class="docutils literal notranslate"><span class="pre">MetaEvidenceJSON</span></code> and the validity of the the hashes</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nx">metaEvidenceValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span>
   <span class="nx">fileValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span>
   <span class="nx">interfaceValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span><span class="p">,</span>
-  <span class="nx">metaEvidenceJSON</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span>
+  <span class="nx">metaEvidenceJSON</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">submittedAt</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">blockNumber</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">transactionHash</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="id3">
-<h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getMetaEvidence</span><span class="p">(</span>
   <span class="s1">&#39;0x91697c78d48e9c83b71727ddd41ccdc95bb2f012&#39;</span><span class="p">,</span>
   <span class="mi">1</span><span class="p">,</span>
@@ -224,11 +251,15 @@ external interface used to render the evidence found at <code class="docutils li
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">})</span>
+
 <span class="o">&gt;</span> <span class="p">{</span>
     <span class="nx">metaEvidenceValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">fileValid</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">interfaceValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nx">metaEvidenceJSON</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;fileURI&quot;</span><span class="o">:</span> <span class="s2">&quot;/ipfs/...&quot;</span><span class="p">,</span> <span class="p">...}</span>
+    <span class="nx">metaEvidenceJSON</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;fileURI&quot;</span><span class="o">:</span> <span class="s2">&quot;/ipfs/...&quot;</span><span class="p">,</span> <span class="p">...},</span>
+    <span class="nx">submittedAt</span><span class="o">:</span> <span class="mi">1539025000</span><span class="p">,</span>
+    <span class="nx">blockNumber</span><span class="o">:</span> <span class="mi">6503570</span><span class="p">,</span>
+    <span class="nx">transactionHash</span><span class="o">:</span> <span class="s2">&quot;0x340fdc6e32ef24eb14f9ccbd2ec614a8d0c7121e8d53f574529008f468481990&quot;</span>
   <span class="p">}</span>
 </pre></div>
 </div>
@@ -240,9 +271,9 @@ external interface used to render the evidence found at <code class="docutils li
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getRuling</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">arbitratorAddress</span><span class="p">,</span> <span class="nx">disputeID</span><span class="p">,</span> <span class="nx">options</span><span class="o">=</span><span class="p">{});</span>
 </pre></div>
 </div>
-<p>Fetch the ruling of a dispute from the <code class="docutils literal notranslate"><span class="pre">Ruling</span></code> event log.</p>
-<div class="section" id="id4">
-<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Fetch data from the <code class="docutils literal notranslate"><span class="pre">Ruling</span></code> event log.</p>
+<div class="section" id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><code class="docutils literal notranslate"><span class="pre">contractAddress</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The address of the arbitrable contract.</li>
 <li><code class="docutils literal notranslate"><span class="pre">arbitratorAddress</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The address of the arbitrator contract.</li>
@@ -278,12 +309,20 @@ external interface used to render the evidence found at <code class="docutils li
 </tbody>
 </table>
 </div>
-<div class="section" id="id5">
-<h3>Returns<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Number</span></code> - The ruling of the dispute.</p>
-</div>
 <div class="section" id="id6">
-<h3>Example<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<h3>Returns<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;Object&gt;</span></code> - A Promise resolving to data from the ruling event log, including the final ruling.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nx">ruling</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// The ruling returned as a number string</span>
+  <span class="nx">ruledAt</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span> <span class="c1">// epoch timestamp in seconds</span>
+  <span class="nx">blockNumber</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">transactionHash</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span> <span class="c1">// The hash of the submission transaction</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id7">
+<h3>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getRuling</span><span class="p">(</span>
   <span class="s1">&#39;0x91697c78d48e9c83b71727ddd41ccdc95bb2f012&#39;</span><span class="p">,</span>
   <span class="s1">&#39;0x211f01e59b425253c0a0e9a7bf612605b42ce82c&#39;</span><span class="p">,</span>
@@ -291,7 +330,89 @@ external interface used to render the evidence found at <code class="docutils li
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">})</span>
-<span class="o">&gt;</span> <span class="mi">2</span>
+
+<span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">ruling</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+  <span class="nx">ruledAt</span><span class="o">:</span> <span class="mi">1539025000</span><span class="p">,</span>
+  <span class="nx">blockNumber</span><span class="o">:</span> <span class="mi">6503570</span><span class="p">,</span>
+  <span class="nx">transactionHash</span><span class="o">:</span> <span class="s2">&quot;0x340fdc6e32ef24eb14f9ccbd2ec614a8d0c7121e8d53f574529008f468481990&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</div>
+</div>
+<div class="section" id="getdispute">
+<span id="id8"></span><h2>getDispute()<a class="headerlink" href="#getdispute" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getDispute</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">arbitratorAddress</span><span class="p">,</span> <span class="nx">disputeID</span><span class="p">,</span> <span class="nx">options</span><span class="o">=</span><span class="p">{});</span>
+</pre></div>
+</div>
+<p>Fetch the dispute creation event. This event is used to link <code class="docutils literal notranslate"><span class="pre">metaEvidenceID</span></code> to a dispute.</p>
+<div class="section" id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">contractAddress</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The address of the arbitrable contract.</li>
+<li><code class="docutils literal notranslate"><span class="pre">arbitratorAddress</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The address of the arbitrator contract.</li>
+<li><code class="docutils literal notranslate"><span class="pre">disputeID</span></code> - <code class="docutils literal notranslate"><span class="pre">Number</span></code>: The unique identifier of the dispute.</li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> - <code class="docutils literal notranslate"><span class="pre">Object</span></code>: Optional parameters.</li>
+</ol>
+<p>The options parameter can include:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="8%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>fromBlock</td>
+<td>int</td>
+<td>The block where we start searching for event logs.</td>
+</tr>
+<tr class="row-odd"><td>toBlock</td>
+<td>int</td>
+<td>The block where we will stop searching for event logs.</td>
+</tr>
+<tr class="row-even"><td>filters</td>
+<td>object</td>
+<td>Additional filters for event logs.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;Object&gt;</span></code> - A Promise resolving to data from the dispute event log including the <code class="docutils literal notranslate"><span class="pre">metaEvidenceID</span></code></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nx">metaEvidenceID</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">createdAt</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">blockNumber</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">Number</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">transactionHash</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id11">
+<h3>Example<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">arbitrable</span><span class="p">.</span><span class="nx">getDispute</span><span class="p">(</span>
+  <span class="s1">&#39;0x91697c78d48e9c83b71727ddd41ccdc95bb2f012&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;0x211f01e59b425253c0a0e9a7bf612605b42ce82c&#39;</span><span class="p">,</span>
+  <span class="mi">1</span>
+<span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">metaEvidenceID</span><span class="o">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+  <span class="nx">createdAt</span><span class="o">:</span> <span class="mi">1539025000</span><span class="p">,</span>
+  <span class="nx">blockNumber</span><span class="o">:</span> <span class="mi">6503570</span><span class="p">,</span>
+  <span class="nx">transactionHash</span><span class="o">:</span> <span class="s2">&quot;0x340fdc6e32ef24eb14f9ccbd2ec614a8d0c7121e8d53f574529008f468481990&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -314,15 +435,21 @@ external interface used to render the evidence found at <code class="docutils li
 </ul>
 </li>
 <li><a class="reference internal" href="#getmetaevidence">getMetaEvidence()</a><ul>
-<li><a class="reference internal" href="#id1">Parameters</a></li>
-<li><a class="reference internal" href="#id2">Returns</a></li>
-<li><a class="reference internal" href="#id3">Example</a></li>
+<li><a class="reference internal" href="#id2">Parameters</a></li>
+<li><a class="reference internal" href="#id3">Returns</a></li>
+<li><a class="reference internal" href="#id4">Example</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#getruling">getRuling()</a><ul>
-<li><a class="reference internal" href="#id4">Parameters</a></li>
-<li><a class="reference internal" href="#id5">Returns</a></li>
-<li><a class="reference internal" href="#id6">Example</a></li>
+<li><a class="reference internal" href="#id5">Parameters</a></li>
+<li><a class="reference internal" href="#id6">Returns</a></li>
+<li><a class="reference internal" href="#id7">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getdispute">getDispute()</a><ul>
+<li><a class="reference internal" href="#id9">Parameters</a></li>
+<li><a class="reference internal" href="#id10">Returns</a></li>
+<li><a class="reference internal" href="#id11">Example</a></li>
 </ul>
 </li>
 </ul>

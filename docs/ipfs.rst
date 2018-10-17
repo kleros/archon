@@ -15,11 +15,11 @@ IPFS Gateways
 ===============
 
 Most browsers do not currently support interacting with the ``ipfs`` network directly.
-Therefore in order to fetch data from the ``ipfs`` network we need to use an IPFS Gateway,
-which is an ``http`` protocol address that returns data from the ``ipfs`` network.
+Therefore, in order to fetch data from the ``ipfs`` network, we need to use an IPFS Gateway.
+Gateways are "standard" ``http`` URI's that return data from the ``ipfs`` network based on the ipfs path.
 
 It is important that you choose a gateway that you trust, as a malicious gateway can
-return invalid data. Please head the warning below:
+return tampered data. Please heed the warning below:
 
 .. warning:: Archon considers data returned directly from a valid ``ipfs`` URI pre-validated. This is because hash validation is built into the protocol. As we need to use gateways to interact with the ``ipfs`` network at this time, `MAKE SURE YOU SET A GATEWAY THAT YOU TRUST`, or otherwise re-validate your ``ipfs`` hashes yourself.
 
@@ -56,12 +56,11 @@ as if they were standard hashes.
 
 .. code-block:: javascript
 
-    const fileURI = "https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH"
     const evidenceJSON = {
-      fileURI
+      fileURI: "https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH"
     }
 
-    archon.utils.validateFileFromURI(fileURI).then(data => {console.log(data.isValid)})
+    archon.utils.validateFileFromURI(evidenceJSON.fileURI).then(data => {console.log(data.isValid)})
     > false
 
 ``Good:``
@@ -73,7 +72,7 @@ as if they were standard hashes.
     }
 
     archon.setIpfsGateway('https://gateway.ipfs.io')
-    archon.utils.validateFileFromURI(fileURI).then(data => {console.log(data.isValid)})
+    archon.utils.validateFileFromURI(evidenceJSON.fileURI).then(data => {console.log(data.isValid)})
     > true
 
 ``Not Recommended:``
@@ -81,13 +80,12 @@ as if they were standard hashes.
 .. code-block:: javascript
 
     const ipfsHasher = data => {...}
-    const fileURI = "https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH"
     const evidenceJSON = {
-      fileURI
+      fileURI: "https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH"
     }
 
     archon.utils.validateFileFromURI(
-      fileURI
+      evidenceJSON.fileURI,
       { customHashFn: ipfsHasher }
     ).then(data => {
       console.log(data.isValid)

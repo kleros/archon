@@ -13,10 +13,11 @@ keccak-384      0x1C
 keccak-512      0x1D
 ==============  =========
 
-.. tip:: By default, IPFS uses ``sha3-256``. Many ethereum hashes are ``keccak-256``.
+.. tip:: By default, IPFS uses ``sha2-256``. Many ethereum hashes are ``keccak-256``.
 
 .. warning:: Solidity uses a different implementation of the ``keccak-256`` algorithm. Hashes generated from smart contracts will need a ``customHashFn`` to verify.
 
+.. note:: All insignificant whitespace should be removed from JSON files before hashing. You can use ``JSON.stringify`` to remove whitespace.
 
 If a different hashing algorithm was used, pass it in the desired function with ``customHashFn``. The function should expect a single string parameter.
 

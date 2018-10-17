@@ -34,7 +34,7 @@ customHashFn  fn      A custom hash function to use to validate the file.
 Returns
 -------
 
-``Object`` - The file as well as if the file is valid
+``Promise.<Object>`` - Promise that resolves to an object containing the file as well as if the file is valid
 
 .. code-block:: javascript
 
@@ -72,6 +72,8 @@ validMultihash()
     archon.utils.validMultihash(multihashHex, file, customHashFn=null);
 
 Verify if the ``multihash`` of a file matches the file contents.
+
+.. note:: Hashes should be base58 encoded ``Strings``
 
 .. include:: include_supported_hashes.rst
 
