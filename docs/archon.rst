@@ -10,7 +10,7 @@ This is the main class of Archon.
 
 .. code-block:: javascript
 
-    var Archon = require('eth-archon');
+    var Archon = require('@kleros/archon');
 
     > Archon.modules
     > Archon.utils
@@ -124,7 +124,7 @@ Instantiate Archon as an object to have access to all initialized modules.
 
 .. code-block:: javascript
 
-    var Archon = require('eth-archon');
+    var Archon = require('@kleros/archon');
 
     // "Web3.providers.givenProvider" will be set if in an Ethereum supported browser.
     var archon = new Archon('ws://some.local-or-remote.node:8546');

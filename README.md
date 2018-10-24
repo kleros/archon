@@ -1,10 +1,10 @@
 # Archon
 
 <p align="center">
-  <a href="https://badge.fury.io/js/eth-archon"><img src="https://badge.fury.io/js/eth-archon.svg" alt="NPM Version"></a>
-  <a href="https://travis-ci.org/kleros/eth-archon"><img src="https://travis-ci.org/kleros/eth-archon.svg?branch=master" alt="Build Status"></a>
-  <a href="https://david-dm.org/kleros/eth-archon"><img src="https://david-dm.org/kleros/eth-archon.svg" alt="Dependencies"></a>
-  <a href="https://david-dm.org/kleros/eth-archon?type=dev"><img src="https://david-dm.org/kleros/eth-archon/dev-status.svg" alt="Dev Dependencies"></a>
+  <a href="https://badge.fury.io/js/archon"><img src="https://badge.fury.io/js/archon.svg" alt="NPM Version"></a>
+  <a href="https://travis-ci.org/kleros/archon"><img src="https://travis-ci.org/kleros/archon.svg?branch=master" alt="Build Status"></a>
+  <a href="https://david-dm.org/kleros/archon"><img src="https://david-dm.org/kleros/archon.svg" alt="Dependencies"></a>
+  <a href="https://david-dm.org/kleros/archon?type=dev"><img src="https://david-dm.org/kleros/archon/dev-status.svg" alt="Dev Dependencies"></a>
   <a href="https://github.com/facebook/jest"><img src="https://img.shields.io/badge/tested_with-jest-99424f.svg" alt="Tested with Jest"></a>
   <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>
   <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" alt="Styled with Prettier"></a>
@@ -14,7 +14,6 @@
 
 > Archon provides functionality for Arbitrator and Arbitrable Ethereum smart contracts as defined in ERC 792.
 
-
 ## Documentation
 
 See full documentation at https://archon.readthedocs.io/en/latest/index.html
@@ -22,13 +21,13 @@ See full documentation at https://archon.readthedocs.io/en/latest/index.html
 ## Installation
 
 ```
-npm install eth-archon
+npm install @kleros/archon
 ```
 
 ## Basic Usage
 
 ```
-var Archon = require('eth-archon');
+var Archon = require('@kleros/archon');
 
 var archon = new Archon('ws://some.local-or-remote.node:8546');
 

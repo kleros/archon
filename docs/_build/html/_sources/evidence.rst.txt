@@ -29,7 +29,7 @@ Part 1: Create Evidence JSON File
 
 .. code-block:: javascript
 
-    var Archon = require('eth-archon');
+    var Archon = require('@kleros/archon');
     var fs = require('fs');
     var path = require('path');
 
@@ -95,7 +95,7 @@ Part 4: Retrieve Evidence from the contract
 
 .. code-block:: javascript
 
-    var Archon = require("eth-archon");
+    var Archon = require("@kleros/archon");
     var archon = new Archon("https://mainnet.infura.io");
 
     archon.arbitrable.getEvidence(
@@ -128,7 +128,7 @@ This example demonstrates how to retrieve the MetaEvidence for a dispute using `
 
 .. code-block:: javascript
 
-    var Archon = require('eth-archon');
+    var Archon = require('@kleros/archon');
 
     // initialize Archon. By default it uses IPFS gateway https://gateway.ipfs.io
     var archon = new Archon("https://mainnet.infura.io");

@@ -9,13 +9,13 @@ Getting Started
 
 .. code-block:: javascript
 
-    yarn add eth-archon
+    yarn add @kleros/archon
 
 2. Import Archon into your project
 
 .. code-block:: javascript
 
-    var Archon = require('eth-archon')
+    var Archon = require('@kleros/archon')
 
 3. Initialize an instance of Archon using an Ethereum Provider and an IPFS Gateway.
 

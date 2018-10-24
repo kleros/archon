@@ -48,7 +48,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'eth-archon'
+project = u'@kleros/archon'
 copyright = u'2018, Kleros'
 author = u'Sam Vitello'
 
@@ -259,7 +259,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'archonjs.tex', u'eth-archon Documentation',
+    (master_doc, 'archonjs.tex', u'@kleros/archon Documentation',
      u'Sam Vitello', 'manual'),
 ]
 
@@ -301,7 +301,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'archonjs', u'eth-archon Documentation',
+    (master_doc, 'archonjs', u'@kleros/archon Documentation',
      [author], 1)
 ]
 
@@ -316,7 +316,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'archonjs', u'eth-archon Documentation',
+    (master_doc, 'archonjs', u'@kleros/archon Documentation',
      author, 'archonjs', 'One line description of project.',
      'Miscellaneous'),
 ]

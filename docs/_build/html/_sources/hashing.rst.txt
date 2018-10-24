@@ -20,7 +20,7 @@ https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt
 
 .. code-block:: javascript
 
-    var Archon = require('eth-archon');
+    var Archon = require('@kleros/archon');
     var fs = require('fs');
     var path = require('path');
 
@@ -53,7 +53,7 @@ https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt
 
 .. code-block:: javascript
 
-    var Archon = require('eth-archon');
+    var Archon = require('@kleros/archon');
     var fs = require('fs');
     var path = require('path');
 
@@ -101,7 +101,7 @@ validate using a custom hashing function.
 
 .. code-block:: javascript
 
-    var Archon = require('eth-archon');
+    var Archon = require('@kleros/archon');
     var Web3 = require('web3')
 
     // Hash our "file" ('12345') using the soliditySha3.

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/utils/hashing.js | @kleros/archon</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A javascript library for Ethereum dispute resolution. Provides the ability to interface with Arbitrable and Arbitrator Ethereum smart contracts, as defined in ERC 792."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="@kleros/archon"><meta property="twitter:description" content="A javascript library for Ethereum dispute resolution. Provides the ability to interface with Arbitrable and Arbitrator Ethereum smart contracts, as defined in ERC 792."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Archon.js~Archon.html">Archon</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#standards">standards</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrable.js~Arbitrable.html">Arbitrable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrator.js~Arbitrator.html">Arbitrator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/StandardContract.js~StandardContract.html">StandardContract</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/EventListener.js~EventListener.html">EventListener</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-multihashFile">multihashFile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validMultihash">validMultihash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateFileFromURI">validateFileFromURI</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isRequired">isRequired</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getHttpUri">getHttpUri</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURIProtocol">getURIProtocol</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURISuffix">getURISuffix</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/utils/hashing.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import multihash from &apos;multihashes&apos;
+import axios from &apos;axios&apos;
+
+import * as errorConstants from &apos;../constants/error&apos;
+import { functions as hashFunctions } from &apos;../constants/hash&apos;
+
+import isRequired from &apos;./isRequired&apos;
+import { getHttpUri, getURISuffix } from &apos;./uri&apos;
+
+/**
+ * Validate a file. The file must include the hash as the suffix of the URI,
+ * or the hash can be passed via the options parameter or using the Evidence standard
+ * self hash.
+ * @param {string} fileURI - The URI of where the file data can be fetched
+ * @param {object} options - The optional paramaters that can be used to validate the file.
+ * @returns {object} The file as well as the validity of the hashes
+ */
+export const validateFileFromURI = async (
+  fileURI = isRequired(&apos;fileURI&apos;),
+  options = {}
+) =&gt; {
+  // A file is considered prevalidated if it is an IPFS uri
+  // NOTE IPFS uri&apos;s are converted to HTTP using a gateway
+  const { uri, preValidated } = getHttpUri(fileURI)
+
+  if (preValidated) return true
+  // Fetch the evidence JSON
+  const fileResponse = await axios.get(uri)
+  if (fileResponse.status !== 200)
+    throw new Error(
+      errorConstants.HTTP_ERROR(
+        `Unable to fetch file at ${uri}. Returned status code ${
+          fileResponse.status
+        }`
+      )
+    )
+
+  let fileContent = fileResponse.data
+  let selfHash = null
+  // If we are validating evidence check for optional selfHash key
+  if (typeof fileContent === &apos;object&apos;) {
+    const { selfHash: _selfHash, ..._fileContent } = fileContent
+    fileContent = _fileContent
+    selfHash = _selfHash
+  }
+
+  let isValid = true
+
+  if (
+    !validMultihash(
+      options.hash || selfHash || getURISuffix(fileURI),
+      fileContent,
+      options.customHashFn
+    )
+  ) {
+    isValid = false
+    if (options.strictHashes)
+      throw new Error(
+        errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)
+      )
+  }
+
+  return {
+    file: fileContent,
+    isValid
+  }
+}
+
+/**
+ * Validate a multihash.
+ * @param {string} multihashHex - The hexadecimal hash.
+ * @param {object|string} file - The object we are validating against.
+ * @param {fn} customHashFn - &lt;optional&gt; A custom hash function used for file.
+ * @returns {bool} If the hashes match.
+ */
+export const validMultihash = (
+  multihashHex = isRequired(&apos;multihashHex&apos;),
+  file = isRequired(&apos;file&apos;),
+  customHashFn
+) =&gt; {
+  if (typeof file === &apos;object&apos;) file = JSON.stringify(file)
+  // Decode hash to get hashing algorithm
+  const decodedHash = multihash.decode(multihash.fromB58String(multihashHex))
+
+  const hashFn = customHashFn || hashFunctions[decodedHash.code]
+  if (!hashFn)
+    throw new Error(
+      `Hash validation error: No hash function for multicode ${
+        decodedHash.code
+      }`
+    )
+  // Hash the original object
+  let fileHash = hashFn(file)
+  if (fileHash.indexOf(&apos;0x&apos;) !== 0) fileHash = &apos;0x&apos; + fileHash
+
+  // ensure they both have the same prefix
+  let decodedHashHex = decodedHash.digest.toString()
+  if (decodedHashHex.indexOf(&apos;0x&apos;) !== 0) decodedHashHex = &apos;0x&apos; + decodedHashHex
+
+  return fileHash === decodedHashHex
+}
+
+/**
+ * Create a base58 multihash from a file.
+ * @param {object|string} file - The object we are hashing.
+ * @param {number} multicode - The multicode of the hashing algorithm.
+ * @param {fn} customHashFn - &lt;optional&gt; A custom hash function used for file.
+ * @returns {string} base58 multihash.
+ */
+export const multihashFile = (
+  file = isRequired(&apos;file&apos;),
+  multicode = isRequired(&apos;multicode&apos;),
+  customHashFn
+) =&gt; {
+  if (typeof file === &apos;object&apos;) file = JSON.stringify(file)
+
+  const hashFn = customHashFn || hashFunctions[multicode]
+  if (!hashFn)
+    throw new Error(`Hashing Error: Unsupported multicode ${multicode}`)
+
+  let fileHash = hashFn(file)
+
+  const encoded = multihash.encode(Buffer.from(fileHash), multicode)
+
+  return multihash.toB58String(encoded)
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
