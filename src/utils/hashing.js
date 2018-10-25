@@ -44,21 +44,23 @@ export const validateFileFromURI = async (
     selfHash = _selfHash
   }
 
-  let isValid = true
-
-  if (
-    !validMultihash(
+  let isValid
+  // If there is an error validating the hash just assume it is invalid so that legacy disputes can be fetched
+  try {
+    isValid = validMultihash(
       options.hash || selfHash || getURISuffix(fileURI),
       fileContent,
       options.customHashFn
     )
-  ) {
+  } catch (err) {
+    console.error(err)
     isValid = false
-    if (options.strictHashes)
-      throw new Error(
-        errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)
-      )
   }
+
+  if (!isValid && options.strictHashes)
+    throw new Error(
+      errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)
+    )
 
   return {
     file: fileContent,
@@ -80,14 +82,25 @@ export const validMultihash = (
 ) => {
   if (typeof file === 'object') file = JSON.stringify(file)
   // Decode hash to get hashing algorithm
-  const decodedHash = multihash.decode(multihash.fromB58String(multihashHex))
+
+  let decodedHash
+  try {
+    decodedHash = multihash.decode(multihash.fromB58String(multihashHex))
+  } catch (err) {
+    console.error(err)
+    throw new Error(
+      errorConstants.VALIDATION_ERROR(
+        'Unable to decode multihash hex. Is your hash base58?'
+      )
+    )
+  }
 
   const hashFn = customHashFn || hashFunctions[decodedHash.code]
   if (!hashFn)
     throw new Error(
-      `Hash validation error: No hash function for multicode ${
-        decodedHash.code
-      }`
+      errorConstants.VALIDATION_ERROR(
+        `No hash function for multicode ${decodedHash.code}`
+      )
     )
   // Hash the original object
   let fileHash = hashFn(file)
