@@ -65,14 +65,21 @@ class Arbitrable extends StandardContract {
           customHashFn: options.customHashFn
         })
 
-        const { isValid: fileValid } = evidenceJSON.fileURI
-          ? await validateFileFromURI(evidenceJSON.fileURI, {
-              evidence: true,
-              strictHashes: options.strictHashes,
-              hash: evidenceJSON.fileHash,
-              customHashFn: options.customHashFn
-            })
-          : { isValid: null }
+        let fileValid
+
+        try {
+          fileValid = evidenceJSON.fileURI
+            ? (await validateFileFromURI(evidenceJSON.fileURI, {
+                evidence: true,
+                strictHashes: options.strictHashes,
+                hash: evidenceJSON.fileHash,
+                customHashFn: options.customHashFn
+              })).isValid
+            : null
+        } catch (err) {
+          if (options.strictHashes) throw new Error(err)
+          fileValid = false
+        }
 
         const submittedAt = (await new Promise((resolve, reject) => {
           this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) => {
@@ -147,29 +154,39 @@ class Arbitrable extends StandardContract {
       customHashFn: options.customHashFn
     })
 
-    // validate file hash
-    const { isValid: fileValid } = metaEvidenceJSON.fileURI
-      ? await validateFileFromURI(metaEvidenceJSON.fileURI, {
-          evidence: true,
-          strictHashes: options.strictHashes,
-          hash: metaEvidenceJSON.fileHash,
-          customHashFn: options.customHashFn
-        })
-      : { isValid: null }
+    let fileValid
+    try {
+      // validate file hash
+      fileValid = metaEvidenceJSON.fileURI
+        ? (await validateFileFromURI(metaEvidenceJSON.fileURI, {
+            evidence: true,
+            strictHashes: options.strictHashes,
+            hash: metaEvidenceJSON.fileHash,
+            customHashFn: options.customHashFn
+          })).isValid
+        : null
+    } catch (err) {
+      if (options.strictHashes) throw new Error(err)
+      fileValid = false
+    }
 
     // validate file hash
-    const {
-      isValid: interfaceValid
-    } = metaEvidenceJSON.evidenceDisplayInterfaceURL
-      ? await validateFileFromURI(
-          metaEvidenceJSON.evidenceDisplayInterfaceURL,
-          {
-            strictHashes: options.strictHashes,
-            hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
-            customHashFn: options.customHashFn
-          }
-        )
-      : { isValid: null }
+    let interfaceValid
+    try {
+      interfaceValid = metaEvidenceJSON.evidenceDisplayInterfaceURL
+        ? (await validateFileFromURI(
+            metaEvidenceJSON.evidenceDisplayInterfaceURL,
+            {
+              strictHashes: options.strictHashes,
+              hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
+              customHashFn: options.customHashFn
+            }
+          )).isValid
+        : { isValid: null }
+    } catch (err) {
+      if (options.strictHashes) throw new Error(err)
+      interfaceValid = false
+    }
 
     return {
       metaEvidenceJSON,
