@@ -47,9 +47,9 @@ class Archon {
     // remove trailing '/'
     if (ipfsGatewayURI.lastIndexOf('/') === ipfsGatewayURI.length - 1)
       ipfsGatewayURI = ipfsGatewayURI.substr(0, ipfsGatewayURI.length - 1)
-    console.log(ipfsGatewayURI)
-    process.env.IPFS_GATEWAY_URI = ipfsGatewayURI
-    console.log(process.env.IPFS_GATEWAY_URI)
+
+    this.arbitrator.setIpfsGateway(ipfsGatewayURI)
+    this.arbitrable.setIpfsGateway(ipfsGatewayURI)
   }
 }
 
