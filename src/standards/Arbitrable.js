@@ -4,6 +4,7 @@ import * as errorConstants from '../constants/error'
 import EventListener from '../utils/EventListener'
 import isRequired from '../utils/isRequired'
 import { validateFileFromURI } from '../utils/hashing'
+import { getHttpUri } from '../utils/uri'
 
 import StandardContract from './StandardContract'
 
@@ -54,31 +55,38 @@ class Arbitrable extends StandardContract {
     return Promise.all(
       evidenceLogs.map(async evidenceLog => {
         const args = await evidenceLog.returnValues
-        const evidenceURI = args._evidence
+        const { uri: evidenceURI, preValidated } = getHttpUri(
+          args._evidence,
+          this.ipfsGateway
+        )
 
         const {
           file: evidenceJSON,
           isValid: evidenceJSONValid
         } = await validateFileFromURI(evidenceURI, {
-          evidence: true,
+          preValidated,
           strictHashes: options.strictHashes,
           customHashFn: options.customHashFn
         })
 
-        let fileValid
+        let fileValid = false
 
         try {
-          fileValid = evidenceJSON.fileURI
-            ? (await validateFileFromURI(evidenceJSON.fileURI, {
-                evidence: true,
-                strictHashes: options.strictHashes,
-                hash: evidenceJSON.fileHash,
-                customHashFn: options.customHashFn
-              })).isValid
-            : null
+          if (evidenceJSON.fileURI) {
+            const { uri: evidenceURI, preValidated } = getHttpUri(
+              evidenceJSON.fileURI,
+              this.ipfsGateway
+            )
+
+            fileValid = (await validateFileFromURI(evidenceURI, {
+              preValidated,
+              strictHashes: options.strictHashes,
+              hash: evidenceJSON.fileHash,
+              customHashFn: options.customHashFn
+            })).isValid
+          }
         } catch (err) {
           if (options.strictHashes) throw new Error(err)
-          fileValid = false
         }
 
         const submittedAt = (await new Promise((resolve, reject) => {
@@ -143,46 +151,56 @@ class Arbitrable extends StandardContract {
 
     const metaEvidenceLog = metaEvidenceLogs[0]
     const args = await metaEvidenceLog.returnValues
-    const metaEvidenceUri = args._evidence
+
+    const { uri: metaEvidenceUri, preValidated } = getHttpUri(
+      args._evidence,
+      this.ipfsGateway
+    )
 
     const {
       file: metaEvidenceJSON,
       isValid: metaEvidenceJSONValid
     } = await validateFileFromURI(metaEvidenceUri, {
-      evidence: true,
+      preValidated,
       strictHashes: options.strictHashes,
       customHashFn: options.customHashFn
     })
 
-    let fileValid
+    let fileValid = false
     try {
       // validate file hash
-      fileValid = metaEvidenceJSON.fileURI
-        ? (await validateFileFromURI(metaEvidenceJSON.fileURI, {
-            evidence: true,
-            strictHashes: options.strictHashes,
-            hash: metaEvidenceJSON.fileHash,
-            customHashFn: options.customHashFn
-          })).isValid
-        : null
+      if (metaEvidenceJSON.fileURI) {
+        const { uri: fileURI, preValidated } = getHttpUri(
+          metaEvidenceJSON.fileURI,
+          this.ipfsGateway
+        )
+        fileValid = (await validateFileFromURI(fileURI, {
+          preValidated,
+          strictHashes: options.strictHashes,
+          hash: metaEvidenceJSON.fileHash,
+          customHashFn: options.customHashFn
+        })).isValid
+      }
     } catch (err) {
       if (options.strictHashes) throw new Error(err)
-      fileValid = false
     }
 
     // validate file hash
     let interfaceValid
     try {
-      interfaceValid = metaEvidenceJSON.evidenceDisplayInterfaceURL
-        ? (await validateFileFromURI(
-            metaEvidenceJSON.evidenceDisplayInterfaceURL,
-            {
-              strictHashes: options.strictHashes,
-              hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
-              customHashFn: options.customHashFn
-            }
-          )).isValid
-        : { isValid: null }
+      if (metaEvidenceJSON.evidenceDisplayInterfaceURL) {
+        const { uri: disputeInterfaceURI, preValidated } = getHttpUri(
+          metaEvidenceJSON.evidenceDisplayInterfaceURL,
+          this.ipfsGateway
+        )
+        if (preValidated) interfaceValid = true
+        else
+          interfaceValid = (await validateFileFromURI(disputeInterfaceURI, {
+            strictHashes: options.strictHashes,
+            hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
+            customHashFn: options.customHashFn
+          })).isValid
+      }
     } catch (err) {
       if (options.strictHashes) throw new Error(err)
       interfaceValid = false

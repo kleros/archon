@@ -11,7 +11,7 @@ export const getURIProtocol = uri => {
   }
 }
 
-export const getHttpUri = uri => {
+export const getHttpUri = (uri, ipfsGateway) => {
   const protocol = getURIProtocol(uri)
 
   let preValidated = false
@@ -30,10 +30,10 @@ export const getHttpUri = uri => {
       uri = uri.replace('://', ':/')
       // NURI
       if (uri.substr(0, 5) === '/ipfs' || uri.substr(0, 5) === 'ipfs/')
-        uri = `${process.env.IPFS_GATEWAY_URI}/${uri}`
+        uri = `${ipfsGateway}/${uri}`
       // compatability scheme
       else if (uri.substr(0, 6) === 'ipfs:/')
-        uri = `${process.env.IPFS_GATEWAY_URI}/${uri.split(':/').pop()}`
+        uri = `${ipfsGateway}/${uri.split(':/').pop()}`
       else throw new Error(`Unrecognized protocol ${protocol}`)
 
       preValidated = true

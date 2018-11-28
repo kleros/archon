@@ -91,6 +91,12 @@ before you apply the hashing algorithm, as is the case with `IPFS` hashes.
 This is only for the initial hashing algorithm in the multihash. Your hashing function should
 take a single ``String`` argument and return a ``String`` that is the hex representation of the hash.
 
+1) Non standard hash function implementations
+
+.. note:: You must still include a hashcode even if you are using a custom hash function. In order to have a valid multihash your hash must correspond to a valid hashcode. It is not recommended you use an unsupported hashing function that does not have a hashcode. If your hashes are not valid multihashes, consider validating your hashes outside of Archon.
+
+.. warning:: If you use a custom hash function other interfaces may not be able to validate your hashes.
+
 ------------------------------
 Example -- Solidity keccak-256
 ------------------------------
@@ -98,6 +104,8 @@ Example -- Solidity keccak-256
 Solidity uses a non standard implementation of the keccak-256 hashing algorithm.
 Therefore if we are using hashes produced by a smart contract we might need to
 validate using a custom hashing function.
+
+.. note:: In this example the custom hash function is a non-standard implementation of keccak-256 so it can still use the hashcode 0x1B.
 
 .. code-block:: javascript
 

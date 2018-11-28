@@ -33,38 +33,33 @@ describe('URI', () => {
     })
   })
   describe('getHttpUri', () => {
-    let ipfsGateway
-
-    beforeAll(() => {
-      ipfsGateway = 'https://gateway.ipfs.io'
-      process.env.IPFS_GATEWAY_URI = ipfsGateway
-    })
+    const ipfsGateway = 'https://gateway.ipfs.io'
 
     it('http://', () => {
       const testURI = 'http://test.com'
 
-      const uriData = getHttpUri(testURI)
+      const uriData = getHttpUri(testURI, ipfsGateway)
       expect(uriData.uri).toEqual(testURI)
       expect(uriData.preValidated).toBeFalsy()
     })
     it('https://', () => {
       const testURI = 'https://test.com'
 
-      const uriData = getHttpUri(testURI)
+      const uriData = getHttpUri(testURI, ipfsGateway)
       expect(uriData.uri).toEqual(testURI)
       expect(uriData.preValidated).toBeFalsy()
     })
     it('/ipfs/', () => {
       const testURI = '/ipfs/hash'
 
-      const uriData = getHttpUri(testURI)
+      const uriData = getHttpUri(testURI, ipfsGateway)
       expect(uriData.uri).toEqual(`${ipfsGateway}/${testURI}`)
       expect(uriData.preValidated).toBeTruthy()
     })
     it('ipfs/', () => {
       const testURI = 'ipfs/hash'
 
-      const uriData = getHttpUri(testURI)
+      const uriData = getHttpUri(testURI, ipfsGateway)
       expect(uriData.uri).toEqual(`${ipfsGateway}/${testURI}`)
       expect(uriData.preValidated).toBeTruthy()
     })
@@ -72,7 +67,7 @@ describe('URI', () => {
       const uriSuffix = 'ipfs/hash'
       const testURI = `ipfs:/${uriSuffix}`
 
-      const uriData = getHttpUri(testURI)
+      const uriData = getHttpUri(testURI, ipfsGateway)
       expect(uriData.uri).toEqual(`${ipfsGateway}/${uriSuffix}`)
       expect(uriData.preValidated).toBeTruthy()
     })
@@ -80,7 +75,7 @@ describe('URI', () => {
       const uriSuffix = 'ipfs/hash'
       const testURI = `ipfs://${uriSuffix}`
 
-      const uriData = getHttpUri(testURI)
+      const uriData = getHttpUri(testURI, ipfsGateway)
       expect(uriData.uri).toEqual(`${ipfsGateway}/${uriSuffix}`)
       expect(uriData.preValidated).toBeTruthy()
     })
@@ -88,7 +83,7 @@ describe('URI', () => {
       const uriSuffix = 'ipfs/hash'
       const testURI = `fs:/${uriSuffix}`
 
-      const uriData = getHttpUri(testURI)
+      const uriData = getHttpUri(testURI, ipfsGateway)
       expect(uriData.uri).toEqual(`${ipfsGateway}/${uriSuffix}`)
       expect(uriData.preValidated).toBeTruthy()
     })
@@ -96,7 +91,7 @@ describe('URI', () => {
       const uriSuffix = '/ipfs/hash'
       const testURI = `fs:/${uriSuffix}`
 
-      const uriData = getHttpUri(testURI)
+      const uriData = getHttpUri(testURI, ipfsGateway)
       expect(uriData.uri).toEqual(`${ipfsGateway}/${uriSuffix}`)
       expect(uriData.preValidated).toBeTruthy()
     })
@@ -105,7 +100,7 @@ describe('URI', () => {
 
       let errored = false
       try {
-        getHttpUri(testURI)
+        getHttpUri(testURI, ipfsGateway)
       } catch (err) {
         expect(err).toBeTruthy()
         errored = true
@@ -117,7 +112,7 @@ describe('URI', () => {
 
       let errored = false
       try {
-        getHttpUri(testURI)
+        getHttpUri(testURI, ipfsGateway)
       } catch (err) {
         expect(err).toBeTruthy()
         errored = true

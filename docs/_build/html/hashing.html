@@ -124,11 +124,26 @@ implementation of the hashing algorithm, or where there needs to be some data tr
 before you apply the hashing algorithm, as is the case with <cite>IPFS</cite> hashes.
 This is only for the initial hashing algorithm in the multihash. Your hashing function should
 take a single <code class="docutils literal notranslate"><span class="pre">String</span></code> argument and return a <code class="docutils literal notranslate"><span class="pre">String</span></code> that is the hex representation of the hash.</p>
+<ol class="arabic simple">
+<li>Non standard hash function implementations</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must still include a hashcode even if you are using a custom hash function. In order to have a valid multihash your hash must correspond to a valid hashcode. It is not recommended you use an unsupported hashing function that does not have a hashcode. If your hashes are not valid multihashes, consider validating your hashes outside of Archon.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you use a custom hash function other interfaces may not be able to validate your hashes.</p>
+</div>
 <div class="section" id="example-solidity-keccak-256">
 <h3>Example – Solidity keccak-256<a class="headerlink" href="#example-solidity-keccak-256" title="Permalink to this headline">¶</a></h3>
 <p>Solidity uses a non standard implementation of the keccak-256 hashing algorithm.
 Therefore if we are using hashes produced by a smart contract we might need to
 validate using a custom hashing function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In this example the custom hash function is a non-standard implementation of keccak-256 so it can still use the hashcode 0x1B.</p>
+</div>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;@kleros/archon&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">Web3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;web3&#39;</span><span class="p">)</span>
 
@@ -223,7 +238,7 @@ validate using a custom hashing function.</p>
 <p class="last">All insignificant whitespace should be removed from JSON files before hashing. You can use <code class="docutils literal notranslate"><span class="pre">JSON.stringify</span></code> to remove whitespace.</p>
 </div>
 <p>If a different hashing algorithm was used, pass it in the desired function with <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
-<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
+<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multicodec/blob/master/table.csv/">here</a>.</p>
 </div>
 </div>
 

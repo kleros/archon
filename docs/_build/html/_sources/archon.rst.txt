@@ -1,5 +1,7 @@
 .. _archon:
 
+.. include:: include_announcement.rst
+
 ======
 Archon
 ======
@@ -157,12 +159,6 @@ Parameters
 1. ``myProvider`` - ``Object|String``: A provider object or URI.
 
 -------
-Returns
--------
-
-``Boolean``
-
--------
 Example
 -------
 
@@ -190,7 +186,7 @@ archon.setIpfsGateway()
 
     archon.setIpfsGateway(ipfsGatewayURI)
 
-Will change the ``IPFS`` gateway environment variable.
+Will change the ``IPFS`` gateway used to fetch and validate data.
 
 ----------
 Parameters

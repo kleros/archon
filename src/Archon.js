@@ -24,8 +24,8 @@ class Archon {
    *                 files from the IPFS network. Defaults to "https://gateway.ipfs.io"
    */
   constructor(ethereumProvider, ipfsGatewayURI = 'https://gateway.ipfs.io') {
-    this.arbitrator = new Arbitrator(ethereumProvider)
-    this.arbitrable = new Arbitrable(ethereumProvider)
+    this.arbitrator = new Arbitrator(ethereumProvider, ipfsGatewayURI)
+    this.arbitrable = new Arbitrable(ethereumProvider, ipfsGatewayURI)
 
     this.setIpfsGateway(ipfsGatewayURI)
   }
@@ -44,11 +44,12 @@ class Archon {
    * @param {string} ipfsGatewayURI - The ipfs gateway URI.
    */
   setIpfsGateway = (ipfsGatewayURI = isRequired('ipfsGatewayURI')) => {
-    // remove trailing /
+    // remove trailing '/'
     if (ipfsGatewayURI.lastIndexOf('/') === ipfsGatewayURI.length - 1)
       ipfsGatewayURI = ipfsGatewayURI.substr(0, ipfsGatewayURI.length - 1)
-
+    console.log(ipfsGatewayURI)
     process.env.IPFS_GATEWAY_URI = ipfsGatewayURI
+    console.log(process.env.IPFS_GATEWAY_URI)
   }
 }
 

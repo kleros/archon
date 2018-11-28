@@ -5,7 +5,7 @@ import * as errorConstants from '../constants/error'
 import { functions as hashFunctions } from '../constants/hash'
 
 import isRequired from './isRequired'
-import { getHttpUri, getURISuffix } from './uri'
+import { getURISuffix } from './uri'
 
 /**
  * Validate a file. The file must include the hash as the suffix of the URI,
@@ -19,23 +19,21 @@ export const validateFileFromURI = async (
   fileURI = isRequired('fileURI'),
   options = {}
 ) => {
-  // A file is considered prevalidated if it is an IPFS uri
-  // NOTE IPFS uri's are converted to HTTP using a gateway
-  const { uri, preValidated } = getHttpUri(fileURI)
-
-  if (preValidated) return true
   // Fetch the evidence JSON
-  const fileResponse = await axios.get(uri)
+  const fileResponse = await axios.get(fileURI)
   if (fileResponse.status !== 200)
     throw new Error(
       errorConstants.HTTP_ERROR(
-        `Unable to fetch file at ${uri}. Returned status code ${
+        `Unable to fetch file at ${fileURI}. Returned status code ${
           fileResponse.status
         }`
       )
     )
 
   let fileContent = fileResponse.data
+  // If from ipfs or other source that validates hashes we cam return file
+  if (options.preValidated) return { file: fileContent, isValid: true }
+
   let selfHash = null
   // If we are validating evidence check for optional selfHash key
   if (typeof fileContent === 'object') {

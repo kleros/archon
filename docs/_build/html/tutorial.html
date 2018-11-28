@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Evidence Examples &#8212; @kleros/archon 0.1.0 documentation</title>
+    <title>Evidence Walkthrough &#8212; @kleros/archon 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -17,9 +17,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Archon" href="archon.html" />
-    <link rel="prev" title="IPFS Links and Validation" href="ipfs.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -27,12 +25,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="archon.html" title="Archon"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="ipfs.html" title="IPFS Links and Validation"
-             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
@@ -46,23 +38,22 @@
 <p class="first admonition-title">Note</p>
 <p class="last">Archon depends on Web3 1.0. This version of <code class="docutils literal notranslate"><span class="pre">web3</span></code> is still in Beta so usage may change unexpectedly and/or bugs may arise until a stable version of Web3 1.0 is released.</p>
 </div>
-<div class="section" id="evidence-examples">
-<h1>Evidence Examples<a class="headerlink" href="#evidence-examples" title="Permalink to this headline">¶</a></h1>
-<p>Here are some examples of how you can use Archon to submit and retrieve evidence.
-In these examples we will assume we are using an <code class="docutils literal notranslate"><span class="pre">Arbitrable</span></code> contract that has a function:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">submitEvidence</span><span class="p">(</span><span class="kt">string</span> <span class="nx">_evidence</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
-    <span class="p">...</span>
-    <span class="nx">emit</span> <span class="nx">Evidence</span><span class="p">(</span><span class="nx">_arbitrator</span><span class="p">,</span> <span class="nx">_disputeID</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">,</span> <span class="nx">_evidence</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<div class="section" id="evidence-walkthrough">
+<h1>Evidence Walkthrough<a class="headerlink" href="#evidence-walkthrough" title="Permalink to this headline">¶</a></h1>
+<p>The best way to try things out is to learn by doing. So we have created a test
+smart contract, deployed on the Kovan test network, that you can use to test out
+submitting and fetching evidence. Here we will go through the process step by step.
+Feel free to follow along.</p>
+<p>The test smart contract we will be using includes all of the standard Evidence related
+events that you would have in your smart contract. You can create a “dispute” in this
+contract and submit MetaEvidence and Evidence. There is no arbitrator for these disputes
+so they will always remain open.</p>
+<p>The contract can be found here: <a class="reference external" href="https://kovan.etherscan.io/address/0x3b43c3f69c5d06cc00575e3c5ab8723b129c494d#code">https://kovan.etherscan.io/address/0x3b43c3f69c5d06cc00575e3c5ab8723b129c494d#code</a></p>
 <hr class="docutils" />
-<div class="section" id="submit-and-fetch-evidence">
-<h2>Submit and Fetch Evidence<a class="headerlink" href="#submit-and-fetch-evidence" title="Permalink to this headline">¶</a></h2>
-<p>This example demonstrates how to submit evidence, as per the Evidence Standard,
-and how to retrieve the Evidence using <code class="docutils literal notranslate"><span class="pre">Archon</span></code>.</p>
-<p>In this example we will use an example evidence file hosted here:
-<a class="reference external" href="https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt">https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt</a></p>
+<div class="section" id="step-1-create-metaevidence">
+<h2>Step 1: Create MetaEvidence<a class="headerlink" href="#step-1-create-metaevidence" title="Permalink to this headline">¶</a></h2>
+<p>The first thing needed in order to create a dispute is to create the MetaEvidence.
+In our example we are going to be going along with a hypothetical escrow dispute.</p>
 <div class="section" id="part-1-create-evidence-json-file">
 <h3>Part 1: Create Evidence JSON File<a class="headerlink" href="#part-1-create-evidence-json-file" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;@kleros/archon&#39;</span><span class="p">);</span>
@@ -231,8 +222,8 @@ aws s3 cp ./&lt;hash&gt; s3://kleros-examples/&lt;hash&gt;
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Evidence Examples</a><ul>
-<li><a class="reference internal" href="#submit-and-fetch-evidence">Submit and Fetch Evidence</a><ul>
+<li><a class="reference internal" href="#">Evidence Walkthrough</a><ul>
+<li><a class="reference internal" href="#step-1-create-metaevidence">Step 1: Create MetaEvidence</a><ul>
 <li><a class="reference internal" href="#part-1-create-evidence-json-file">Part 1: Create Evidence JSON File</a></li>
 <li><a class="reference internal" href="#part-2-host-with-ipfs-and-get-the-hash">Part 2: Host with IPFS and get the hash</a></li>
 <li><a class="reference internal" href="#part-2-alternate-host-on-any-cloud-provider-e-g-aws-using-hash-as-filename">Part 2 (Alternate): Host on any cloud provider (e.g. AWS) using hash as filename</a></li>
@@ -245,16 +236,10 @@ aws s3 cp ./&lt;hash&gt; s3://kleros-examples/&lt;hash&gt;
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="ipfs.html"
-                        title="previous chapter">IPFS Links and Validation</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="archon.html"
-                        title="next chapter">Archon</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/evidence.rst.txt"
+      <li><a href="_sources/tutorial.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -280,12 +265,6 @@ aws s3 cp ./&lt;hash&gt; s3://kleros-examples/&lt;hash&gt;
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="archon.html" title="Archon"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ipfs.html" title="IPFS Links and Validation"
-             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li> 
       </ul>
     </div>
