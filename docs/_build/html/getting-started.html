@@ -51,7 +51,7 @@
 <ol class="arabic simple">
 <li>Install Archon from NPM</li>
 </ol>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">yarn</span> <span class="nx">add</span> <span class="nx">eth</span><span class="o">-</span><span class="nx">archon</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span>yarn add @kleros/archon
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -61,9 +61,10 @@
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>Initialize an instance of Archon using an Ethereum Provider and an IPFS Gateway.</li>
+<li>Initialize an instance of Archon using an Ethereum Provider and, optionally, an IPFS Gateway.</li>
 </ol>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;https://mainnet.infura.io&#39;</span><span class="p">,</span> <span class="s1">&#39;https://gateway.ipfs.io&#39;</span><span class="p">)</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// By default Archon uses &#39;https://gateway.ipfs.io&#39; as the default IPFS gateway. To use your own gateway, pass the gateway URI as the 2nd parameter to Archon.</span>
+<span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;https://mainnet.infura.io&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -72,7 +73,7 @@
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This sets the environment variable <code class="docutils literal notranslate"><span class="pre">IPFS_GATEWAY_URI</span></code>. A gateway is needed to access <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> files that might be referenced in evidence or metaEvidence.</p>
+<p class="last">A gateway is needed to access <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> files that might be referenced in evidence or metaEvidence.</p>
 </div>
 <p>Now you are all set! Use your <a class="reference internal" href="archon.html#archon"><span class="std std-ref">Archon</span></a> object to interact with <a class="reference internal" href="archon-arbitrable.html#arbitrable"><span class="std std-ref">arbitrable</span></a>
 and <a class="reference internal" href="archon-arbitrator.html#arbitrator"><span class="std std-ref">arbitrator</span></a> smart contracts on the blockchain.</p>

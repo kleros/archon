@@ -186,7 +186,7 @@ archon.setIpfsGateway()
 
     archon.setIpfsGateway(ipfsGatewayURI)
 
-Will change the ``IPFS`` gateway environment variable.
+Will change the ``IPFS`` gateway used to fetch and validate data.
 
 ----------
 Parameters

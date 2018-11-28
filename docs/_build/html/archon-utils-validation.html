@@ -55,9 +55,9 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <p>The options parameter can include:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="17%" />
-<col width="8%" />
-<col width="75%" />
+<col width="12%" />
+<col width="6%" />
+<col width="82%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Key</th>
@@ -66,15 +66,19 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>hash</td>
+<tr class="row-even"><td>preValidated</td>
+<td>bool</td>
+<td>If file has been pre-validated this will just fetch file and set isValid = true.</td>
+</tr>
+<tr class="row-odd"><td>hash</td>
 <td>string</td>
 <td>The original hash to compare the file against.</td>
 </tr>
-<tr class="row-odd"><td>strictHashes</td>
+<tr class="row-even"><td>strictHashes</td>
 <td>bool</td>
 <td>If true, an error will throw if hash validations fail.</td>
 </tr>
-<tr class="row-even"><td>customHashFn</td>
+<tr class="row-odd"><td>customHashFn</td>
 <td>fn</td>
 <td>A custom hash function to use to validate the file.</td>
 </tr>
@@ -171,7 +175,7 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <p class="last">All insignificant whitespace should be removed from JSON files before hashing. You can use <code class="docutils literal notranslate"><span class="pre">JSON.stringify</span></code> to remove whitespace.</p>
 </div>
 <p>If a different hashing algorithm was used, pass it in the desired function with <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
-<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
+<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multicodec/blob/master/table.csv/">here</a>.</p>
 <div class="section" id="id1">
 <h2>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
@@ -253,7 +257,7 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <p class="last">All insignificant whitespace should be removed from JSON files before hashing. You can use <code class="docutils literal notranslate"><span class="pre">JSON.stringify</span></code> to remove whitespace.</p>
 </div>
 <p>If a different hashing algorithm was used, pass it in the desired function with <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
-<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multihash/blob/master/hashtable.csv/">here</a>.</p>
+<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multicodec/blob/master/table.csv/">here</a>.</p>
 <div class="section" id="id5">
 <h2>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
