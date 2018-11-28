@@ -22,4 +22,4 @@ keccak-512      0x1D
 If a different hashing algorithm was used, pass it in the desired function with ``customHashFn``. The function should expect a single string parameter.
 
 A full list of possible algorithms and multicodes can be found `here
-<https://github.com/multiformats/multihash/blob/master/hashtable.csv/>`_.
+<https://github.com/multiformats/multicodec/blob/master/table.csv/>`_.

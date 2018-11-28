@@ -42,8 +42,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="archon">
-<span id="id1"></span><h1>Archon<a class="headerlink" href="#archon" title="Permalink to this headline">¶</a></h1>
+  <div class="admonition note" id="archon">
+<p class="first admonition-title">Note</p>
+<p class="last">Archon depends on Web3 1.0. This version of <code class="docutils literal notranslate"><span class="pre">web3</span></code> is still in Beta so usage may change unexpectedly and/or bugs may arise until a stable version of Web3 1.0 is released.</p>
+</div>
+<div class="section" id="id1">
+<h1>Archon<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <blockquote>
 <div>Class</div></blockquote>
 <p>This is the main class of Archon.</p>
@@ -169,11 +173,7 @@
 </ol>
 </div>
 <div class="section" id="id6">
-<h3>Returns<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">Boolean</span></code></p>
-</div>
-<div class="section" id="id7">
-<h3>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<h3>Example<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;archon&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">);</span>
 
@@ -194,15 +194,15 @@
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">setIpfsGateway</span><span class="p">(</span><span class="nx">ipfsGatewayURI</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Will change the <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> gateway environment variable.</p>
-<div class="section" id="id8">
-<h3>Parameters<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>Will change the <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> gateway used to fetch and validate data.</p>
+<div class="section" id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><code class="docutils literal notranslate"><span class="pre">ipfsGatewayURI</span></code> - <code class="docutils literal notranslate"><span class="pre">Object</span></code>: A URI to a trusted IPFS gateway .</li>
 </ol>
 </div>
-<div class="section" id="id9">
-<h3>Example<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>Example<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;archon&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;http://localhost:8545&#39;</span><span class="p">);</span>
 
@@ -241,13 +241,12 @@
 </li>
 <li><a class="reference internal" href="#archon-setprovider">archon.setProvider()</a><ul>
 <li><a class="reference internal" href="#id5">Parameters</a></li>
-<li><a class="reference internal" href="#id6">Returns</a></li>
-<li><a class="reference internal" href="#id7">Example</a></li>
+<li><a class="reference internal" href="#id6">Example</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#archon-setipfsgateway">archon.setIpfsGateway()</a><ul>
-<li><a class="reference internal" href="#id8">Parameters</a></li>
-<li><a class="reference internal" href="#id9">Example</a></li>
+<li><a class="reference internal" href="#id7">Parameters</a></li>
+<li><a class="reference internal" href="#id8">Example</a></li>
 </ul>
 </li>
 </ul>

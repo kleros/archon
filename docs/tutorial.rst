@@ -1,29 +1,28 @@
 .. include:: include_announcement.rst
 
-=================
-Evidence Examples
-=================
+====================
+Evidence Walkthrough
+====================
 
-Here are some examples of how you can use Archon to submit and retrieve evidence.
-In these examples we will assume we are using an ``Arbitrable`` contract that has a function:
+The best way to try things out is to learn by doing. So we have created a test
+smart contract, deployed on the Kovan test network, that you can use to test out
+submitting and fetching evidence. Here we will go through the process step by step.
+Feel free to follow along.
 
-.. code-block:: guess
+The test smart contract we will be using includes all of the standard Evidence related
+events that you would have in your smart contract. You can create a "dispute" in this
+contract and submit MetaEvidence and Evidence. There is no arbitrator for these disputes
+so they will always remain open.
 
-    function submitEvidence(string _evidence) public {
-        ...
-        emit Evidence(_arbitrator, _disputeID, msg.sender, _evidence);
-    }
+The contract can be found here: https://kovan.etherscan.io/address/0x3b43c3f69c5d06cc00575e3c5ab8723b129c494d#code
 
 ------------------------------------------------------------------------------
 
-Submit and Fetch Evidence
-=========================
+Step 1: Create MetaEvidence
+===========================
 
-This example demonstrates how to submit evidence, as per the Evidence Standard,
-and how to retrieve the Evidence using ``Archon``.
-
-In this example we will use an example evidence file hosted here:
-https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt
+The first thing needed in order to create a dispute is to create the MetaEvidence.
+In our example we are going to be going along with a hypothetical escrow dispute.
 
 ---------------------------------
 Part 1: Create Evidence JSON File
