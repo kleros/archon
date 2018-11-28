@@ -1,5 +1,7 @@
 .. _archon:
 
+.. include:: include_announcement.rst
+
 ======
 Archon
 ======
@@ -155,12 +157,6 @@ Parameters
 ----------
 
 1. ``myProvider`` - ``Object|String``: A provider object or URI.
-
--------
-Returns
--------
-
-``Boolean``
 
 -------
 Example
