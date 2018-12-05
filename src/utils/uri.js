@@ -30,8 +30,8 @@ export const getHttpUri = (uri, ipfsGateway) => {
       uri = uri.replace('://', ':/')
       // NURI
       if (uri.substr(0, 5) === '/ipfs' || uri.substr(0, 5) === 'ipfs/') {
-        if (uri.substr(0,1) === '/') uri = uri.substr(1, uri.length - 1)
-        uri = `${ipfsGateway}/ipfs/${uri}`
+        if (uri.substr(0, 1) === '/') uri = uri.substr(1, uri.length - 1)
+        uri = `${ipfsGateway}/${uri}`
       }
       // compatability scheme
       else if (uri.substr(0, 6) === 'ipfs:/')
