@@ -29,14 +29,19 @@ export const getHttpUri = (uri, ipfsGateway) => {
       // :// -> :/
       uri = uri.replace('://', ':/')
       // NURI
-      if (uri.substr(0, 5) === '/ipfs' || uri.substr(0, 5) === 'ipfs/')
-        uri = `${ipfsGateway}/${uri}`
+      if (uri.substr(0, 5) === '/ipfs' || uri.substr(0, 5) === 'ipfs/') {
+        if (uri.substr(0,1) === '/') uri = uri.substr(1, uri.length - 1)
+        uri = `${ipfsGateway}/ipfs/${uri}`
+      }
       // compatability scheme
       else if (uri.substr(0, 6) === 'ipfs:/')
         uri = `${ipfsGateway}/${uri.split(':/').pop()}`
       else throw new Error(`Unrecognized protocol ${protocol}`)
 
       preValidated = true
+      break
+    case 'ipns':
+      // TODO we cannot validate these right now
       break
     default:
       throw new Error(`Unrecognized protocol ${protocol}`)
