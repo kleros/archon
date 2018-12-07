@@ -305,7 +305,7 @@ class Arbitrable extends StandardContract {
       }
     )
 
-    if (!disputeLogs[0])
+    if (disputeLogs.length === 0)
       throw new Error(
         errorConstants.CONTRACT_ERROR(
           `No Dispute log for ${contractAddress} with arbitrator ${arbitratorAddress} and disputeID ${disputeID}`

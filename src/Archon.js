@@ -2,6 +2,7 @@ import packageJSON from '../package.json'
 
 import isRequired from './utils/isRequired'
 import * as hashingUtils from './utils/hashing'
+import { getURIProtocol, getHttpUri } from './utils/uri'
 import { Arbitrable, Arbitrator } from './standards'
 
 /**
@@ -11,7 +12,7 @@ import { Arbitrable, Arbitrator } from './standards'
 class Archon {
   modules = { Arbitrable, Arbitrator }
   version = packageJSON.version
-  utils = { ...hashingUtils }
+  utils = { ...hashingUtils, getHttpUri, getURIProtocol }
 
   /**
    * Instantiates a new Archon instance that provides the public interface
@@ -26,8 +27,6 @@ class Archon {
   constructor(ethereumProvider, ipfsGatewayURI = 'https://gateway.ipfs.io') {
     this.arbitrator = new Arbitrator(ethereumProvider, ipfsGatewayURI)
     this.arbitrable = new Arbitrable(ethereumProvider, ipfsGatewayURI)
-
-    this.setIpfsGateway(ipfsGatewayURI)
   }
 
   /**
