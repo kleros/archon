@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/kleros/archon/compare/v0.4.3...v0.5.0) (2018-12-07)
+
+
+### Features
+
+* add uri utils ([6f20756](https://github.com/kleros/archon/commit/6f20756))
+
+
+
 <a name="0.4.3"></a>
 ## [0.4.3](https://github.com/kleros/archon/compare/v0.4.2...v0.4.3) (2018-12-05)
 
