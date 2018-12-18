@@ -10,6 +10,11 @@ import { Arbitrable, Arbitrator } from './standards'
  * as defined in ERC 792 and ___insert_evidence_standard_ERC___.
  */
 class Archon {
+  // static methods
+  static modules = { Arbitrable, Arbitrator }
+  static version = packageJSON.version
+  static utils = { ...hashingUtils, getHttpUri, getURIProtocol }
+  // class methods
   modules = { Arbitrable, Arbitrator }
   version = packageJSON.version
   utils = { ...hashingUtils, getHttpUri, getURIProtocol }
