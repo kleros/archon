@@ -1,3 +1,3 @@
 import Archon from './Archon.js'
 
-module.exports = Archon
+export default Archon
