@@ -6,7 +6,7 @@ contract TestArbitrable {
 
   event Dispute(address indexed _arbitrator, uint indexed _disputeID, uint _metaEvidenceID);
 
-  event Evidence(address indexed _arbitrator, uint indexed _disputeID, address _party, string _evidence);
+  event Evidence(address indexed _arbitrator, uint indexed _disputeID, address indexed _party, string _evidence);
 
   event Ruling(address indexed _arbitrator, uint indexed _disputeID, uint _ruling);
 

@@ -66,24 +66,24 @@ contract TestArbitrator {
   /** @dev To be raised when a dispute can be appealed.
    *  @param _disputeID ID of the dispute.
    */
-  event AppealPossible(uint _disputeID);
+  event AppealPossible(uint indexed _disputeID, address indexed _arbitrable);
 
   /** @dev To be raised when a dispute is created.
    *  @param _disputeID ID of the dispute.
    *  @param _arbitrable The contract which created the dispute.
    */
-  event DisputeCreation(uint indexed _disputeID, address _arbitrable);
+  event DisputeCreation(uint indexed _disputeID, address indexed _arbitrable);
 
   /** @dev To be raised when the current ruling is appealed.
    *  @param _disputeID ID of the dispute.
    *  @param _arbitrable The contract which created the dispute.
    */
-  event AppealDecision(uint indexed _disputeID, address _arbitrable);
+  event AppealDecision(uint indexed _disputeID, address indexed _arbitrable);
 
   /* TEST EMITTERS */
 
-  function emitAppealPossible(uint _disputeID) public {
-    emit AppealPossible(_disputeID);
+  function emitAppealPossible(uint _disputeID, address _arbitrable) public {
+    emit AppealPossible(_disputeID, _arbitrable);
   }
 
   function emitDisputeCreation(uint _disputeID, address _arbitrable) public {
