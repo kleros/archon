@@ -59,6 +59,8 @@
     "husky": "^0.14.3",
     "jest": "^22.4.2",
     "kleros-scripts": "^0.4.0",
+    "nock": "^10.0.0",
+    "solc": "^0.4.25",
     "standard-version": "^4.3.0",
     "webpack": "^4.19.1",
     "webpack-cli": "^3.1.2"
@@ -70,8 +72,6 @@
     "js-sha3": "^0.8.0",
     "lodash": "^4.17.4",
     "multihashes": "^0.4.14",
-    "nock": "^10.0.0",
-    "solc": "^0.4.25",
-    "web3": "^1.0.0-beta.36"
+    "web3": "1.0.0-beta.36"
   }
 }
