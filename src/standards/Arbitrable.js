@@ -45,7 +45,7 @@ class Arbitrable extends StandardContract {
       options.toBlock || 'latest',
       {
         _arbitrator: arbitratorAddress,
-        _disputeID: disputeID,
+        _disputeID: disputeID.toString(),
         ...options.filters
       }
     )
@@ -122,7 +122,7 @@ class Arbitrable extends StandardContract {
    */
   getMetaEvidence = async (
     contractAddress = isRequired('contractAddress'),
-    metaEvidenceID = 0,
+    metaEvidenceID = '0',
     options = {}
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
@@ -132,7 +132,7 @@ class Arbitrable extends StandardContract {
       'MetaEvidence',
       options.fromBlock || 0,
       options.toBlock || 'latest',
-      { _metaEvidenceID: metaEvidenceID, ...options.filters }
+      { _metaEvidenceID: metaEvidenceID.toString(), ...options.filters }
     )
 
     if (!metaEvidenceLogs[0])
@@ -239,7 +239,7 @@ class Arbitrable extends StandardContract {
       options.toBlock || 'latest',
       {
         _arbitrator: arbitratorAddress,
-        _disputeID: disputeID,
+        _disputeID: disputeID.toString(),
         ...options.filters
       }
     )
@@ -300,7 +300,7 @@ class Arbitrable extends StandardContract {
       options.toBlock || 'latest',
       {
         _arbitrator: arbitratorAddress,
-        _disputeID: disputeID,
+        _disputeID: disputeID.toString(),
         ...options.filters
       }
     )

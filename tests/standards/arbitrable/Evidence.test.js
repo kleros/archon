@@ -455,7 +455,7 @@ describe('Evidence', () => {
     const evidence = await arbitrableInstance.getEvidence(
       arbitrableContract.options.address,
       arbitratorAddress,
-      0
+      '0'
     )
     expect(evidence.length).toBe(1)
     expect(evidence[0].evidenceJSONValid).toBeTruthy()
