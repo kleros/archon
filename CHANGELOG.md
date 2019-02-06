@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.5"></a>
+## [0.5.5](https://github.com/kleros/archon/compare/v0.5.4...v0.5.5) (2019-02-06)
+
+
+### Bug Fixes
+
+* never use ints for event logs as 0 is interpreted as null ([d7dfb2b](https://github.com/kleros/archon/commit/d7dfb2b))
+
+
+
 <a name="0.5.4"></a>
 ## [0.5.4](https://github.com/kleros/archon/compare/v0.5.3...v0.5.4) (2018-12-31)
 
