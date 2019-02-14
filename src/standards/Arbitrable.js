@@ -115,6 +115,7 @@ class Arbitrable extends StandardContract {
    * By default MetaEvidence will be returned regardless of the validity of the hashes
    * with an indicator on whether the hash was valid or not. To throw an error instead,
    * use strictHashes = true in options object.
+   * NOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.
    * @param {string} contractAddress - The address of the Arbitrable contract.
    * @param {number} metaEvidenceID - The identifier of the metaEvidence log
    * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, strictHashes
@@ -139,13 +140,6 @@ class Arbitrable extends StandardContract {
       throw new Error(
         errorConstants.CONTRACT_ERROR(
           `No MetaEvidence log for ${contractAddress} with metaEvidenceID ${metaEvidenceID}`
-        )
-      )
-
-    if (metaEvidenceLogs.length > 1)
-      throw new Error(
-        errorConstants.CONTRACT_ERROR(
-          `More than one MetaEvidence returned for metaEvidenceID ${metaEvidenceID}`
         )
       )
 

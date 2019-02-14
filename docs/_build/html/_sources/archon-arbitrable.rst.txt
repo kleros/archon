@@ -147,6 +147,8 @@ filters       object  Additional filters for event logs.
 
 .. tip:: Use :ref:`getDispute <getDispute>` to get the metaEvidenceID for a dispute.
 
+.. note:: If more than one MetaEvidence exists for the given metaEvidenceID, only the first submitted metaEvidence will be returned.
+
 -------
 Returns
 -------
