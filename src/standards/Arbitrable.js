@@ -26,14 +26,14 @@ class Arbitrable extends StandardContract {
    * Fetch all Evidence submitted to the contract.
    * @param {string} contractAddress - The address of the arbitrable contract.
    * @param {string} arbitratorAddress - The address of the arbitrator contract.
-   * @param {number} disputeID - The index of the dispute.
+   * @param {number} evidenceGroupID - The index of the evidence group.
    * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes
    * @returns {object[]} An array of evidence objects
    */
   getEvidence = async (
     contractAddress = isRequired('contractAddress'),
     arbitratorAddress = isRequired('arbitratorAddress'),
-    disputeID = isRequired('isRequired'),
+    evidenceGroupID = isRequired('evidenceGroupID'),
     options = {}
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
@@ -45,7 +45,7 @@ class Arbitrable extends StandardContract {
       options.toBlock || 'latest',
       {
         _arbitrator: arbitratorAddress,
-        _disputeID: disputeID.toString(),
+        _evidenceGroupID: evidenceGroupID.toString(),
         ...options.filters
       }
     )
@@ -117,13 +117,13 @@ class Arbitrable extends StandardContract {
    * use strictHashes = true in options object.
    * NOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.
    * @param {string} contractAddress - The address of the Arbitrable contract.
-   * @param {number} metaEvidenceID - The identifier of the metaEvidence log
+   * @param {number} metaEvidenceID - The identifier of the metaEvidence log.
    * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, strictHashes
    * @returns {object} The metaEvidence object
    */
   getMetaEvidence = async (
     contractAddress = isRequired('contractAddress'),
-    metaEvidenceID = '0',
+    metaEvidenceID = isRequired('metaEvidenceID'),
     options = {}
   ) => {
     const contractInstance = this._loadContractInstance(contractAddress)
@@ -325,6 +325,7 @@ class Arbitrable extends StandardContract {
 
     return {
       metaEvidenceID: args._metaEvidenceID,
+      evidenceGroupID: args._evidenceGroupID,
       createdAt,
       blockNumber: disputeLog.blockNumber,
       transactionHash: disputeLog.transactionHash

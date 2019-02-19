@@ -16,7 +16,7 @@ describe('Dispute', () => {
     arbitrableInstance = new Arbitrable(provider)
   })
 
-  it('get dispute log', async () => {
+  it.only('get dispute log', async () => {
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
       provider,
@@ -25,11 +25,17 @@ describe('Dispute', () => {
     expect(arbitrableContract.options.address).toBeTruthy()
 
     const arbitratorAddress = '0x0000000000000000000000000000000000000000'
-    const disputeID = 0
+    const disputeID = 2
     const metaEvidenceID = 1
-    // emit evidence with evidence = fakeURI
+    const evidenceGroupID = 3
+
     let receipt = await arbitrableContract.methods
-      .emitDispute(arbitratorAddress, disputeID, metaEvidenceID)
+      .emitDispute(
+        arbitratorAddress,
+        disputeID,
+        metaEvidenceID,
+        evidenceGroupID
+      )
       .send({
         from: accounts[0],
         gas: 500000
@@ -42,6 +48,7 @@ describe('Dispute', () => {
       disputeID
     )
     expect(disputeData.metaEvidenceID).toEqual(`${metaEvidenceID}`)
+    expect(disputeData.evidenceGroupID).toEqual(`${evidenceGroupID}`)
     expect(disputeData.createdAt).toBeTruthy()
     expect(disputeData.blockNumber).toBeTruthy()
     expect(disputeData.transactionHash).toEqual(receipt.transactionHash)
@@ -81,9 +88,15 @@ describe('Dispute', () => {
     const arbitratorAddress = '0x0000000000000000000000000000000000000000'
     const disputeID = 0
     const metaEvidenceID = 1
+    const evidenceGroupID = 3
     // emit evidence with evidence = fakeURI
     let receipt = await arbitrableContract.methods
-      .emitDispute(arbitratorAddress, disputeID, metaEvidenceID)
+      .emitDispute(
+        arbitratorAddress,
+        disputeID,
+        metaEvidenceID,
+        evidenceGroupID
+      )
       .send({
         from: accounts[0],
         gas: 500000
@@ -91,7 +104,12 @@ describe('Dispute', () => {
     expect(receipt.transactionHash).toBeTruthy()
     // emit evidence with evidence = fakeURI
     receipt = await arbitrableContract.methods
-      .emitDispute(arbitratorAddress, disputeID, metaEvidenceID + 1)
+      .emitDispute(
+        arbitratorAddress,
+        disputeID,
+        metaEvidenceID + 1,
+        evidenceGroupID
+      )
       .send({
         from: accounts[0],
         gas: 500000
