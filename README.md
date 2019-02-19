@@ -1,7 +1,7 @@
 # Archon
 
-<p align="center">
-  <a href="https://badge.fury.io/js/archon"><img src="https://badge.fury.io/js/archon.svg" alt="NPM Version"></a>
+<p align="center">  
+  <a href="https://badge.fury.io/js/%40kleros%2Farchon"><img src="https://badge.fury.io/js/%40kleros%2Farchon.svg" alt="npm version"></a>
   <a href="https://travis-ci.org/kleros/archon"><img src="https://travis-ci.org/kleros/archon.svg?branch=master" alt="Build Status"></a>
   <a href="https://david-dm.org/kleros/archon"><img src="https://david-dm.org/kleros/archon.svg" alt="Dependencies"></a>
   <a href="https://david-dm.org/kleros/archon?type=dev"><img src="https://david-dm.org/kleros/archon/dev-status.svg" alt="Dev Dependencies"></a>
