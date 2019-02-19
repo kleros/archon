@@ -358,11 +358,12 @@
   dependencies:
     find-up "^2.1.0"
 
-"@kleros/kleros-interaction@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@kleros/kleros-interaction/-/kleros-interaction-0.5.0.tgz#b27fd8eea2c037853673977a1249accca670de0f"
-  integrity sha512-i4RusXPK1NY2wzsGnW4fwJ5cHmToCKa7m5c6I03odTNBX/gTy8WqAhhdOtSJqNNDZUt8EzEJ0azI9rOrmmt4mg==
+"@kleros/kleros-interaction@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@kleros/kleros-interaction/-/kleros-interaction-0.7.0.tgz#f416c3b370345d5a8c2f95366d6d741c97ecda81"
+  integrity sha512-31q0mt2BvskI5w8A4hsOlnXgsNoG3EdWo4U5TI86070pjdGhrKw9mDIJRt9BR1YRUPyCCUegzTlG+owyRgV/LQ==
   dependencies:
+    "@realitio/realitio-contracts" "^2.0.5"
     minimetoken "^0.2.0"
     openzeppelin-solidity "^1.12.0"
     solidity-bytes-utils "^0.0.5"
@@ -388,6 +389,11 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.2.tgz#54c5a964462be3d4d78af631363c18d6fa91ac26"
   integrity sha512-yprFYuno9FtNsSHVlSWd+nRlmGoAbqbeCwOryP6sC/zoCjhpArcRMYp19EvpSUSizJAlsXEwJv+wcWS9XaXdMw==
+
+"@realitio/realitio-contracts@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@realitio/realitio-contracts/-/realitio-contracts-2.0.5.tgz#785db5f1af064add917e91cd56f037243ff392a3"
+  integrity sha512-bt2dQxqd0VDqJwdOJn6t+dySGRe8YqaqmFwzWnB+R9ozREQPQ0kSfOnhFV7nFFZRdI2eEXP0M3p18l1WyGtrZg==
 
 "@types/node@*", "@types/node@^10.3.2":
   version "10.12.0"
