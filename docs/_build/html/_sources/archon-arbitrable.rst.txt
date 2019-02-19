@@ -20,7 +20,7 @@ getEvidence()
 
 .. code-block:: javascript
 
-    archon.arbitrable.getEvidence(contractAddress, arbitratorAddress, disputeID, options={});
+    archon.arbitrable.getEvidence(contractAddress, arbitratorAddress, evidenceGroupID, options={});
 
 Fetch and validate evidence via the Arbitrable smart contract ``Evidence`` event logs.
 For a particular dispute.
@@ -35,7 +35,7 @@ Parameters
 
 2) ``arbitratorAddress`` - ``String``: The address of the arbitrator contract.
 
-3) ``disputeID`` - ``Number``: The unique identifier of the dispute in the arbitrator contract.
+3) ``evidenceGroupID`` - ``Number``: The evidence group ID.
 
 4) ``options`` - ``Object``: Optional parameters.
 
@@ -50,6 +50,8 @@ fromBlock     int     The block where we start searching for event logs.
 toBlock       int     The block where we will stop searching for event logs.
 filters       object  Additional filters for event logs.
 ============  ======  ======================================================
+
+.. tip:: Use :ref:`getDispute <getDispute>` to get the evidenceGroupID for a dispute.
 
 -------
 Returns
@@ -307,6 +309,7 @@ Returns
 
       {
         metaEvidenceID: <String>,
+        evidenceGroupID: <String>,
         createdAt: <Number>,
         blockNumber: <Number>,
         transactionHash: <String>
@@ -328,6 +331,7 @@ Example
 
     > {
       metaEvidenceID: "0",
+      evidenceGroupID: "3",
       createdAt: 1539025000,
       blockNumber: 6503570,
       transactionHash: "0x340fdc6e32ef24eb14f9ccbd2ec614a8d0c7121e8d53f574529008f468481990"
