@@ -21,6 +21,7 @@ export const validateFileFromURI = async (
 ) => {
   // Fetch the evidence JSON
   const fileResponse = await axios.get(fileURI)
+
   if (fileResponse.status !== 200)
     throw new Error(
       errorConstants.HTTP_ERROR(

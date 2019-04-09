@@ -137,19 +137,22 @@ Parameters
 
 The options parameter can include:
 
-============  ======  ======================================================
-Key           Type    Description
-============  ======  ======================================================
-strictHashes  bool    If true, an error will throw if hash validations fail.
-customHashFn  fn      Hashing function that should be used to validate the hashes.
-fromBlock     int     The block where we start searching for event logs.
-toBlock       int     The block where we will stop searching for event logs.
-filters       object  Additional filters for event logs.
-============  ======  ======================================================
+================  ======  ======================================================
+Key               Type    Description
+================  ======  ======================================================
+strictHashes      bool    If true, an error will throw if hash validations fail.
+customHashFn      fn      Hashing function that should be used to validate the hashes.
+fromBlock         int     The block where we start searching for event logs.
+toBlock           int     The block where we will stop searching for event logs.
+filters           object  Additional filters for event logs.
+scriptParameters  object  Parameters to pass to sandboxed script.
+================  ======  ======================================================
 
 .. tip:: Use :ref:`getDispute <getDispute>` to get the metaEvidenceID for a dispute.
 
 .. note:: If more than one MetaEvidence exists for the given metaEvidenceID, only the first submitted metaEvidence will be returned.
+
+.. tip:: See :ref:`MetaEvidece Scripts <metaEvidenceScripts>` for detailed description on creating scripts compatible with Archon.
 
 -------
 Returns

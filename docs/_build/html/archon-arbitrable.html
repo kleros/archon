@@ -191,9 +191,9 @@ external interface used to render the evidence found at <code class="docutils li
 <p>The options parameter can include:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="15%" />
-<col width="8%" />
-<col width="77%" />
+<col width="20%" />
+<col width="7%" />
+<col width="73%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Key</th>
@@ -222,6 +222,10 @@ external interface used to render the evidence found at <code class="docutils li
 <td>object</td>
 <td>Additional filters for event logs.</td>
 </tr>
+<tr class="row-odd"><td>scriptParameters</td>
+<td>object</td>
+<td>Parameters to pass to sandboxed script.</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition tip">
@@ -231,6 +235,10 @@ external interface used to render the evidence found at <code class="docutils li
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If more than one MetaEvidence exists for the given metaEvidenceID, only the first submitted metaEvidence will be returned.</p>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">See <a class="reference internal" href="metaevidence-scripts.html#metaevidencescripts"><span class="std std-ref">MetaEvidece Scripts</span></a> for detailed description on creating scripts compatible with Archon.</p>
 </div>
 </div>
 <div class="section" id="id3">

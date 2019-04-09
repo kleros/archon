@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 
@@ -27,7 +28,7 @@ describe('Hashing and Validation', () => {
       validMultihash(nonStandardSha3Hash, hashedText, Web3.utils.soliditySha3)
     ).toBeTruthy() // true
   })
-  it.only('Hash from a file', async () => {
+  it('Hash from a file', async () => {
     const fileContents = JSON.parse(fs.readFileSync(path.resolve(__dirname, "./exampleMetaEvidenceBasic.json")).toString())
 
     const evidenceHash = multihashFile(
@@ -40,7 +41,7 @@ describe('Hashing and Validation', () => {
       JSON.stringify(fileContents)
     )).toBeTruthy() // true
   })
-  it.only('Hash from a file selfHash', async () => {
+  it('Hash from a file selfHash', async () => {
     const fileContents = fs.readFileSync(path.resolve(__dirname, "./exampleMetaEvidenceBasicSelfHash.json")).toString()
 
     const { selfHash, ...fileJSON } = JSON.parse(fileContents)
@@ -49,5 +50,17 @@ describe('Hashing and Validation', () => {
       selfHash,
       fileJSON
     )).toBeTruthy() // true
+  })
+  it.only('Hash display interface', async () => {
+    const pageContents = (await axios.get('https://kleros-t2cr-evidence.netlify.com/')).data
+    // console.log(pageContents)
+
+    const multiHash = multihashFile(pageContents, 0x1B)
+    console.log(multiHash)
+
+    expect(validMultihash(
+      multiHash,
+      pageContents
+    )).toBeTruthy()
   })
 })
