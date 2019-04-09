@@ -33,6 +33,7 @@ To get up to speed on the standards please reference:
    hashing
    ipfs
    evidence
+   metaevidence-scripts
 
 .. toctree::
     :maxdepth: 2

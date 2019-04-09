@@ -2,6 +2,7 @@ import ArbitrableJSONInterface from '@kleros/kleros-interaction/build/contracts/
 
 import * as errorConstants from '../constants/error'
 import EventListener from '../utils/EventListener'
+import fetchDataFromScript from '../utils/frame-loader'
 import isRequired from '../utils/isRequired'
 import { validateFileFromURI } from '../utils/hashing'
 import { getHttpUri } from '../utils/uri'
@@ -152,13 +153,47 @@ class Arbitrable extends StandardContract {
     )
 
     const {
-      file: metaEvidenceJSON,
+      file: _metaEvidenceJSON,
       isValid: metaEvidenceJSONValid
     } = await validateFileFromURI(metaEvidenceUri, {
       preValidated,
       strictHashes: options.strictHashes,
       customHashFn: options.customHashFn
     })
+
+    // we want it to be a dynamic variable so we can edit via script if neccesary
+    let metaEvidenceJSON = _metaEvidenceJSON
+
+    // make updates to metaEvidence from script
+    let scriptValid = false
+    try {
+      if (metaEvidenceJSON.dynamicScriptURI) {
+        const { uri: scriptURI, preValidated } = getHttpUri(
+          metaEvidenceJSON.dynamicScriptURI,
+          this.ipfsGateway
+        )
+
+        const script = await validateFileFromURI(scriptURI, {
+          preValidated,
+          strictHashes: options.strictHashes,
+          hash: metaEvidenceJSON.dynamicScriptHash,
+          customHashFn: options.customHashFn
+        })
+        scriptValid = script.isValid
+        const metaEvidenceEdits = await fetchDataFromScript(
+          script.file,
+          options.scriptParameters
+        )
+        metaEvidenceJSON = {
+          ...metaEvidenceJSON,
+          ...metaEvidenceEdits
+        }
+      }
+    } catch (err) {
+      if (options.strictHashes) throw new Error(err)
+      // if we get an error in the execution the script is invalid
+      scriptValid = false
+    }
 
     let fileValid = false
     try {
@@ -180,7 +215,7 @@ class Arbitrable extends StandardContract {
     }
 
     // validate file hash
-    let interfaceValid
+    let interfaceValid = false
     try {
       if (metaEvidenceJSON.evidenceDisplayInterfaceURL) {
         const { uri: disputeInterfaceURI, preValidated } = getHttpUri(
@@ -197,7 +232,6 @@ class Arbitrable extends StandardContract {
       }
     } catch (err) {
       if (options.strictHashes) throw new Error(err)
-      interfaceValid = false
     }
 
     return {
@@ -205,6 +239,7 @@ class Arbitrable extends StandardContract {
       metaEvidenceJSONValid,
       fileValid,
       interfaceValid,
+      scriptValid,
       blockNumber: metaEvidenceLog.blockNumber,
       transactionHash: metaEvidenceLog.transactionHash
     }

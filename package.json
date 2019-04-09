@@ -69,6 +69,7 @@
     "@kleros/kleros-interaction": "^0.7.0",
     "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
+    "iframe": "^1.0.0",
     "js-sha3": "^0.8.0",
     "lodash": "^4.17.4",
     "multihashes": "^0.4.14",
