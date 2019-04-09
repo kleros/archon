@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 
+import axios from 'axios'
 import Web3 from 'web3'
 
 import {

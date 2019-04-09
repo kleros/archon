@@ -582,7 +582,7 @@ describe('MetaEvidence', () => {
 
     expect(metaEvidence.scriptValid).toBeTruthy()
     expect(metaEvidence.metaEvidenceJSON.rulingOptions.rulingType).toBe("multiple")
-  }),
+  })
   it('script fail: should still return metaEvidence', async () => {
     const testScript = 'const test = () => {bad syntax; return {rulingOptions: {rulingType: "multiple"}}}; test();'
     const scriptHash = multihashFile(testScript, 0x1B)
@@ -629,7 +629,7 @@ describe('MetaEvidence', () => {
 
     expect(metaEvidence.scriptValid).toBeFalsy()
     expect(metaEvidence.metaEvidenceJSON).toEqual(metaEvidenceJSON)
-  }),
+  })
   it('script hash fail', async () => {
     const testScript = 'const test = () => {return {rulingOptions: {rulingType: "multiple"}}}; test();'
     const scriptHash = multihashFile(testScript, 0x1B) + '1'

@@ -180,7 +180,10 @@ class Arbitrable extends StandardContract {
           customHashFn: options.customHashFn
         })
         scriptValid = script.isValid
-        const metaEvidenceEdits = await fetchDataFromScript(script.file, options.scriptParameters)
+        const metaEvidenceEdits = await fetchDataFromScript(
+          script.file,
+          options.scriptParameters
+        )
         metaEvidenceJSON = {
           ...metaEvidenceJSON,
           ...metaEvidenceEdits

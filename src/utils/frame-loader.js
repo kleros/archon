@@ -4,13 +4,11 @@ const fetchDataFromScript = async (scriptString, scriptParameters) => {
   // Only works in the browser atm
   if (!window) return {}
   let resolver
-  let rejecter
-  const returnPromise = new Promise((resolve, reject) => {
+  const returnPromise = new Promise(resolve => {
     resolver = resolve
-    rejecter = reject
   })
 
-  window.onmessage = (message) => {
+  window.onmessage = message => {
     if (message.data.target === 'script') {
       resolver(message.data.result)
     }
@@ -40,7 +38,10 @@ const fetchDataFromScript = async (scriptString, scriptParameters) => {
     )})
   </script>`
 
-  const frame = iframe({body: frameBody, sandboxAttributes: ['allow-same-origin', 'allow-scripts']})
+  const _ = iframe({
+    body: frameBody,
+    sandboxAttributes: ['allow-same-origin', 'allow-scripts']
+  })
   return returnPromise
 }
 
