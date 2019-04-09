@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/kleros/archon/compare/v0.7.0...v0.8.0) (2019-04-09)
+
+
+### Features
+
+* sanitize metaEvidence to add support for legacy standard ([7d526c0](https://github.com/kleros/archon/commit/7d526c0))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/kleros/archon/compare/v0.5.7...v0.7.0) (2019-04-09)
 
