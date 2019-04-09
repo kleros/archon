@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/kleros/archon/compare/v0.5.7...v0.7.0) (2019-04-09)
+
+
+### Bug Fixes
+
+* version badge ([452873c](https://github.com/kleros/archon/commit/452873c))
+
+
+### Features
+
+* evidence groups ([aec7052](https://github.com/kleros/archon/commit/aec7052))
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/kleros/archon/compare/v0.5.7...v0.6.0) (2019-02-19)
 
