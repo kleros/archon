@@ -51,12 +51,10 @@ describe('Hashing and Validation', () => {
       fileJSON
     )).toBeTruthy() // true
   })
-  it.only('Hash display interface', async () => {
+  it('Hash display interface', async () => {
     const pageContents = (await axios.get('https://kleros-t2cr-evidence.netlify.com/')).data
-    // console.log(pageContents)
 
     const multiHash = multihashFile(pageContents, 0x1B)
-    console.log(multiHash)
 
     expect(validMultihash(
       multiHash,

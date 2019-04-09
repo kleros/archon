@@ -6,6 +6,7 @@ import fetchDataFromScript from '../utils/frame-loader'
 import isRequired from '../utils/isRequired'
 import { validateFileFromURI } from '../utils/hashing'
 import { getHttpUri } from '../utils/uri'
+import { sanitizeMetaEvidence } from '../utils/sanitize'
 
 import StandardContract from './StandardContract'
 
@@ -162,7 +163,7 @@ class Arbitrable extends StandardContract {
     })
 
     // we want it to be a dynamic variable so we can edit via script if neccesary
-    let metaEvidenceJSON = _metaEvidenceJSON
+    let metaEvidenceJSON = sanitizeMetaEvidence(_metaEvidenceJSON)
 
     // make updates to metaEvidence from script
     let scriptValid = false
@@ -216,10 +217,12 @@ class Arbitrable extends StandardContract {
 
     // validate file hash
     let interfaceValid = false
+    // allow for both so not to break previous versions from standard
+    const evidenceDisplayURI = metaEvidenceJSON.evidenceDisplayInterfaceURI
     try {
-      if (metaEvidenceJSON.evidenceDisplayInterfaceURL) {
+      if (evidenceDisplayURI) {
         const { uri: disputeInterfaceURI, preValidated } = getHttpUri(
-          metaEvidenceJSON.evidenceDisplayInterfaceURL,
+          evidenceDisplayURI,
           this.ipfsGateway
         )
         if (preValidated) interfaceValid = true
