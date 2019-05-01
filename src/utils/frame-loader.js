@@ -14,7 +14,6 @@ const fetchDataFromScript = async (scriptString, scriptParameters) => {
     }
   }
 
-  // scriptString = 'setTimeout(() => {resolver({"test": "ok"})}, 1000)'
   const frameBody = `<script type='text/javascript'>
     const scriptParameters = ${JSON.stringify(scriptParameters)}
     let resolveScript
@@ -24,11 +23,6 @@ const fetchDataFromScript = async (scriptString, scriptParameters) => {
       rejectScript = reject
     })
 
-    const evaluator = () => {
-      ${scriptString}
-    }
-    evaluator()
-
     returnPromise.then(result => {window.parent.postMessage(
       {
         target: 'script',
@@ -36,6 +30,9 @@ const fetchDataFromScript = async (scriptString, scriptParameters) => {
       },
       '*'
     )})
+
+    ${scriptString}
+    getMetaEvidence()
   </script>`
 
   const _ = iframe({

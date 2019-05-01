@@ -185,6 +185,7 @@ class Arbitrable extends StandardContract {
           script.file,
           options.scriptParameters
         )
+
         metaEvidenceJSON = {
           ...metaEvidenceJSON,
           ...metaEvidenceEdits
