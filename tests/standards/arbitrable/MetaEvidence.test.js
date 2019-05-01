@@ -534,7 +534,7 @@ describe('MetaEvidence', () => {
       0
     )
     expect(metaEvidence.interfaceValid).toBeFalsy()
-  }),
+  })
   it.skip('edit metaEvidence with dynamicScriptURI', async () => {
     // TODO add support for nodejs
     const testScript = 'const test = () => {return {rulingOptions: {rulingType: "multiple"}}}; test();'
