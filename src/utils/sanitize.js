@@ -21,5 +21,9 @@ export const sanitizeMetaEvidence = _metaEvidenceJSON => {
     metaEvidenceJSON[updatedKey] = value
   }
 
+  // default to single-select ruling options
+  if (metaEvidenceJSON.rulingOptions && !metaEvidenceJSON.rulingOptions.type)
+    metaEvidenceJSON.rulingOptions.type = 'single-select'
+
   return metaEvidenceJSON
 }
