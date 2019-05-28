@@ -39,6 +39,7 @@ const fetchDataFromScript = async (scriptString, scriptParameters) => {
     body: frameBody,
     sandboxAttributes: ['allow-same-origin', 'allow-scripts']
   })
+  _.iframe.style.display = 'none'
   return returnPromise
 }
 

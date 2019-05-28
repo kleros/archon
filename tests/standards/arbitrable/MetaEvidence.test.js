@@ -537,7 +537,7 @@ describe('MetaEvidence', () => {
   })
   it.skip('edit metaEvidence with dynamicScriptURI', async () => {
     // TODO add support for nodejs
-    const testScript = 'const test = () => {return {rulingOptions: {rulingType: "multiple"}}}; test();'
+    const testScript = 'const getMetaEvidence = () => {resolveScript({rulingOptions: {type: "multiple-select"}})};'
     const scriptHash = multihashFile(testScript, 0x1B)
 
     const fakeHost = 'http://fake-address'
@@ -546,7 +546,7 @@ describe('MetaEvidence', () => {
       title: 'test title',
       description: 'test description',
       rulingOptions: {
-        rulingType: "single"
+        type: "single-select"
       },
       dynamicScriptURI: `${fakeHost}/${scriptHash}`,
       dynamicScriptHash: scriptHash
@@ -581,10 +581,10 @@ describe('MetaEvidence', () => {
     )
 
     expect(metaEvidence.scriptValid).toBeTruthy()
-    expect(metaEvidence.metaEvidenceJSON.rulingOptions.rulingType).toBe("multiple")
+    expect(metaEvidence.metaEvidenceJSON.rulingOptions.type).toBe("multiple-select")
   })
   it('script fail: should still return metaEvidence', async () => {
-    const testScript = 'const test = () => {bad syntax; return {rulingOptions: {rulingType: "multiple"}}}; test();'
+    const testScript = 'const getMetaEvidence = () => {bad syntax; resolveScript({rulingOptions: {type: "multiple-select"}}});'
     const scriptHash = multihashFile(testScript, 0x1B)
 
     const fakeHost = 'http://fake-address'
@@ -593,7 +593,7 @@ describe('MetaEvidence', () => {
       title: 'test title',
       description: 'test description',
       rulingOptions: {
-        rulingType: "single"
+        type: "single-select"
       },
       dynamicScriptURI: `${fakeHost}/${scriptHash}`,
       dynamicScriptHash: scriptHash
@@ -631,7 +631,7 @@ describe('MetaEvidence', () => {
     expect(metaEvidence.metaEvidenceJSON).toEqual(metaEvidenceJSON)
   })
   it('script hash fail', async () => {
-    const testScript = 'const test = () => {return {rulingOptions: {rulingType: "multiple"}}}; test();'
+    const testScript = 'const getMetaEvidence = () => {resolveScript {rulingOptions: {type: "multiple-select"}}};'
     const scriptHash = multihashFile(testScript, 0x1B) + '1'
 
     const fakeHost = 'http://fake-address'
@@ -640,7 +640,7 @@ describe('MetaEvidence', () => {
       title: 'test title',
       description: 'test description',
       rulingOptions: {
-        rulingType: "single"
+        type: "single"
       },
       dynamicScriptURI: `${fakeHost}/${scriptHash}`,
       dynamicScriptHash: scriptHash
