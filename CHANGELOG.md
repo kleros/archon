@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.10.1"></a>
+## [0.10.1](https://github.com/kleros/archon/compare/v0.10.0...v0.10.1) (2019-05-28)
+
+
+### Bug Fixes
+
+* **dynamicScript:** remove display from iframe ([2350dbd](https://github.com/kleros/archon/commit/2350dbd))
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/kleros/archon/compare/v0.9.0...v0.10.0) (2019-05-14)
 
