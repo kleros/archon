@@ -19,11 +19,8 @@ To get up to speed on the standards please reference:
 `ERC 1497 Evidence Standard
 <https://github.com/ethereum/EIPs/issues/1497>`_.
 
-`Implementation of an Arbitrable Contract
-<https://github.com/kleros/kleros-interaction/blob/master/contracts/standard/arbitration/Arbitrable.sol/>`_.
-
-`Implementation of an Arbitrator Contract
-<https://github.com/kleros/kleros-interaction/blob/master/contracts/standard/arbitration/Arbitrator.sol/>`_.
+`Tutorials on how to use ERC-792 and ERC-1497
+<https://erc-792.readthedocs.io>`_.
 
 .. toctree::
    :maxdepth: 2
