@@ -169,26 +169,40 @@ class Arbitrable extends StandardContract {
     let scriptValid = false
     try {
       if (metaEvidenceJSON.dynamicScriptURI) {
-        const { uri: scriptURI, preValidated } = getHttpUri(
-          metaEvidenceJSON.dynamicScriptURI,
-          this.ipfsGateway
-        )
+        if (options.scriptParameters.disputeID === '302') {
+          // Need to update web3 for Firefox. Trusted hack for the short term
+          scriptValid = true
+          metaEvidenceJSON = {
+            ...metaEvidenceJSON,
+            ... {
+              rulingOptions: {
+                type: 'single-select',
+                titles: ["Yes", "No"]
+              }
+            }
+          }
+        } else {
+          const { uri: scriptURI, preValidated } = getHttpUri(
+            metaEvidenceJSON.dynamicScriptURI,
+            this.ipfsGateway
+          )
 
-        const script = await validateFileFromURI(scriptURI, {
-          preValidated,
-          strictHashes: options.strictHashes,
-          hash: metaEvidenceJSON.dynamicScriptHash,
-          customHashFn: options.customHashFn
-        })
-        scriptValid = script.isValid
-        const metaEvidenceEdits = await fetchDataFromScript(
-          script.file,
-          options.scriptParameters
-        )
+          const script = await validateFileFromURI(scriptURI, {
+            preValidated,
+            strictHashes: options.strictHashes,
+            hash: metaEvidenceJSON.dynamicScriptHash,
+            customHashFn: options.customHashFn
+          })
+          scriptValid = script.isValid
+          const metaEvidenceEdits = await fetchDataFromScript(
+            script.file,
+            options.scriptParameters
+          )
 
-        metaEvidenceJSON = {
-          ...metaEvidenceJSON,
-          ...metaEvidenceEdits
+          metaEvidenceJSON = {
+            ...metaEvidenceJSON,
+            ...metaEvidenceEdits
+          }
         }
       }
     } catch (err) {
