@@ -1,4 +1,4 @@
-import ArbitratorContractInterface from '@kleros/kleros-interaction/build/contracts/Arbitrator'
+import ArbitratorContractInterface from '../abis/arbitrator.json'
 
 import EventListener from '../utils/EventListener'
 import isRequired from '../utils/isRequired'

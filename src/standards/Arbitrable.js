@@ -1,4 +1,4 @@
-import ArbitrableJSONInterface from '@kleros/kleros-interaction/build/contracts/Arbitrable'
+import ArbitrableJSONInterface from '../abis/arbitrable.json'
 
 import * as errorConstants from '../constants/error'
 import EventListener from '../utils/EventListener'
