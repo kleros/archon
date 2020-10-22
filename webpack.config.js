@@ -9,9 +9,7 @@ module.exports = {
     umdNamedDefine: true,
     library: 'Archon'
   },
-
   devtool: 'source-map',
-
   module: {
     rules: [
       {

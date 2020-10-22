@@ -1,4 +1,4 @@
-import ArbitrableJSONInterface from '../abis/arbitrable.json'
+import ArbitrableJSONInterface from '../abis/arbitrable'
 
 import * as errorConstants from '../constants/error'
 import EventListener from '../utils/EventListener'
@@ -21,8 +21,10 @@ class Arbitrable extends StandardContract {
    * @param {string} contractAddress - Address of the Arbitrable contract.
    * @returns {object} web3 contract instance
    */
-  _loadContractInstance = contractAddress =>
-    new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
+  _loadContractInstance = contractAddress => {
+    console.log(ArbitrableJSONInterface.abi)
+    return new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
+  }
 
   /**
    * Fetch all Evidence submitted to the contract.

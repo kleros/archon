@@ -1,4 +1,4 @@
-import ArbitratorContractInterface from '../abis/arbitrator.json'
+import ArbitratorContractInterface from '../abis/arbitrator'
 
 import EventListener from '../utils/EventListener'
 import isRequired from '../utils/isRequired'
