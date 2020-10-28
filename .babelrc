@@ -1,15 +1,15 @@
 {
-  "presets": [["env", { "modules": false }], "stage-2"],
+  "presets": ["@babel/preset-env"],
   "plugins": [
-    "transform-runtime",
-    "add-module-exports"
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-proposal-class-properties"
   ],
   "env": {
     "test": {
-      "presets": ["env", "stage-2"]
+      "presets": ["@babel/preset-env"]
     },
     "commonjs": {
-      "presets": ["env", "stage-2"]
+      "presets": ["@babel/preset-env"]
     }
   }
 }

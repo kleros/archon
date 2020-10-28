@@ -16,7 +16,7 @@ describe('Dispute', () => {
     arbitrableInstance = new Arbitrable(provider)
   })
 
-  it.only('get dispute log', async () => {
+  it('get dispute log', async () => {
     // deploy arbitrable contract to test with
     const arbitrableContract = await _deplyTestArbitrableContract(
       provider,

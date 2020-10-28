@@ -1,77 +1,41 @@
 {
   "name": "@kleros/archon",
   "version": "0.11.2",
-  "description": "A javascript library for Ethereum dispute resolution. Provides the ability to interface with Arbitrable and Arbitrator Ethereum smart contracts, as defined in ERC 792.",
-  "keywords": [
-    "Blockchain",
-    "Ethereum",
-    "Arbitration",
-    "Arbitrable",
-    "Arbitrator",
-    "ERC 792",
-    "Evidence",
-    "MetaEvidence"
-  ],
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "files": [
-    "es",
-    "lib",
-    "umd"
-  ],
-  "repository": "github:kleros/archon",
-  "bugs": "https://github.com/kleros/archon/issues",
-  "author": "Kleros Team <contact@kleros.io> (https://github.com/kleros)",
-  "license": "MIT",
-  "private": false,
+  "main": "dist/archon.bundle.js",
   "scripts": {
-    "docs": "esdoc",
+    "build": "webpack --mode production",
     "ganache": "ganache-cli",
-    "prettify": "kleros-scripts prettify",
-    "lint": "kleros-scripts lint:js --config ./.eslintrc.js",
-    "test": "jest --config ./jest.config.js",
-    "test:coveralls": "coveralls < ./coverage/lcov.info",
-    "commitmsg": "kleros-scripts commitmsg",
-    "cz": "kleros-scripts cz",
-    "start": "babel src --out-dir ./es --watch --source-maps",
-    "build": "rimraf ./umd ./es ./lib && webpack --env.NODE_ENV=production -p && babel src --out-dir ./es --source-maps && cross-env BABEL_ENV=commonjs babel src --out-dir ./lib --source-maps"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-jest": "^22.4.1",
-    "babel-loader": "^7.1.3",
-    "babel-plugin-add-module-exports": "^1.0.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "coveralls": "^3.0.0",
-    "cross-env": "^5.1.4",
-    "esdoc": "^1.1.0",
-    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
-    "esdoc-standard-plugin": "^1.0.0",
-    "ganache-cli": "^6.1.8",
-    "husky": "^0.14.3",
-    "jest": "^22.4.2",
-    "kleros-scripts": "^0.4.0",
-    "nock": "^10.0.0",
-    "solc": "^0.4.25",
-    "standard-version": "^4.3.0",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.2"
+    "test": "jest --config ./jest.config.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "babel-runtime": "^6.26.0",
+    "axios": "^0.21.0",
     "iframe": "^1.0.0",
     "js-sha3": "^0.8.0",
-    "lodash": "^4.17.4",
-    "multihashes": "^0.4.14",
-    "web3": "^1.2.11"
+    "multihashes": "0.4.14",
+    "web3": "^1.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "assert": "^2.0.0",
+    "babel-jest": "^26.6.1",
+    "babel-loader": "^8.1.0",
+    "crypto-browserify": "^3.12.0",
+    "ganache-cli": "^6.12.1",
+    "https-browserify": "^1.0.0",
+    "jest": "^26.6.1",
+    "jest-cli": "^26.6.1",
+    "nock": "^13.0.4",
+    "os-browserify": "^0.3.0",
+    "solc": "0.4.25",
+    "standard-version": "^9.0.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.1.1",
+    "url": "^0.11.0",
+    "util": "^0.12.3",
+    "webpack": "^5.3.0",
+    "webpack-cli": "^4.1.0"
   }
 }

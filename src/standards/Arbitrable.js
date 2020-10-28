@@ -22,7 +22,6 @@ class Arbitrable extends StandardContract {
    * @returns {object} web3 contract instance
    */
   _loadContractInstance = contractAddress => {
-    console.log(ArbitrableJSONInterface.abi)
     return new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
   }
 
