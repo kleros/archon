@@ -17,6 +17,7 @@
 ## Documentation
 
 Archon ^0.x works with Solidiy 0.4.x contracts but does not include the most recent features of web3.
+
 Archon ^1.x DOES NOT work with Solidity 0.4.x
 
 See full documentation at https://archon.readthedocs.io/en/latest/index.html
