@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/kleros/archon/compare/v0.11.2...v1.1.0) (2020-10-28)
+
+
+### Features
+
+* archon 1.x ([8dfe037](https://github.com/kleros/archon/commit/8dfe03746426578fa3d553b05492110ccced1692))
+
+
+### Bug Fixes
+
+* switch abi to js files ([a9538b2](https://github.com/kleros/archon/commit/a9538b2685c09e032f715ac413b16b621394894c))
+
 ### [0.11.2](https://github.com/kleros/archon/compare/v0.11.1...v0.11.2) (2020-10-21)
 
 ### [0.11.1](https://github.com/kleros/archon/compare/v0.10.5...v0.11.1) (2020-10-21)
