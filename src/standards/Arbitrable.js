@@ -170,7 +170,7 @@ class Arbitrable extends StandardContract {
     let scriptValid = false
     try {
       if (metaEvidenceJSON.dynamicScriptURI) {
-        if (options.scriptParameters.disputeID === '302') {
+        if (options.scriptParameters.disputeID === '302' || options.scriptParameters.disputeID === '532') {
           // Need to update web3 for Firefox. Trusted hack for the short term
           scriptValid = true
           metaEvidenceJSON = {
