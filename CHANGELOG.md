@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/kleros/archon/compare/v1.1.1...v1.2.0) (2020-12-22)
+
+
+### Features
+
+* ff fix ([5585d5a](https://github.com/kleros/archon/commit/5585d5a71defbf0934a66a03da86d8b0ba8a4bec))
+
 ### [1.1.1](https://github.com/kleros/archon/compare/v1.1.0...v1.1.1) (2020-12-21)
 
 ## [1.1.0](https://github.com/kleros/archon/compare/v0.11.2...v1.1.0) (2020-10-28)
