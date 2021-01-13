@@ -1,0 +1,63 @@
+{
+  "coverage": "67.56%",
+  "expectCount": 37,
+  "actualCount": 25,
+  "files": {
+    "src/Archon.js": {
+      "expectCount": 9,
+      "actualCount": 4,
+      "undocumentLines": [
+        12,
+        13,
+        14,
+        27,
+        28
+      ]
+    },
+    "src/standards/Arbitrable.js": {
+      "expectCount": 6,
+      "actualCount": 6,
+      "undocumentLines": []
+    },
+    "src/standards/Arbitrator.js": {
+      "expectCount": 9,
+      "actualCount": 8,
+      "undocumentLines": [
+        15
+      ]
+    },
+    "src/standards/StandardContract.js": {
+      "expectCount": 4,
+      "actualCount": 1,
+      "undocumentLines": [
+        3,
+        9,
+        12
+      ]
+    },
+    "src/utils/EventListener.js": {
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/utils/hashing.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
+    },
+    "src/utils/isRequired.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/utils/uri.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        2,
+        4,
+        14
+      ]
+    }
+  }
+}

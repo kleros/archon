@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/standards/Arbitrable.js | @kleros/archon</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A javascript library for Ethereum dispute resolution. Provides the ability to interface with Arbitrable and Arbitrator Ethereum smart contracts, as defined in ERC 792."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="@kleros/archon"><meta property="twitter:description" content="A javascript library for Ethereum dispute resolution. Provides the ability to interface with Arbitrable and Arbitrator Ethereum smart contracts, as defined in ERC 792."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Archon.js~Archon.html">Archon</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#standards">standards</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrable.js~Arbitrable.html">Arbitrable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrator.js~Arbitrator.html">Arbitrator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/StandardContract.js~StandardContract.html">StandardContract</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/EventListener.js~EventListener.html">EventListener</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-multihashFile">multihashFile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validMultihash">validMultihash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateFileFromURI">validateFileFromURI</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isRequired">isRequired</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getHttpUri">getHttpUri</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURIProtocol">getURIProtocol</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURISuffix">getURISuffix</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/standards/Arbitrable.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import ArbitrableJSONInterface from &apos;kleros-interaction/build/contracts/Arbitrable&apos;
+
+import * as errorConstants from &apos;../constants/error&apos;
+import EventListener from &apos;../utils/EventListener&apos;
+import isRequired from &apos;../utils/isRequired&apos;
+import { validateFileFromURI } from &apos;../utils/hashing&apos;
+
+import StandardContract from &apos;./StandardContract&apos;
+
+/**
+ * Provides interaction with standard Arbitrable contracts
+ * @example
+ * const arbitrable = new Arbitable(web3Provider)
+ */
+class Arbitrable extends StandardContract {
+  /**
+   * Load an arbitrable web3 contract instance
+   * @param {string} contractAddress - Address of the Arbitrable contract.
+   * @returns {object} web3 contract instance
+   */
+  _loadContractInstance = contractAddress =&gt;
+    new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
+
+  /**
+   * Fetch all Evidence submitted to the contract.
+   * @param {string} contractAddress - The address of the arbitrable contract.
+   * @param {string} arbitratorAddress - The address of the arbitrator contract.
+   * @param {number} disputeID - The index of the dispute.
+   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes
+   * @returns {object[]} An array of evidence objects
+   */
+  getEvidence = async (
+    contractAddress = isRequired(&apos;contractAddress&apos;),
+    arbitratorAddress = isRequired(&apos;arbitratorAddress&apos;),
+    disputeID = isRequired(&apos;isRequired&apos;),
+    options = {}
+  ) =&gt; {
+    const contractInstance = this._loadContractInstance(contractAddress)
+
+    const evidenceLogs = await EventListener.getEventLogs(
+      contractInstance,
+      &apos;Evidence&apos;,
+      options.fromBlock || 0,
+      options.toBlock || &apos;latest&apos;,
+      {
+        _arbitrator: arbitratorAddress,
+        _disputeID: disputeID,
+        ...options.filters
+      }
+    )
+
+    if (evidenceLogs.length === 0) return []
+
+    return Promise.all(
+      evidenceLogs.map(async evidenceLog =&gt; {
+        const args = await evidenceLog.returnValues
+        const evidenceURI = args._evidence
+
+        const {
+          file: evidenceJSON,
+          isValid: evidenceJSONValid
+        } = await validateFileFromURI(evidenceURI, {
+          evidence: true,
+          strictHashes: options.strictHashes,
+          customHashFn: options.customHashFn
+        })
+
+        const { isValid: fileValid } = evidenceJSON.fileURI
+          ? await validateFileFromURI(evidenceJSON.fileURI, {
+              evidence: true,
+              strictHashes: options.strictHashes,
+              hash: evidenceJSON.fileHash,
+              customHashFn: options.customHashFn
+            })
+          : { isValid: null }
+
+        const submittedAt = (await new Promise((resolve, reject) =&gt; {
+          this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) =&gt; {
+            if (error) reject(error)
+
+            resolve(result)
+          })
+        })).timestamp
+
+        return {
+          evidenceJSONValid,
+          fileValid,
+          evidenceJSON,
+          submittedAt,
+          submittedBy: args._party,
+          blockNumber: evidenceLog.blockNumber,
+          transactionHash: evidenceLog.transactionHash
+        }
+      })
+    )
+  }
+
+  /**
+   * Get the MetaEvidence object for a metaEvidenceID. Hashes will be validated.
+   * By default MetaEvidence will be returned regardless of the validity of the hashes
+   * with an indicator on whether the hash was valid or not. To throw an error instead,
+   * use strictHashes = true in options object.
+   * @param {string} contractAddress - The address of the Arbitrable contract.
+   * @param {number} metaEvidenceID - The identifier of the metaEvidence log
+   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, strictHashes
+   * @returns {object} The metaEvidence object
+   */
+  getMetaEvidence = async (
+    contractAddress = isRequired(&apos;contractAddress&apos;),
+    metaEvidenceID = 0,
+    options = {}
+  ) =&gt; {
+    const contractInstance = this._loadContractInstance(contractAddress)
+
+    const metaEvidenceLogs = await EventListener.getEventLogs(
+      contractInstance,
+      &apos;MetaEvidence&apos;,
+      options.fromBlock || 0,
+      options.toBlock || &apos;latest&apos;,
+      { _metaEvidenceID: metaEvidenceID, ...options.filters }
+    )
+
+    if (!metaEvidenceLogs[0])
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `No MetaEvidence log for ${contractAddress} with metaEvidenceID ${metaEvidenceID}`
+        )
+      )
+
+    if (metaEvidenceLogs.length &gt; 1)
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `More than one MetaEvidence returned for metaEvidenceID ${metaEvidenceID}`
+        )
+      )
+
+    const metaEvidenceLog = metaEvidenceLogs[0]
+    const args = await metaEvidenceLog.returnValues
+    const metaEvidenceUri = args._evidence
+
+    const {
+      file: metaEvidenceJSON,
+      isValid: metaEvidenceJSONValid
+    } = await validateFileFromURI(metaEvidenceUri, {
+      evidence: true,
+      strictHashes: options.strictHashes,
+      customHashFn: options.customHashFn
+    })
+
+    // validate file hash
+    const { isValid: fileValid } = metaEvidenceJSON.fileURI
+      ? await validateFileFromURI(metaEvidenceJSON.fileURI, {
+          evidence: true,
+          strictHashes: options.strictHashes,
+          hash: metaEvidenceJSON.fileHash,
+          customHashFn: options.customHashFn
+        })
+      : { isValid: null }
+
+    // validate file hash
+    const {
+      isValid: interfaceValid
+    } = metaEvidenceJSON.evidenceDisplayInterfaceURL
+      ? await validateFileFromURI(
+          metaEvidenceJSON.evidenceDisplayInterfaceURL,
+          {
+            strictHashes: options.strictHashes,
+            hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
+            customHashFn: options.customHashFn
+          }
+        )
+      : { isValid: null }
+
+    return {
+      metaEvidenceJSON,
+      metaEvidenceJSONValid,
+      fileValid,
+      interfaceValid,
+      blockNumber: metaEvidenceLog.blockNumber,
+      transactionHash: metaEvidenceLog.transactionHash
+    }
+  }
+
+  /**
+   * Fetch the ruling for a dispute.
+   * @param {string} contractAddress - The address of the arbitrable contract.
+   * @param {string} arbitratorAddress - The address of the arbitrator contract.
+   * @param {number} disputeID - The index of the dispute.
+   * @param {object} options - Optional parameters. Includes fromBlock and toBlock.
+   * @returns {number} The number denoting the ruling.
+   */
+  getRuling = async (
+    contractAddress = isRequired(&apos;contractAddress&apos;),
+    arbitratorAddress = isRequired(&apos;arbitratorAddress&apos;),
+    disputeID = isRequired(&apos;disputeID&apos;),
+    options = {}
+  ) =&gt; {
+    const contractInstance = this._loadContractInstance(contractAddress)
+
+    const rulingLogs = await EventListener.getEventLogs(
+      contractInstance,
+      &apos;Ruling&apos;,
+      options.fromBlock || 0,
+      options.toBlock || &apos;latest&apos;,
+      {
+        _arbitrator: arbitratorAddress,
+        _disputeID: disputeID,
+        ...options.filters
+      }
+    )
+
+    if (rulingLogs.length === 0)
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `There is no ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`
+        )
+      )
+    else if (rulingLogs.length &gt; 1)
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `There is more than one ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`
+        )
+      )
+
+    const rulingLog = rulingLogs[0]
+    const args = await rulingLog.returnValues
+
+    const ruledAt = (await new Promise((resolve, reject) =&gt; {
+      this.web3.eth.getBlock(rulingLog.blockNumber, (error, result) =&gt; {
+        if (error) reject(error)
+
+        resolve(result)
+      })
+    })).timestamp
+
+    return {
+      ruling: args._ruling,
+      ruledAt,
+      blockNumber: rulingLog.blockNumber,
+      transactionHash: rulingLog.transactionHash
+    }
+  }
+
+  /**
+   * Get the event log emitted when a dispute has been created. This event links
+   * metaEvidence to a dispute by _metaEvidenceID.
+   * @param {string} contractAddress - The address of the contract.
+   * @param {string} arbitratorAddress - The address of the arbitrator contract.
+   * @param {number} disputeID - The index of the dispute.
+   * @param {object} options - Optional parameters. Includes fromBlock and toBlock.
+   * @returns {object} The data from the event log
+   */
+  getDispute = async (
+    contractAddress = isRequired(&apos;contractAddress&apos;),
+    arbitratorAddress = isRequired(&apos;arbitratorAddress&apos;),
+    disputeID = isRequired(&apos;isRequired&apos;),
+    options = {}
+  ) =&gt; {
+    const contractInstance = this._loadContractInstance(contractAddress)
+
+    const disputeLogs = await EventListener.getEventLogs(
+      contractInstance,
+      &apos;Dispute&apos;,
+      options.fromBlock || 0,
+      options.toBlock || &apos;latest&apos;,
+      {
+        _arbitrator: arbitratorAddress,
+        _disputeID: disputeID,
+        ...options.filters
+      }
+    )
+
+    if (!disputeLogs[0])
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `No Dispute log for ${contractAddress} with arbitrator ${arbitratorAddress} and disputeID ${disputeID}`
+        )
+      )
+
+    if (disputeLogs.length &gt; 1)
+      throw new Error(
+        errorConstants.CONTRACT_ERROR(
+          `More than one Dispute returned for arbitrator ${arbitratorAddress} and disputeID ${disputeID}`
+        )
+      )
+
+    const disputeLog = disputeLogs[0]
+    const args = await disputeLog.returnValues
+    const createdAt = (await new Promise((resolve, reject) =&gt; {
+      this.web3.eth.getBlock(disputeLog.blockNumber, (error, result) =&gt; {
+        if (error) reject(error)
+
+        resolve(result)
+      })
+    })).timestamp
+
+    return {
+      metaEvidenceID: args._metaEvidenceID,
+      createdAt,
+      blockNumber: disputeLog.blockNumber,
+      transactionHash: disputeLog.transactionHash
+    }
+  }
+}
+
+export default Arbitrable
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

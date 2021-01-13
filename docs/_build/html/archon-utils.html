@@ -1,0 +1,380 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>archon.utils &#8212; @kleros/archon 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="archon.arbitrator" href="archon-arbitrator.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="archon-arbitrator.html" title="archon.arbitrator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="admonition note" id="utils">
+<p class="first admonition-title">Note</p>
+<p class="last">Archon depends on Web3 1.0. This version of <code class="docutils literal notranslate"><span class="pre">web3</span></code> is still in Beta so usage may change unexpectedly and/or bugs may arise until a stable version of Web3 1.0 is released.</p>
+</div>
+<div class="section" id="archon-utils">
+<h1>archon.utils<a class="headerlink" href="#archon-utils" title="Permalink to this headline">¶</a></h1>
+<p>This package provides utility functions that can be used to validate hashes of <code class="docutils literal notranslate"><span class="pre">Evidence</span></code> and <code class="docutils literal notranslate"><span class="pre">MetaEvidence</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If using <code class="docutils literal notranslate"><span class="pre">/ipfs/...</span></code> URIs the the IPFS Gateway will be used to fetch and validate the data.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It is not recommended that you link directly to an <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> gateway in the evidence because it will not be able to be verified without a custom hashing function. The <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> protocol does transformations on the data before hashing, therefore a hash can not be verified naively using the resulting <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> multihash and the original file contents.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="validatefilefromuri">
+<h2>validateFileFromURI()<a class="headerlink" href="#validatefilefromuri" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span><span class="nx">fileURI</span><span class="p">,</span> <span class="nx">options</span><span class="o">=</span><span class="p">{});</span>
+</pre></div>
+</div>
+<p>Takes a the URI of the file and validates the hash. In order for to validate the hash,
+the original <code class="docutils literal notranslate"><span class="pre">multihash</span></code> must be included as:</p>
+<ol class="arabic simple">
+<li>The suffix of the URI (e.g. <code class="docutils literal notranslate"><span class="pre">https://file-uri/QmUQMJbfiQYX7k6SWt8xMpR7g4vwtAYY1BTeJ8UY8JWRs9</span></code>)</li>
+<li>As a member of the <code class="docutils literal notranslate"><span class="pre">options</span></code> parameter (e.g. <code class="docutils literal notranslate"><span class="pre">options.hash</span> <span class="pre">=</span> <span class="pre">'QmUQMJbfiQYX7k6SWt8xMpR7g4vwtAYY1BTeJ8UY8JWRs9'</span></code>)</li>
+<li>In the resulting file JSON using the key <code class="docutils literal notranslate"><span class="pre">selfHash</span></code></li>
+</ol>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">fileURI</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The URI where the file can be fetched. Currently only support protocols: <code class="docutils literal notranslate"><span class="pre">http(s)://</span></code>, <code class="docutils literal notranslate"><span class="pre">/ipfs/</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">options</span></code> - <code class="docutils literal notranslate"><span class="pre">Object</span></code>: Optional parameters.</li>
+</ol>
+<p>The options parameter can include:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="6%" />
+<col width="82%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>preValidated</td>
+<td>bool</td>
+<td>If file has been pre-validated this will just fetch file and set isValid = true.</td>
+</tr>
+<tr class="row-odd"><td>hash</td>
+<td>string</td>
+<td>The original hash to compare the file against.</td>
+</tr>
+<tr class="row-even"><td>strictHashes</td>
+<td>bool</td>
+<td>If true, an error will throw if hash validations fail.</td>
+</tr>
+<tr class="row-odd"><td>customHashFn</td>
+<td>fn</td>
+<td>A custom hash function to use to validate the file.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Promise.&lt;Object&gt;</span></code> - Promise that resolves to an object containing the file as well as if the file is valid</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nx">file</span><span class="o">:</span> <span class="o">&lt;</span><span class="nb">String</span><span class="o">|</span><span class="nb">Object</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">isValid</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Bool</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validateFileFromURI</span><span class="p">(</span>
+  <span class="s1">&#39;https://s3.us-east-2.amazonaws.com/kleros-examples/exampleEvidence.txt&#39;</span><span class="p">,</span>
+  <span class="p">{</span>
+    <span class="nx">hash</span><span class="o">:</span> <span class="s1">&#39;Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj&#39;</span>
+  <span class="p">}</span>
+<span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">})</span>
+<span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">file</span><span class="o">:</span> <span class="s1">&#39;This is an example evidence file. Here we could have...&#39;</span><span class="p">,</span>
+  <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="validmultihash">
+<h2>validMultihash()<a class="headerlink" href="#validmultihash" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span><span class="nx">multihashHex</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">customHashFn</span><span class="o">=</span><span class="kc">null</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Verify if the <code class="docutils literal notranslate"><span class="pre">multihash</span></code> of a file matches the file contents.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Hashes should be base58 encoded <code class="docutils literal notranslate"><span class="pre">Strings</span></code></p>
+</div>
+<p>Supported hashing algorithms:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Multicode</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>sha3-512</td>
+<td>0x14</td>
+</tr>
+<tr class="row-odd"><td>sha3-384</td>
+<td>0x15</td>
+</tr>
+<tr class="row-even"><td>sha3-256</td>
+<td>0x16</td>
+</tr>
+<tr class="row-odd"><td>sha3-224</td>
+<td>0x17</td>
+</tr>
+<tr class="row-even"><td>keccak-224</td>
+<td>0x1A</td>
+</tr>
+<tr class="row-odd"><td>keccak-256</td>
+<td>0x1B</td>
+</tr>
+<tr class="row-even"><td>keccak-384</td>
+<td>0x1C</td>
+</tr>
+<tr class="row-odd"><td>keccak-512</td>
+<td>0x1D</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">By default, IPFS uses <code class="docutils literal notranslate"><span class="pre">sha2-256</span></code>. Many ethereum hashes are <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Solidity uses a different implementation of the <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code> algorithm. Hashes generated from smart contracts will need a <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> to verify.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All insignificant whitespace should be removed from JSON files before hashing. You can use <code class="docutils literal notranslate"><span class="pre">JSON.stringify</span></code> to remove whitespace.</p>
+</div>
+<p>If a different hashing algorithm was used, pass it in the desired function with <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
+<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multicodec/blob/master/table.csv/">here</a>.</p>
+<div class="section" id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">multihashHex</span></code> - <code class="docutils literal notranslate"><span class="pre">String</span></code>: The base58 multihash hex string.</li>
+<li><code class="docutils literal notranslate"><span class="pre">file</span></code> - <code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: The raw File or JSON object we are verifying the hash of.</li>
+<li><code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> - <code class="docutils literal notranslate"><span class="pre">Function</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;optional&gt;</span></code> A custom hashing algorithm used to generate original hash.</li>
+</ol>
+</div>
+<div class="section" id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Bool</span></code> - If the provided hash and file are valid.</p>
+</div>
+<div class="section" id="id3">
+<h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">validMultihash</span><span class="p">(</span>
+  <span class="s1">&#39;Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;This is an example evidence file. Here we could have some document...&#39;</span>
+<span class="p">)</span>
+<span class="o">&gt;</span> <span class="kc">true</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="multihashfile">
+<h2>multihashFile()<a class="headerlink" href="#multihashfile" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">multicode</span><span class="p">,</span> <span class="nx">customHashFn</span><span class="o">=</span><span class="kc">null</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Generate the base58 multihash hex of a file</p>
+<p>Supported hashing algorithms:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="61%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Multicode</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>sha3-512</td>
+<td>0x14</td>
+</tr>
+<tr class="row-odd"><td>sha3-384</td>
+<td>0x15</td>
+</tr>
+<tr class="row-even"><td>sha3-256</td>
+<td>0x16</td>
+</tr>
+<tr class="row-odd"><td>sha3-224</td>
+<td>0x17</td>
+</tr>
+<tr class="row-even"><td>keccak-224</td>
+<td>0x1A</td>
+</tr>
+<tr class="row-odd"><td>keccak-256</td>
+<td>0x1B</td>
+</tr>
+<tr class="row-even"><td>keccak-384</td>
+<td>0x1C</td>
+</tr>
+<tr class="row-odd"><td>keccak-512</td>
+<td>0x1D</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">By default, IPFS uses <code class="docutils literal notranslate"><span class="pre">sha2-256</span></code>. Many ethereum hashes are <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Solidity uses a different implementation of the <code class="docutils literal notranslate"><span class="pre">keccak-256</span></code> algorithm. Hashes generated from smart contracts will need a <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> to verify.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All insignificant whitespace should be removed from JSON files before hashing. You can use <code class="docutils literal notranslate"><span class="pre">JSON.stringify</span></code> to remove whitespace.</p>
+</div>
+<p>If a different hashing algorithm was used, pass it in the desired function with <code class="docutils literal notranslate"><span class="pre">customHashFn</span></code>. The function should expect a single string parameter.</p>
+<p>A full list of possible algorithms and multicodes can be found <a class="reference external" href="https://github.com/multiformats/multicodec/blob/master/table.csv/">here</a>.</p>
+<div class="section" id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">file</span></code> - <code class="docutils literal notranslate"><span class="pre">Object|String</span></code>: The raw File or JSON object to hash</li>
+<li><code class="docutils literal notranslate"><span class="pre">multicode</span></code> - <code class="docutils literal notranslate"><span class="pre">Number</span></code>: The multihash hashing algorithm identifier.</li>
+<li><code class="docutils literal notranslate"><span class="pre">customHashFn</span></code> - <code class="docutils literal notranslate"><span class="pre">Function</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;optional&gt;</span></code> A custom hashing algorithm used to generate the hash.</li>
+</ol>
+</div>
+<div class="section" id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">String</span></code> - base58 multihash of file.</p>
+</div>
+<div class="section" id="id7">
+<h3>Example<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">archon</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">multihashFile</span><span class="p">(</span>
+  <span class="s1">&#39;This is an example evidence file. Here we could have some document...&#39;</span><span class="p">,</span>
+  <span class="mh">0x1B</span> <span class="c1">// 27 =&gt; keccak-256</span>
+<span class="p">)</span>
+<span class="o">&gt;</span> <span class="s2">&quot;Bce1WTQa7bfrJMFdEJuWV2xHsmj5JcDDyqBKGXu6PHZsn5e5oxkJ8cMJcuFDK1VsQYBtfrzgWkKCovWSvsacgN1XTj&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">archon.utils</a><ul>
+<li><a class="reference internal" href="#validatefilefromuri">validateFileFromURI()</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#returns">Returns</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validmultihash">validMultihash()</a><ul>
+<li><a class="reference internal" href="#id1">Parameters</a></li>
+<li><a class="reference internal" href="#id2">Returns</a></li>
+<li><a class="reference internal" href="#id3">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#multihashfile">multihashFile()</a><ul>
+<li><a class="reference internal" href="#id5">Parameters</a></li>
+<li><a class="reference internal" href="#id6">Returns</a></li>
+<li><a class="reference internal" href="#id7">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="archon-arbitrator.html"
+                        title="previous chapter">archon.arbitrator</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/archon-utils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="archon-arbitrator.html" title="archon.arbitrator"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kleros.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
