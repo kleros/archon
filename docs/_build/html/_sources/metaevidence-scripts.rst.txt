@@ -11,7 +11,7 @@ MetaEvidence Dynamic Scripts
 dynamicScriptURI as specified in `ERC 1497 <https://github.com/ethereum/EIPs/issues/1497>`_. allow
 for metaEvidence to be changed dynamically.
 
-In order to support asynchronous scripts Archon provides global ``scriptResolver`` and ``scriptRejecter``. Please use these
+In order to support asynchronous scripts Archon provides global functions ``resolveScript`` and ``rejectScript``. Please use these
 when you are returning the updates to the metaEvidence
 
 Available Global Variables
@@ -19,9 +19,9 @@ Available Global Variables
 
 When you create a script you can assume that you will have global access to these variables:
 
-1) ``scriptResolver`` - ``function``: Call this function to return the result of your script.
+1) ``resolveScript`` - ``function``: Call this function to return the result of your script.
 
-2) ``scriptRejecter`` - ``function``: To throw a handled error in your script you can call scriptRejecter.
+2) ``rejectScript`` - ``function``: To throw a handled error in your script you can call scriptRejecter.
 
 3) ``scriptParameters`` - ``object``: These are the parameters you pass as `options["scriptParameters"]` in :ref:`getMetaEvidence <archon.arbitrable.getMetaEvidence>`
 
@@ -40,11 +40,11 @@ Example
           ... async code to lookup data here ...
 
           if (data) {
-            scriptResolver({
+            resolveScript({
               newMetaEvidenceParam: "Look at me!"
             })
           } else {
-            scriptRejecter("Unable to fetch data")
+            rejectScript("Unable to fetch data")
           }
         }
 

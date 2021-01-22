@@ -1,20 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IPFS Links and Validation &#8212; @kleros/archon 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -33,7 +32,8 @@
         <li class="right" >
           <a href="hashing.html" title="Hashing Examples"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">IPFS Links and Validation</a></li> 
       </ul>
     </div>  
 
@@ -42,11 +42,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Archon depends on Web3 1.0. This version of <code class="docutils literal notranslate"><span class="pre">web3</span></code> is still in Beta so usage may change unexpectedly and/or bugs may arise until a stable version of Web3 1.0 is released.</p>
-</div>
-<div class="section" id="ipfs-links-and-validation">
+  <div class="section" id="ipfs-links-and-validation">
 <h1>IPFS Links and Validation<a class="headerlink" href="#ipfs-links-and-validation" title="Permalink to this headline">¶</a></h1>
 <p>Many users will want to use decentralized file storage for their arbitrable DApps
 and will store <code class="docutils literal notranslate"><span class="pre">Evidence</span></code> and <code class="docutils literal notranslate"><span class="pre">MetaEvidence</span></code> on <code class="docutils literal notranslate"><span class="pre">IPFS</span></code>.</p>
@@ -60,8 +56,8 @@ Gateways are “standard” <code class="docutils literal notranslate"><span cla
 <p>It is important that you choose a gateway that you trust, as a malicious gateway can
 return tampered data. Please heed the warning below:</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Archon considers data returned directly from a valid <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> URI pre-validated. This is because hash validation is built into the protocol. As we need to use gateways to interact with the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network at this time, <cite>MAKE SURE YOU SET A GATEWAY THAT YOU TRUST</cite>, or otherwise re-validate your <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> hashes yourself.</p>
+<p class="admonition-title">Warning</p>
+<p>Archon considers data returned directly from a valid <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> URI pre-validated. This is because hash validation is built into the protocol. As we need to use gateways to interact with the <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> network at this time, <cite>MAKE SURE YOU SET A GATEWAY THAT YOU TRUST</cite>, or otherwise re-validate your <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> hashes yourself.</p>
 </div>
 <p>The default gateway set is <code class="docutils literal notranslate"><span class="pre">https://gateway.ipfs.io</span></code>. This is the gateway provided by the Protocol Labs staff.</p>
 <p>To set a custom gateway, use <code class="docutils literal notranslate"><span class="pre">archon.setIpfsGateway(uri)</span></code>.
@@ -71,9 +67,9 @@ See documentation on setting a gateway <a class="reference internal" href="archo
 <h2>IPFS URIs<a class="headerlink" href="#ipfs-uris" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">IPFS</span></code> URIs are recognized in any of these formats:</p>
 <ol class="arabic simple">
-<li><code class="docutils literal notranslate"><span class="pre">/ipfs/Qm...../foo/bar</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">ipfs:/ipfs/Qm...../foo/bar</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">fs:/ipfs/Qm...../foo/bar</span></code></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/ipfs/Qm...../foo/bar</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipfs:/ipfs/Qm...../foo/bar</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fs:/ipfs/Qm...../foo/bar</span></code></p></li>
 </ol>
 </div>
 <div class="section" id="gateway-uri-s-bad">
@@ -126,6 +122,7 @@ as if they were standard hashes.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -155,17 +152,15 @@ as if they were standard hashes.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -182,12 +177,13 @@ as if they were standard hashes.</p>
         <li class="right" >
           <a href="hashing.html" title="Hashing Examples"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">IPFS Links and Validation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Kleros.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

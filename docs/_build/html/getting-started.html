@@ -1,20 +1,19 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Getting Started &#8212; @kleros/archon 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -33,7 +32,8 @@
         <li class="right" >
           <a href="index.html" title="archon - Ethereum Arbitration Standard API"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Getting Started</a></li> 
       </ul>
     </div>  
 
@@ -42,44 +42,41 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Archon depends on Web3 1.0. This version of <code class="docutils literal notranslate"><span class="pre">web3</span></code> is still in Beta so usage may change unexpectedly and/or bugs may arise until a stable version of Web3 1.0 is released.</p>
-</div>
-<div class="section" id="getting-started">
+  <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <ol class="arabic simple">
-<li>Install Archon from NPM</li>
+<li><p>Install Archon from NPM</p></li>
 </ol>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span>yarn add @kleros/archon
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Import Archon into your project</li>
+<li><p>Import Archon into your project</p></li>
 </ol>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">Archon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;@kleros/archon&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>Initialize an instance of Archon using an Ethereum Provider and, optionally, an IPFS Gateway.</li>
+<li><p>Initialize an instance of Archon using an Ethereum Provider and, optionally, an IPFS Gateway.</p></li>
 </ol>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// By default Archon uses &#39;https://gateway.ipfs.io&#39; as the default IPFS gateway. To use your own gateway, pass the gateway URI as the 2nd parameter to Archon.</span>
 <span class="kd">var</span> <span class="nx">archon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Archon</span><span class="p">(</span><span class="s1">&#39;https://mainnet.infura.io&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A provider is needed so that the codebase knows how to connect to the Ethereum network. You can use a connection to your own node, or to a hosted node such as infura. <code class="docutils literal notranslate"><span class="pre">web3.js</span></code> will make RPC calls to the provider to fetch data from the blockchain.</p>
+<p class="admonition-title">Note</p>
+<p>A provider is needed so that the codebase knows how to connect to the Ethereum network. You can use a connection to your own node, or to a hosted node such as infura. <code class="docutils literal notranslate"><span class="pre">web3.js</span></code> will make RPC calls to the provider to fetch data from the blockchain.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A gateway is needed to access <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> files that might be referenced in evidence or metaEvidence.</p>
+<p class="admonition-title">Note</p>
+<p>A gateway is needed to access <code class="docutils literal notranslate"><span class="pre">IPFS</span></code> files that might be referenced in evidence or metaEvidence.</p>
 </div>
 <p>Now you are all set! Use your <a class="reference internal" href="archon.html#archon"><span class="std std-ref">Archon</span></a> object to interact with <a class="reference internal" href="archon-arbitrable.html#arbitrable"><span class="std std-ref">arbitrable</span></a>
 and <a class="reference internal" href="archon-arbitrator.html#arbitrator"><span class="std std-ref">arbitrator</span></a> smart contracts on the blockchain.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -99,17 +96,15 @@ and <a class="reference internal" href="archon-arbitrator.html#arbitrator"><span
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -126,12 +121,13 @@ and <a class="reference internal" href="archon-arbitrator.html#arbitrator"><span
         <li class="right" >
           <a href="index.html" title="archon - Ethereum Arbitration Standard API"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Getting Started</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Kleros.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>
