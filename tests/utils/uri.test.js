@@ -49,6 +49,14 @@ describe('URI', () => {
       expect(uriData.uri).toEqual(testURI)
       expect(uriData.preValidated).toBeFalsy()
     })
+    it("https://ipfs.kleros.io", () => {
+      const testURI = "https://ipfs.kleros.io/ipfs/hash";
+      const trustedGateway = "https://ipfs.kleros.io";
+
+      const uriData = getHttpUri(testURI, trustedGateway);
+      expect(uriData.uri).toEqual(testURI);
+      expect(uriData.preValidated).toBeTruthy();
+    });
     it('/ipfs/', () => {
       const testURI = '/ipfs/hash'
 

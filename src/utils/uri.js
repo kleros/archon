@@ -13,14 +13,14 @@ export const getURIProtocol = uri => {
 
 export const getHttpUri = (uri, ipfsGateway) => {
   const protocol = getURIProtocol(uri)
-
   let preValidated = false
   switch (protocol) {
     case 'http':
       break
-    case 'https':
+    case 'https': {
+      if (ipfsGateway === 'https://ipfs.kleros.io') preValidated = true
       break
-    case 'fs':
+    } case 'fs':
       // check to see if fs is appended by /ipfs/
       if (uri.includes('/ipfs/')) uri = uri.split(':/').pop()
       else throw new Error(`Unrecognized protocol ${protocol}`)
