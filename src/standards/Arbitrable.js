@@ -10,6 +10,18 @@ import { sanitizeMetaEvidence } from '../utils/sanitize'
 
 import StandardContract from './StandardContract'
 
+// Polyfill to support Promise.allSettled with node < 12
+Promise.allSettled = Promise.allSettled || ((promises) => Promise.all(promises.map(p => p
+  .then(v => ({
+    status: 'fulfilled',
+    value: v,
+  }))
+  .catch(e => ({
+    status: 'rejected',
+    reason: e,
+  }))
+)));
+
 /**
  * Provides interaction with standard Arbitrable contracts
  * @example
@@ -55,7 +67,7 @@ class Arbitrable extends StandardContract {
 
     if (evidenceLogs.length === 0) return []
 
-    return Promise.all(
+    return (await Promise.allSettled(
       evidenceLogs.map(async evidenceLog => {
         const args = await evidenceLog.returnValues
         const { uri: evidenceURI, preValidated } = getHttpUri(
@@ -110,7 +122,7 @@ class Arbitrable extends StandardContract {
           transactionHash: evidenceLog.transactionHash
         }
       })
-    )
+    )).map(r => r.value ? r.value : r)
   }
 
   /**
