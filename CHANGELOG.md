@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/kleros/archon/compare/v1.2.1...v1.2.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* invalid URI throwing whole evidence request ([42317d5](https://github.com/kleros/archon/commit/42317d50d1e19a86d82db6d5f3c4e49c9b439637))
+
 ### [1.2.1](https://github.com/kleros/archon/compare/v1.2.0...v1.2.1) (2021-02-01)
 
 ## [1.2.0](https://github.com/kleros/archon/compare/v1.1.1...v1.2.0) (2020-12-22)
