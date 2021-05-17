@@ -1,11 +1,12 @@
 import Web3 from 'web3'
+import ganache from 'ganache-core'
 import multihash from 'multihashes'
 import nock from 'nock'
 
 import { _deplyTestArbitrableContract } from '../../utils.js'
 import Arbitrable from '../../../src/standards/Arbitrable'
 
-const provider = new Web3.providers.HttpProvider('http://localhost:8545')
+const provider = ganache.provider()
 
 describe('Evidence', () => {
   let web3

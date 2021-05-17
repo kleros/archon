@@ -1,10 +1,11 @@
 import Web3 from 'web3'
+import ganache from 'ganache-core'
 
 import { _deplyTestArbitratorContract } from '../../utils.js'
 import Arbitrator from '../../../src/standards/Arbitrator'
 import { DisputeStatus } from '../../../src/constants/arbitrator'
 
-const provider = new Web3.providers.HttpProvider('http://localhost:8545')
+const provider = ganache.provider()
 
 describe('AppealDecision', () => {
   let web3
