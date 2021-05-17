@@ -14,8 +14,12 @@
     "MetaEvidence"
   ],
   "main": "dist/archon.bundle.js",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
     "build": "webpack --mode production",
+    "prepublishOnly": "run-s test build",
     "docs": "esdoc",
     "ganache": "ganache-cli",
     "test": "jest --config ./jest.config.js"
@@ -41,6 +45,7 @@
     "jest": "^26.6.1",
     "jest-cli": "^26.6.1",
     "nock": "^13.0.4",
+    "npm-run-all": "^4.1.5",
     "os-browserify": "^0.3.0",
     "solc": "0.4.25",
     "standard-version": "^9.0.0",
