@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/kleros/archon/compare/v1.2.3...v2.0.0) (2021-07-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* released version 2.0 ([91f93c9](https://github.com/kleros/archon/commit/91f93c9009a56f4cbf64671d8181e6534dfad203))
+
 ### [1.2.4](https://github.com/kleros/archon/compare/v1.2.1...v1.2.4) (2021-05-21)
 
 * Bumped `web3` version to `1.3.6`
