@@ -7,9 +7,11 @@ Getting Started
 
 1. Install Archon from NPM
 
+.. note:: As of v2.0.0 ``web3.js`` is a peer-dependency and should be installed alongside ``@kleros/archon``.
+
 .. code-block:: javascript
 
-    yarn add @kleros/archon
+    yarn add '@kleros/archon@^2.0.0' 'web3@^1.4.0'
 
 2. Import Archon into your project
 

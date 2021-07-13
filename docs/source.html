@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="">
+  <base data-ice="baseUrl" href>
   <title data-ice="title">Source | @kleros/archon</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
@@ -30,14 +30,24 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Archon.js~Archon.html">Archon</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CONTRACT_ERROR">CONTRACT_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ERROR_FETCHING_EVENTS">ERROR_FETCHING_EVENTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-HTTP_ERROR">HTTP_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-MISSING_PARAMETERS">MISSING_PARAMETERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-PARAMETER_ERROR">PARAMETER_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-VALIDATION_ERROR">VALIDATION_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DisputeStatus">DisputeStatus</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-functions">functions</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#standards">standards</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrable.js~Arbitrable.html">Arbitrable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrator.js~Arbitrator.html">Arbitrator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/StandardContract.js~StandardContract.html">StandardContract</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/EventListener.js~EventListener.html">EventListener</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fetchDataFromScript">fetchDataFromScript</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-multihashFile">multihashFile</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validMultihash">validMultihash</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateFileFromURI">validateFileFromURI</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isRequired">isRequired</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sanitizeMetaEvidence">sanitizeMetaEvidence</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getHttpUri">getHttpUri</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURIProtocol">getURIProtocol</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURISuffix">getURISuffix</a></span></span></li>
@@ -45,7 +55,7 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">25/37</span></h1>
+<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">25/52</span></h1>
 
 <table class="files-summary" data-ice="files" data-use-coverage="true">
   <thead>
@@ -61,12 +71,57 @@
   <tbody>
     
   <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/Archon.js.html#errorLines=12,13,14,27,28">src/Archon.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/Archon.js.html#errorLines=14,15,16,18,19,20,32,33,34">src/Archon.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/Archon.js~Archon.html">Archon</a></span></td>
-      <td class="coverage"><span data-ice="coverage">44 %</span><span data-ice="coverageCount" class="coverage-count">4/9</span></td>
-      <td style="display: none;" data-ice="size">2001 byte</td>
-      <td style="display: none;" data-ice="lines">55</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">25 %</span><span data-ice="coverageCount" class="coverage-count">3/12</span></td>
+      <td style="display: none;" data-ice="size">2320 byte</td>
+      <td style="display: none;" data-ice="lines">60</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/abis/arbitrable.js.html">src/abis/arbitrable.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">2669 byte</td>
+      <td style="display: none;" data-ice="lines">158</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 14:18:45 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/abis/arbitrator.js.html">src/abis/arbitrator.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3264 byte</td>
+      <td style="display: none;" data-ice="lines">199</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 14:18:45 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/constants/arbitrator.js.html#errorLines=1">src/constants/arbitrator.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-DisputeStatus">DisputeStatus</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/1</span></td>
+      <td style="display: none;" data-ice="size">65 byte</td>
+      <td style="display: none;" data-ice="lines">1</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/constants/error.js.html#errorLines=1,2,3,4,5,6">src/constants/error.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-CONTRACT_ERROR">CONTRACT_ERROR</a></span>
+<span><a href="function/index.html#static-function-ERROR_FETCHING_EVENTS">ERROR_FETCHING_EVENTS</a></span>
+<span><a href="function/index.html#static-function-HTTP_ERROR">HTTP_ERROR</a></span>
+<span><a href="function/index.html#static-function-MISSING_PARAMETERS">MISSING_PARAMETERS</a></span>
+<span><a href="function/index.html#static-function-PARAMETER_ERROR">PARAMETER_ERROR</a></span>
+<span><a href="function/index.html#static-function-VALIDATION_ERROR">VALIDATION_ERROR</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/6</span></td>
+      <td style="display: none;" data-ice="size">420 byte</td>
+      <td style="display: none;" data-ice="lines">6</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/constants/hash.js.html#errorLines=4">src/constants/hash.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-functions">functions</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/1</span></td>
+      <td style="display: none;" data-ice="size">283 byte</td>
+      <td style="display: none;" data-ice="lines">13</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/index.js.html">src/index.js</a></span></td>
@@ -74,31 +129,31 @@
       <td class="coverage"><span data-ice="coverage">-</span></td>
       <td style="display: none;" data-ice="size">56 byte</td>
       <td style="display: none;" data-ice="lines">3</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/standards/Arbitrable.js.html">src/standards/Arbitrable.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/standards/Arbitrable.js~Arbitrable.html">Arbitrable</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">6/6</span></td>
-      <td style="display: none;" data-ice="size">9878 byte</td>
-      <td style="display: none;" data-ice="lines">306</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td style="display: none;" data-ice="size">13034 byte</td>
+      <td style="display: none;" data-ice="lines">402</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 14:18:45 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/standards/Arbitrator.js.html#errorLines=15">src/standards/Arbitrator.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/standards/Arbitrator.js~Arbitrator.html">Arbitrator</a></span></td>
       <td class="coverage"><span data-ice="coverage">88 %</span><span data-ice="coverageCount" class="coverage-count">8/9</span></td>
-      <td style="display: none;" data-ice="size">6678 byte</td>
+      <td style="display: none;" data-ice="size">6651 byte</td>
       <td style="display: none;" data-ice="lines">198</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 14:18:45 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/standards/StandardContract.js.html#errorLines=12,3,9">src/standards/StandardContract.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/standards/StandardContract.js.html#errorLines=10,11,14,18,3">src/standards/StandardContract.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/standards/StandardContract.js~StandardContract.html">StandardContract</a></span></td>
-      <td class="coverage"><span data-ice="coverage">25 %</span><span data-ice="coverageCount" class="coverage-count">1/4</span></td>
-      <td style="display: none;" data-ice="size">331 byte</td>
-      <td style="display: none;" data-ice="lines">17</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">16 %</span><span data-ice="coverageCount" class="coverage-count">1/6</span></td>
+      <td style="display: none;" data-ice="size">504 byte</td>
+      <td style="display: none;" data-ice="lines">23</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/standards/index.js.html">src/standards/index.js</a></span></td>
@@ -106,7 +161,7 @@
       <td class="coverage"><span data-ice="coverage">-</span></td>
       <td style="display: none;" data-ice="size">111 byte</td>
       <td style="display: none;" data-ice="lines">4</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/utils/EventListener.js.html">src/utils/EventListener.js</a></span></td>
@@ -114,7 +169,15 @@
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
       <td style="display: none;" data-ice="size">1055 byte</td>
       <td style="display: none;" data-ice="lines">32</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/frame-loader.js.html#errorLines=3">src/utils/frame-loader.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-fetchDataFromScript">fetchDataFromScript</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/1</span></td>
+      <td style="display: none;" data-ice="size">1065 byte</td>
+      <td style="display: none;" data-ice="lines">46</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/utils/hashing.js.html">src/utils/hashing.js</a></span></td>
@@ -122,9 +185,9 @@
 <span><a href="function/index.html#static-function-validMultihash">validMultihash</a></span>
 <span><a href="function/index.html#static-function-validateFileFromURI">validateFileFromURI</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
-      <td style="display: none;" data-ice="size">3854 byte</td>
-      <td style="display: none;" data-ice="lines">126</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td style="display: none;" data-ice="size">4163 byte</td>
+      <td style="display: none;" data-ice="lines">138</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/utils/isRequired.js.html">src/utils/isRequired.js</a></span></td>
@@ -132,7 +195,15 @@
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
       <td style="display: none;" data-ice="size">376 byte</td>
       <td style="display: none;" data-ice="lines">12</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/sanitize.js.html">src/utils/sanitize.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-sanitizeMetaEvidence">sanitizeMetaEvidence</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">1055 byte</td>
+      <td style="display: none;" data-ice="lines">29</td>
+      <td style="display: none;" data-ice="updated">2020-10-04 14:33:08 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/utils/uri.js.html#errorLines=14,2,4">src/utils/uri.js</a></span></td>
@@ -140,9 +211,9 @@
 <span><a href="function/index.html#static-function-getURIProtocol">getURIProtocol</a></span>
 <span><a href="function/index.html#static-function-getURISuffix">getURISuffix</a></span></td>
       <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/3</span></td>
-      <td style="display: none;" data-ice="size">1378 byte</td>
-      <td style="display: none;" data-ice="lines">49</td>
-      <td style="display: none;" data-ice="updated">2018-10-04 16:18:58 (UTC)</td>
+      <td style="display: none;" data-ice="size">1596 byte</td>
+      <td style="display: none;" data-ice="lines">54</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 14:18:45 (UTC)</td>
     </tr>
 </tbody>
 </table>

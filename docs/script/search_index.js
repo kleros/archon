@@ -18,16 +18,70 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@kleros/archon/src/constants/error.js~contract_error",
+    "function/index.html#static-function-CONTRACT_ERROR",
+    "<span>CONTRACT_ERROR</span> <span class=\"search-result-import-path\">@kleros/archon/src/constants/error.js</span>",
+    "function"
+  ],
+  [
+    "@kleros/archon/src/constants/arbitrator.js~disputestatus",
+    "variable/index.html#static-variable-DisputeStatus",
+    "<span>DisputeStatus</span> <span class=\"search-result-import-path\">@kleros/archon/src/constants/arbitrator.js</span>",
+    "variable"
+  ],
+  [
+    "@kleros/archon/src/constants/error.js~error_fetching_events",
+    "function/index.html#static-function-ERROR_FETCHING_EVENTS",
+    "<span>ERROR_FETCHING_EVENTS</span> <span class=\"search-result-import-path\">@kleros/archon/src/constants/error.js</span>",
+    "function"
+  ],
+  [
     "@kleros/archon/src/utils/eventlistener.js~eventlistener",
     "class/src/utils/EventListener.js~EventListener.html",
     "<span>EventListener</span> <span class=\"search-result-import-path\">@kleros/archon/src/utils/EventListener.js</span>",
     "class"
   ],
   [
+    "@kleros/archon/src/constants/error.js~http_error",
+    "function/index.html#static-function-HTTP_ERROR",
+    "<span>HTTP_ERROR</span> <span class=\"search-result-import-path\">@kleros/archon/src/constants/error.js</span>",
+    "function"
+  ],
+  [
+    "@kleros/archon/src/constants/error.js~missing_parameters",
+    "function/index.html#static-function-MISSING_PARAMETERS",
+    "<span>MISSING_PARAMETERS</span> <span class=\"search-result-import-path\">@kleros/archon/src/constants/error.js</span>",
+    "function"
+  ],
+  [
+    "@kleros/archon/src/constants/error.js~parameter_error",
+    "function/index.html#static-function-PARAMETER_ERROR",
+    "<span>PARAMETER_ERROR</span> <span class=\"search-result-import-path\">@kleros/archon/src/constants/error.js</span>",
+    "function"
+  ],
+  [
     "@kleros/archon/src/standards/standardcontract.js~standardcontract",
     "class/src/standards/StandardContract.js~StandardContract.html",
     "<span>StandardContract</span> <span class=\"search-result-import-path\">@kleros/archon/src/standards/StandardContract.js</span>",
     "class"
+  ],
+  [
+    "@kleros/archon/src/constants/error.js~validation_error",
+    "function/index.html#static-function-VALIDATION_ERROR",
+    "<span>VALIDATION_ERROR</span> <span class=\"search-result-import-path\">@kleros/archon/src/constants/error.js</span>",
+    "function"
+  ],
+  [
+    "@kleros/archon/src/utils/frame-loader.js~fetchdatafromscript",
+    "function/index.html#static-function-fetchDataFromScript",
+    "<span>fetchDataFromScript</span> <span class=\"search-result-import-path\">@kleros/archon/src/utils/frame-loader.js</span>",
+    "function"
+  ],
+  [
+    "@kleros/archon/src/constants/hash.js~functions",
+    "variable/index.html#static-variable-functions",
+    "<span>functions</span> <span class=\"search-result-import-path\">@kleros/archon/src/constants/hash.js</span>",
+    "variable"
   ],
   [
     "@kleros/archon/src/utils/uri.js~gethttpuri",
@@ -57,6 +111,12 @@ window.esdocSearchIndex = [
     "@kleros/archon/src/utils/hashing.js~multihashfile",
     "function/index.html#static-function-multihashFile",
     "<span>multihashFile</span> <span class=\"search-result-import-path\">@kleros/archon/src/utils/hashing.js</span>",
+    "function"
+  ],
+  [
+    "@kleros/archon/src/utils/sanitize.js~sanitizemetaevidence",
+    "function/index.html#static-function-sanitizeMetaEvidence",
+    "<span>sanitizeMetaEvidence</span> <span class=\"search-result-import-path\">@kleros/archon/src/utils/sanitize.js</span>",
     "function"
   ],
   [
@@ -408,6 +468,54 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/archon.js~archon.modules",
+    "class/src/Archon.js~Archon.html#static-member-modules",
+    "src/Archon.js~Archon.modules",
+    "member"
+  ],
+  [
+    "src/archon.js~archon.utils",
+    "class/src/Archon.js~Archon.html#static-member-utils",
+    "src/Archon.js~Archon.utils",
+    "member"
+  ],
+  [
+    "src/archon.js~archon.version",
+    "class/src/Archon.js~Archon.html#static-member-version",
+    "src/Archon.js~Archon.version",
+    "member"
+  ],
+  [
+    "src/abis/arbitrable.js",
+    "file/src/abis/arbitrable.js.html",
+    "src/abis/arbitrable.js",
+    "file"
+  ],
+  [
+    "src/abis/arbitrator.js",
+    "file/src/abis/arbitrator.js.html",
+    "src/abis/arbitrator.js",
+    "file"
+  ],
+  [
+    "src/constants/arbitrator.js",
+    "file/src/constants/arbitrator.js.html",
+    "src/constants/arbitrator.js",
+    "file"
+  ],
+  [
+    "src/constants/error.js",
+    "file/src/constants/error.js.html",
+    "src/constants/error.js",
+    "file"
+  ],
+  [
+    "src/constants/hash.js",
+    "file/src/constants/hash.js.html",
+    "src/constants/hash.js",
+    "file"
+  ],
+  [
     "src/index.js",
     "file/src/index.js.html",
     "src/index.js",
@@ -516,6 +624,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/standards/standardcontract.js~standardcontract#ipfsgateway",
+    "class/src/standards/StandardContract.js~StandardContract.html#instance-member-ipfsGateway",
+    "src/standards/StandardContract.js~StandardContract#ipfsGateway",
+    "member"
+  ],
+  [
+    "src/standards/standardcontract.js~standardcontract#setipfsgateway",
+    "class/src/standards/StandardContract.js~StandardContract.html#instance-member-setIpfsGateway",
+    "src/standards/StandardContract.js~StandardContract#setIpfsGateway",
+    "member"
+  ],
+  [
     "src/standards/standardcontract.js~standardcontract#setprovider",
     "class/src/standards/StandardContract.js~StandardContract.html#instance-member-setProvider",
     "src/standards/StandardContract.js~StandardContract#setProvider",
@@ -546,6 +666,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/utils/frame-loader.js",
+    "file/src/utils/frame-loader.js.html",
+    "src/utils/frame-loader.js",
+    "file"
+  ],
+  [
     "src/utils/hashing.js",
     "file/src/utils/hashing.js.html",
     "src/utils/hashing.js",
@@ -555,6 +681,12 @@ window.esdocSearchIndex = [
     "src/utils/isrequired.js",
     "file/src/utils/isRequired.js.html",
     "src/utils/isRequired.js",
+    "file"
+  ],
+  [
+    "src/utils/sanitize.js",
+    "file/src/utils/sanitize.js.html",
+    "src/utils/sanitize.js",
     "file"
   ],
   [

@@ -30,14 +30,24 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Archon.js~Archon.html">Archon</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CONTRACT_ERROR">CONTRACT_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ERROR_FETCHING_EVENTS">ERROR_FETCHING_EVENTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-HTTP_ERROR">HTTP_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-MISSING_PARAMETERS">MISSING_PARAMETERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-PARAMETER_ERROR">PARAMETER_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-VALIDATION_ERROR">VALIDATION_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DisputeStatus">DisputeStatus</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-functions">functions</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#standards">standards</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrable.js~Arbitrable.html">Arbitrable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrator.js~Arbitrator.html">Arbitrator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/StandardContract.js~StandardContract.html">StandardContract</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/EventListener.js~EventListener.html">EventListener</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fetchDataFromScript">fetchDataFromScript</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-multihashFile">multihashFile</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validMultihash">validMultihash</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateFileFromURI">validateFileFromURI</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isRequired">isRequired</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sanitizeMetaEvidence">sanitizeMetaEvidence</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getHttpUri">getHttpUri</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURIProtocol">getURIProtocol</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURISuffix">getURISuffix</a></span></span></li>
@@ -46,14 +56,29 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/standards/Arbitrable.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import ArbitrableJSONInterface from &apos;kleros-interaction/build/contracts/Arbitrable&apos;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import ArbitrableJSONInterface from &apos;../abis/arbitrable&apos;
 
 import * as errorConstants from &apos;../constants/error&apos;
 import EventListener from &apos;../utils/EventListener&apos;
+import fetchDataFromScript from &apos;../utils/frame-loader&apos;
 import isRequired from &apos;../utils/isRequired&apos;
 import { validateFileFromURI } from &apos;../utils/hashing&apos;
+import { getHttpUri } from &apos;../utils/uri&apos;
+import { sanitizeMetaEvidence } from &apos;../utils/sanitize&apos;
 
 import StandardContract from &apos;./StandardContract&apos;
+
+// Polyfill to support Promise.allSettled with node &lt; 12
+Promise.allSettled = Promise.allSettled || ((promises) =&gt; Promise.all(promises.map(p =&gt; p
+  .then(v =&gt; ({
+    status: &apos;fulfilled&apos;,
+    value: v,
+  }))
+  .catch(e =&gt; ({
+    status: &apos;rejected&apos;,
+    reason: e,
+  }))
+)));
 
 /**
  * Provides interaction with standard Arbitrable contracts
@@ -66,21 +91,22 @@ class Arbitrable extends StandardContract {
    * @param {string} contractAddress - Address of the Arbitrable contract.
    * @returns {object} web3 contract instance
    */
-  _loadContractInstance = contractAddress =&gt;
-    new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
+  _loadContractInstance = contractAddress =&gt; {
+    return new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)
+  }
 
   /**
    * Fetch all Evidence submitted to the contract.
    * @param {string} contractAddress - The address of the arbitrable contract.
    * @param {string} arbitratorAddress - The address of the arbitrator contract.
-   * @param {number} disputeID - The index of the dispute.
+   * @param {number} evidenceGroupID - The index of the evidence group.
    * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes
    * @returns {object[]} An array of evidence objects
    */
   getEvidence = async (
     contractAddress = isRequired(&apos;contractAddress&apos;),
     arbitratorAddress = isRequired(&apos;arbitratorAddress&apos;),
-    disputeID = isRequired(&apos;isRequired&apos;),
+    evidenceGroupID = isRequired(&apos;evidenceGroupID&apos;),
     options = {}
   ) =&gt; {
     const contractInstance = this._loadContractInstance(contractAddress)
@@ -92,35 +118,49 @@ class Arbitrable extends StandardContract {
       options.toBlock || &apos;latest&apos;,
       {
         _arbitrator: arbitratorAddress,
-        _disputeID: disputeID,
+        _evidenceGroupID: evidenceGroupID.toString(),
         ...options.filters
       }
     )
 
     if (evidenceLogs.length === 0) return []
 
-    return Promise.all(
+    return (await Promise.allSettled(
       evidenceLogs.map(async evidenceLog =&gt; {
         const args = await evidenceLog.returnValues
-        const evidenceURI = args._evidence
+        const { uri: evidenceURI, preValidated } = getHttpUri(
+          args._evidence,
+          this.ipfsGateway
+        )
 
         const {
           file: evidenceJSON,
           isValid: evidenceJSONValid
         } = await validateFileFromURI(evidenceURI, {
-          evidence: true,
+          preValidated,
           strictHashes: options.strictHashes,
           customHashFn: options.customHashFn
         })
 
-        const { isValid: fileValid } = evidenceJSON.fileURI
-          ? await validateFileFromURI(evidenceJSON.fileURI, {
-              evidence: true,
+        let fileValid = false
+
+        try {
+          if (evidenceJSON.fileURI) {
+            const { uri: evidenceURI, preValidated } = getHttpUri(
+              evidenceJSON.fileURI,
+              this.ipfsGateway
+            )
+
+            fileValid = (await validateFileFromURI(evidenceURI, {
+              preValidated,
               strictHashes: options.strictHashes,
               hash: evidenceJSON.fileHash,
               customHashFn: options.customHashFn
-            })
-          : { isValid: null }
+            })).isValid
+          }
+        } catch (err) {
+          if (options.strictHashes) throw new Error(err)
+        }
 
         const submittedAt = (await new Promise((resolve, reject) =&gt; {
           this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) =&gt; {
@@ -140,7 +180,7 @@ class Arbitrable extends StandardContract {
           transactionHash: evidenceLog.transactionHash
         }
       })
-    )
+    )).map(r =&gt; r.value ? r.value : r)
   }
 
   /**
@@ -148,14 +188,15 @@ class Arbitrable extends StandardContract {
    * By default MetaEvidence will be returned regardless of the validity of the hashes
    * with an indicator on whether the hash was valid or not. To throw an error instead,
    * use strictHashes = true in options object.
+   * NOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.
    * @param {string} contractAddress - The address of the Arbitrable contract.
-   * @param {number} metaEvidenceID - The identifier of the metaEvidence log
+   * @param {number} metaEvidenceID - The identifier of the metaEvidence log.
    * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, strictHashes
    * @returns {object} The metaEvidence object
    */
   getMetaEvidence = async (
     contractAddress = isRequired(&apos;contractAddress&apos;),
-    metaEvidenceID = 0,
+    metaEvidenceID = isRequired(&apos;metaEvidenceID&apos;),
     options = {}
   ) =&gt; {
     const contractInstance = this._loadContractInstance(contractAddress)
@@ -165,7 +206,7 @@ class Arbitrable extends StandardContract {
       &apos;MetaEvidence&apos;,
       options.fromBlock || 0,
       options.toBlock || &apos;latest&apos;,
-      { _metaEvidenceID: metaEvidenceID, ...options.filters }
+      { _metaEvidenceID: metaEvidenceID.toString(), ...options.filters }
     )
 
     if (!metaEvidenceLogs[0])
@@ -175,55 +216,119 @@ class Arbitrable extends StandardContract {
         )
       )
 
-    if (metaEvidenceLogs.length &gt; 1)
-      throw new Error(
-        errorConstants.CONTRACT_ERROR(
-          `More than one MetaEvidence returned for metaEvidenceID ${metaEvidenceID}`
-        )
-      )
-
     const metaEvidenceLog = metaEvidenceLogs[0]
     const args = await metaEvidenceLog.returnValues
-    const metaEvidenceUri = args._evidence
+
+    const { uri: metaEvidenceUri, preValidated } = getHttpUri(
+      args._evidence,
+      this.ipfsGateway
+    )
 
     const {
-      file: metaEvidenceJSON,
+      file: _metaEvidenceJSON,
       isValid: metaEvidenceJSONValid
     } = await validateFileFromURI(metaEvidenceUri, {
-      evidence: true,
+      preValidated,
       strictHashes: options.strictHashes,
       customHashFn: options.customHashFn
     })
 
-    // validate file hash
-    const { isValid: fileValid } = metaEvidenceJSON.fileURI
-      ? await validateFileFromURI(metaEvidenceJSON.fileURI, {
-          evidence: true,
+    // we want it to be a dynamic variable so we can edit via script if neccesary
+    let metaEvidenceJSON = sanitizeMetaEvidence(_metaEvidenceJSON)
+
+    // make updates to metaEvidence from script
+    let scriptValid = false
+    try {
+      if (metaEvidenceJSON.dynamicScriptURI) {
+        if (options.scriptParameters.disputeID === &apos;302&apos; || options.scriptParameters.disputeID === &apos;532&apos;) {
+          // Need to update web3 for Firefox. Trusted hack for the short term
+          scriptValid = true
+          metaEvidenceJSON = {
+            ...metaEvidenceJSON,
+            ... {
+              rulingOptions: {
+                type: &apos;single-select&apos;,
+                titles: [&quot;Yes&quot;, &quot;No&quot;]
+              }
+            }
+          }
+        } else {
+          const { uri: scriptURI, preValidated } = getHttpUri(
+            metaEvidenceJSON.dynamicScriptURI,
+            this.ipfsGateway
+          )
+
+          const script = await validateFileFromURI(scriptURI, {
+            preValidated,
+            strictHashes: options.strictHashes,
+            hash: metaEvidenceJSON.dynamicScriptHash,
+            customHashFn: options.customHashFn
+          })
+          scriptValid = script.isValid
+          const metaEvidenceEdits = await fetchDataFromScript(
+            script.file,
+            options.scriptParameters
+          )
+
+          metaEvidenceJSON = {
+            ...metaEvidenceJSON,
+            ...metaEvidenceEdits
+          }
+        }
+      }
+    } catch (err) {
+      if (options.strictHashes) throw new Error(err)
+      // if we get an error in the execution the script is invalid
+      scriptValid = false
+    }
+
+    let fileValid = false
+    try {
+      // validate file hash
+      if (metaEvidenceJSON.fileURI) {
+        const { uri: fileURI, preValidated } = getHttpUri(
+          metaEvidenceJSON.fileURI,
+          this.ipfsGateway
+        )
+        fileValid = (await validateFileFromURI(fileURI, {
+          preValidated,
           strictHashes: options.strictHashes,
           hash: metaEvidenceJSON.fileHash,
           customHashFn: options.customHashFn
-        })
-      : { isValid: null }
+        })).isValid
+      }
+    } catch (err) {
+      if (options.strictHashes) throw new Error(err)
+    }
 
     // validate file hash
-    const {
-      isValid: interfaceValid
-    } = metaEvidenceJSON.evidenceDisplayInterfaceURL
-      ? await validateFileFromURI(
-          metaEvidenceJSON.evidenceDisplayInterfaceURL,
-          {
+    let interfaceValid = false
+    // allow for both so not to break previous versions from standard
+    const evidenceDisplayURI = metaEvidenceJSON.evidenceDisplayInterfaceURI
+    try {
+      if (evidenceDisplayURI) {
+        const { uri: disputeInterfaceURI, preValidated } = getHttpUri(
+          evidenceDisplayURI,
+          this.ipfsGateway
+        )
+        if (preValidated) interfaceValid = true
+        else
+          interfaceValid = (await validateFileFromURI(disputeInterfaceURI, {
             strictHashes: options.strictHashes,
             hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
             customHashFn: options.customHashFn
-          }
-        )
-      : { isValid: null }
+          })).isValid
+      }
+    } catch (err) {
+      if (options.strictHashes) throw new Error(err)
+    }
 
     return {
       metaEvidenceJSON,
       metaEvidenceJSONValid,
       fileValid,
       interfaceValid,
+      scriptValid,
       blockNumber: metaEvidenceLog.blockNumber,
       transactionHash: metaEvidenceLog.transactionHash
     }
@@ -252,7 +357,7 @@ class Arbitrable extends StandardContract {
       options.toBlock || &apos;latest&apos;,
       {
         _arbitrator: arbitratorAddress,
-        _disputeID: disputeID,
+        _disputeID: disputeID.toString(),
         ...options.filters
       }
     )
@@ -313,12 +418,12 @@ class Arbitrable extends StandardContract {
       options.toBlock || &apos;latest&apos;,
       {
         _arbitrator: arbitratorAddress,
-        _disputeID: disputeID,
+        _disputeID: disputeID.toString(),
         ...options.filters
       }
     )
 
-    if (!disputeLogs[0])
+    if (disputeLogs.length === 0)
       throw new Error(
         errorConstants.CONTRACT_ERROR(
           `No Dispute log for ${contractAddress} with arbitrator ${arbitratorAddress} and disputeID ${disputeID}`
@@ -344,6 +449,7 @@ class Arbitrable extends StandardContract {
 
     return {
       metaEvidenceID: args._metaEvidenceID,
+      evidenceGroupID: args._evidenceGroupID,
       createdAt,
       blockNumber: disputeLog.blockNumber,
       transactionHash: disputeLog.transactionHash

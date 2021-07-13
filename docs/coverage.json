@@ -1,17 +1,47 @@
 {
-  "coverage": "67.56%",
-  "expectCount": 37,
+  "coverage": "48.07%",
+  "expectCount": 52,
   "actualCount": 25,
   "files": {
     "src/Archon.js": {
-      "expectCount": 9,
-      "actualCount": 4,
+      "expectCount": 12,
+      "actualCount": 3,
       "undocumentLines": [
-        12,
-        13,
         14,
-        27,
-        28
+        15,
+        16,
+        18,
+        19,
+        20,
+        32,
+        33,
+        34
+      ]
+    },
+    "src/constants/arbitrator.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/constants/error.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "src/constants/hash.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        4
       ]
     },
     "src/standards/Arbitrable.js": {
@@ -27,12 +57,14 @@
       ]
     },
     "src/standards/StandardContract.js": {
-      "expectCount": 4,
+      "expectCount": 6,
       "actualCount": 1,
       "undocumentLines": [
         3,
-        9,
-        12
+        10,
+        11,
+        14,
+        18
       ]
     },
     "src/utils/EventListener.js": {
@@ -40,12 +72,24 @@
       "actualCount": 2,
       "undocumentLines": []
     },
+    "src/utils/frame-loader.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        3
+      ]
+    },
     "src/utils/hashing.js": {
       "expectCount": 3,
       "actualCount": 3,
       "undocumentLines": []
     },
     "src/utils/isRequired.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/utils/sanitize.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []

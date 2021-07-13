@@ -13,36 +13,43 @@
     "Evidence",
     "MetaEvidence"
   ],
-  "main": "dist/archon.bundle.js",
+  "main": "dist/index.js",
+  "module": "src/index.js",
   "files": [
-    "dist/*"
+    "dist",
+    "src"
   ],
   "scripts": {
-    "build": "webpack --mode production",
-    "prepublishOnly": "run-s test build",
+    "build": "babel src -d dist",
     "docs": "esdoc",
     "ganache": "ganache-cli",
+    "prepublishOnly": "run-s test build",
+    "release": "standard-version",
     "test": "jest --config ./jest.config.js"
   },
   "dependencies": {
     "axios": "^0.21.0",
     "iframe": "^1.0.0",
     "js-sha3": "^0.8.0",
-    "multihashes": "0.4.14",
+    "multihashes": "0.4.14"
+  },
+  "peerDependencies": {
     "web3": "^1.3.6"
   },
   "devDependencies": {
+    "@babel/cli": "^7.14.5",
     "@babel/core": "^7.12.3",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "assert": "^2.0.0",
     "babel-jest": "^26.6.1",
-    "babel-loader": "^8.1.0",
-    "crypto-browserify": "^3.12.0",
+    "electron": "^13.1.6",
+    "esdoc": "^1.1.0",
+    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "ganache-cli": "^6.12.1",
     "ganache-core": "^2.13.2",
-    "https-browserify": "^1.0.0",
     "jest": "^26.6.1",
     "jest-cli": "^26.6.1",
     "nock": "^13.0.4",
@@ -50,14 +57,10 @@
     "os-browserify": "^0.3.0",
     "solc": "0.4.25",
     "standard-version": "^9.0.0",
-    "stream-browserify": "^3.0.0",
-    "stream-http": "^3.1.1",
     "url": "^0.11.0",
-    "util": "^0.12.3",
-    "webpack": "^5.3.0",
-    "webpack-cli": "^4.1.0"
+    "util": "^0.12.3"
   },
   "volta": {
-    "node": "10.23.3"
+    "node": "14.17.3"
   }
 }

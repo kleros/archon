@@ -5,15 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IPFS Links and Validation &#8212; @kleros/archon 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <title>IPFS Links and Validation &#8212; @kleros/archon 2.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -32,7 +31,7 @@
         <li class="right" >
           <a href="hashing.html" title="Hashing Examples"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 2.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">IPFS Links and Validation</a></li> 
       </ul>
     </div>  
@@ -85,7 +84,7 @@ would require additional validation regardless.</p>
 <p>Archon treats all <code class="docutils literal notranslate"><span class="pre">http(s)://</span></code> URI’s the same, and will try to validate the hash
 as if they were standard hashes.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Bad:</span></code></p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">fileURI</span><span class="o">:</span> <span class="s2">&quot;https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH&quot;</span>
 <span class="p">}</span>
 
@@ -94,7 +93,7 @@ as if they were standard hashes.</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Good:</span></code></p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">fileURI</span><span class="o">:</span> <span class="s2">&quot;/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH&quot;</span>
 <span class="p">}</span>
 
@@ -104,8 +103,8 @@ as if they were standard hashes.</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Not</span> <span class="pre">Recommended:</span></code></p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">ipfsHasher</span> <span class="o">=</span> <span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{...}</span>
-<span class="kr">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span> <span class="nx">ipfsHasher</span> <span class="o">=</span> <span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{...}</span>
+<span class="kd">const</span> <span class="nx">evidenceJSON</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">fileURI</span><span class="o">:</span> <span class="s2">&quot;https://gateway.ipfs.io/ipfs/QmQhJRhvwgBPRdee18pK6QDECysFPuvuDLZMSeexdUfEiH&quot;</span>
 <span class="p">}</span>
 
@@ -155,7 +154,7 @@ as if they were standard hashes.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -177,13 +176,13 @@ as if they were standard hashes.</p>
         <li class="right" >
           <a href="hashing.html" title="Hashing Examples"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">@kleros/archon 2.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">IPFS Links and Validation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Kleros.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
     </div>
   </body>
 </html>

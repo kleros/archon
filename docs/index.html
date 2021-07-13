@@ -30,14 +30,24 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Archon.js~Archon.html">Archon</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CONTRACT_ERROR">CONTRACT_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ERROR_FETCHING_EVENTS">ERROR_FETCHING_EVENTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-HTTP_ERROR">HTTP_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-MISSING_PARAMETERS">MISSING_PARAMETERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-PARAMETER_ERROR">PARAMETER_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-VALIDATION_ERROR">VALIDATION_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DisputeStatus">DisputeStatus</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-functions">functions</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#standards">standards</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrable.js~Arbitrable.html">Arbitrable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrator.js~Arbitrator.html">Arbitrator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/StandardContract.js~StandardContract.html">StandardContract</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/EventListener.js~EventListener.html">EventListener</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fetchDataFromScript">fetchDataFromScript</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-multihashFile">multihashFile</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validMultihash">validMultihash</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateFileFromURI">validateFileFromURI</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isRequired">isRequired</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sanitizeMetaEvidence">sanitizeMetaEvidence</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getHttpUri">getHttpUri</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURIProtocol">getURIProtocol</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURISuffix">getURISuffix</a></span></span></li>
@@ -45,27 +55,14 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="archon">Archon</h1><p></p><p>
-  <a href="https://badge.fury.io/js/archon"><img src="https://badge.fury.io/js/archon.svg"></a>
-  <a href="https://travis-ci.org/kleros/archon"><img src="https://travis-ci.org/kleros/archon.svg?branch=master"></a>
-  <a href="https://david-dm.org/kleros/archon"><img src="https://david-dm.org/kleros/archon.svg"></a>
-  <a href="https://david-dm.org/kleros/archon?type=dev"><img src="https://david-dm.org/kleros/archon/dev-status.svg"></a>
-  <a href="https://github.com/facebook/jest"><img src="https://img.shields.io/badge/tested_with-jest-99424f.svg"></a>
-  <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
-  <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg"></a>
-  <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg"></a>
-  <a href="http://commitizen.github.io/cz-cli/"><img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"></a>
-</p>
-
-<p></p>
-<blockquote>
-<p>Archon provides functionality for Arbitrator and Arbitrable Ethereum smart contracts as defined in ERC 792.</p>
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="archon">Archon</h1><blockquote>
+<p>Archon provides functionality for Arbitrator and Arbitrable Ethereum smart contracts as defined in ERC 792 and ERC 1497.</p>
 </blockquote>
 <h2 id="documentation">Documentation</h2><p>See full documentation at <a href="https://archon.readthedocs.io/en/latest/index.html">https://archon.readthedocs.io/en/latest/index.html</a></p>
 <h2 id="installation">Installation</h2><pre><code><code class="source-code prettyprint">npm install @kleros/archon</code>
 </code></pre><h2 id="basic-usage">Basic Usage</h2><pre><code><code class="source-code prettyprint">var Archon = require(&apos;@kleros/archon&apos;);
 
-var archon = new Archon(&apos;ws://some.local-or-remote.node:8546&apos;);
+var archon = new Archon(&apos;wss://some.local-or-remote.node:8546&apos;);
 
 &gt; archon.arbitrator
 &gt; archon.arbitrable
@@ -76,6 +73,14 @@ yarn test</code>
 </code></pre>
 <h2 id="build">Build</h2><pre><code class="lang-sh"><code class="source-code prettyprint">yarn run build</code>
 </code></pre>
+<h2 id="update-docs">Update Docs</h2><p>The documentation is based on Sphinx. Install Sphinx with your global python or in a virtualenv</p>
+<pre><code><code class="source-code prettyprint">pip install sphinx</code>
+</code></pre><p>1) Update <code>.rst</code> files in /docs</p>
+<p>2) Run to generate new docs bundle</p>
+<pre><code><code class="source-code prettyprint">cd docs &amp;&amp; make html</code>
+</code></pre><p>3) View changes</p>
+<pre><code><code class="source-code prettyprint">open ./docs/_build/html/index.html</code>
+</code></pre><p>4) Push changes</p>
 </div>
 </div>
 

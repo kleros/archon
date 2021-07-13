@@ -30,14 +30,24 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Archon.js~Archon.html">Archon</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CONTRACT_ERROR">CONTRACT_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ERROR_FETCHING_EVENTS">ERROR_FETCHING_EVENTS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-HTTP_ERROR">HTTP_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-MISSING_PARAMETERS">MISSING_PARAMETERS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-PARAMETER_ERROR">PARAMETER_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-VALIDATION_ERROR">VALIDATION_ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DisputeStatus">DisputeStatus</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-functions">functions</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#standards">standards</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrable.js~Arbitrable.html">Arbitrable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/Arbitrator.js~Arbitrator.html">Arbitrator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/standards/StandardContract.js~StandardContract.html">StandardContract</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/EventListener.js~EventListener.html">EventListener</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fetchDataFromScript">fetchDataFromScript</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-multihashFile">multihashFile</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validMultihash">validMultihash</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateFileFromURI">validateFileFromURI</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isRequired">isRequired</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sanitizeMetaEvidence">sanitizeMetaEvidence</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getHttpUri">getHttpUri</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURIProtocol">getURIProtocol</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getURISuffix">getURISuffix</a></span></span></li>
@@ -53,7 +63,7 @@ import * as errorConstants from &apos;../constants/error&apos;
 import { functions as hashFunctions } from &apos;../constants/hash&apos;
 
 import isRequired from &apos;./isRequired&apos;
-import { getHttpUri, getURISuffix } from &apos;./uri&apos;
+import { getURISuffix } from &apos;./uri&apos;
 
 /**
  * Validate a file. The file must include the hash as the suffix of the URI,
@@ -67,23 +77,22 @@ export const validateFileFromURI = async (
   fileURI = isRequired(&apos;fileURI&apos;),
   options = {}
 ) =&gt; {
-  // A file is considered prevalidated if it is an IPFS uri
-  // NOTE IPFS uri&apos;s are converted to HTTP using a gateway
-  const { uri, preValidated } = getHttpUri(fileURI)
-
-  if (preValidated) return true
   // Fetch the evidence JSON
-  const fileResponse = await axios.get(uri)
+  const fileResponse = await axios.get(fileURI)
+
   if (fileResponse.status !== 200)
     throw new Error(
       errorConstants.HTTP_ERROR(
-        `Unable to fetch file at ${uri}. Returned status code ${
+        `Unable to fetch file at ${fileURI}. Returned status code ${
           fileResponse.status
         }`
       )
     )
 
   let fileContent = fileResponse.data
+  // If from ipfs or other source that validates hashes we cam return file
+  if (options.preValidated) return { file: fileContent, isValid: true }
+
   let selfHash = null
   // If we are validating evidence check for optional selfHash key
   if (typeof fileContent === &apos;object&apos;) {
@@ -92,21 +101,23 @@ export const validateFileFromURI = async (
     selfHash = _selfHash
   }
 
-  let isValid = true
-
-  if (
-    !validMultihash(
+  let isValid
+  // If there is an error validating the hash just assume it is invalid so that legacy disputes can be fetched
+  try {
+    isValid = validMultihash(
       options.hash || selfHash || getURISuffix(fileURI),
       fileContent,
       options.customHashFn
     )
-  ) {
+  } catch (err) {
+    console.error(err)
     isValid = false
-    if (options.strictHashes)
-      throw new Error(
-        errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)
-      )
   }
+
+  if (!isValid &amp;&amp; options.strictHashes)
+    throw new Error(
+      errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)
+    )
 
   return {
     file: fileContent,
@@ -128,14 +139,25 @@ export const validMultihash = (
 ) =&gt; {
   if (typeof file === &apos;object&apos;) file = JSON.stringify(file)
   // Decode hash to get hashing algorithm
-  const decodedHash = multihash.decode(multihash.fromB58String(multihashHex))
+
+  let decodedHash
+  try {
+    decodedHash = multihash.decode(multihash.fromB58String(multihashHex))
+  } catch (err) {
+    console.error(err)
+    throw new Error(
+      errorConstants.VALIDATION_ERROR(
+        &apos;Unable to decode multihash hex. Is your hash base58?&apos;
+      )
+    )
+  }
 
   const hashFn = customHashFn || hashFunctions[decodedHash.code]
   if (!hashFn)
     throw new Error(
-      `Hash validation error: No hash function for multicode ${
-        decodedHash.code
-      }`
+      errorConstants.VALIDATION_ERROR(
+        `No hash function for multicode ${decodedHash.code}`
+      )
     )
   // Hash the original object
   let fileHash = hashFn(file)
