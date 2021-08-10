@@ -4,6 +4,7 @@
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-class-properties"
   ],
+  "sourceMaps": "inline",
   "env": {
     "test": {
       "presets": ["@babel/preset-env"]
