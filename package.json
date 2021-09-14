@@ -27,6 +27,7 @@
     "test": "jest --config ./jest.config.js"
   },
   "dependencies": {
+    "@babel/runtime": "^7.15.4",
     "axios": "^0.21.0",
     "iframe": "^1.0.0",
     "js-sha3": "^0.8.0",
