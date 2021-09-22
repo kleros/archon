@@ -73,11 +73,15 @@ the original <code class="docutils literal notranslate"><span class="pre">multih
 <td><p>string</p></td>
 <td><p>The original hash to compare the file against.</p></td>
 </tr>
-<tr class="row-even"><td><p>strictHashes</p></td>
+<tr class="row-even"><td><p>strict</p></td>
 <td><p>bool</p></td>
-<td><p>If true, an error will throw if hash validations fail.</p></td>
+<td><p>If true, an error will throw if hash or chain ID validations fail.</p></td>
 </tr>
-<tr class="row-odd"><td><p>customHashFn</p></td>
+<tr class="row-odd"><td><p>strictHashes</p></td>
+<td><p>bool</p></td>
+<td><p>[DEPRECATED] If true, an error will throw if hash validations fail.</p></td>
+</tr>
+<tr class="row-even"><td><p>customHashFn</p></td>
 <td><p>fn</p></td>
 <td><p>A custom hash function to use to validate the file.</p></td>
 </tr>

@@ -48,7 +48,7 @@ class Arbitrable extends StandardContract {
    * @param {string} contractAddress - The address of the arbitrable contract.
    * @param {string} arbitratorAddress - The address of the arbitrator contract.
    * @param {number} evidenceGroupID - The index of the evidence group.
-   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes
+   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes, strict
    * @returns {object[]} An array of evidence objects
    */
   getEvidence = async (
@@ -57,6 +57,8 @@ class Arbitrable extends StandardContract {
     evidenceGroupID = isRequired("evidenceGroupID"),
     options = {}
   ) => {
+    const strict = options.strict || options.strictHashes;
+
     const contractInstance = this._loadContractInstance(contractAddress);
 
     const evidenceLogs = await EventListener.getEventLogs(
@@ -81,6 +83,7 @@ class Arbitrable extends StandardContract {
 
           const { file: evidenceJSON, isValid: evidenceJSONValid } = await validateFileFromURI(evidenceURI, {
             preValidated,
+            strict,
             strictHashes: options.strictHashes,
             customHashFn: options.customHashFn,
           });
@@ -94,6 +97,7 @@ class Arbitrable extends StandardContract {
               fileValid = (
                 await validateFileFromURI(evidenceURI, {
                   preValidated,
+                  strict,
                   strictHashes: options.strictHashes,
                   hash: evidenceJSON.fileHash,
                   customHashFn: options.customHashFn,
@@ -101,7 +105,11 @@ class Arbitrable extends StandardContract {
               ).isValid;
             }
           } catch (err) {
-            if (options.strictHashes) throw new Error(err);
+            if (strict) {
+              throw new Error(err);
+            }
+
+            console.warn("Invalid evidence file:", err);
           }
 
           const submittedAt = (
@@ -132,7 +140,7 @@ class Arbitrable extends StandardContract {
    * Get the MetaEvidence object for a metaEvidenceID. Hashes will be validated.
    * By default MetaEvidence will be returned regardless of the validity of the hashes
    * with an indicator on whether the hash was valid or not. To throw an error instead,
-   * use strictHashes = true in options object.
+   * use strict = true in options object.
    * NOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.
    * @param {string} contractAddress - The address of the Arbitrable contract.
    * @param {number} metaEvidenceID - The identifier of the metaEvidence log.
@@ -144,6 +152,7 @@ class Arbitrable extends StandardContract {
     metaEvidenceID = isRequired("metaEvidenceID"),
     options = {}
   ) => {
+    const strict = options.strict || options.strictHashes;
     const contractInstance = this._loadContractInstance(contractAddress);
 
     const metaEvidenceLogs = await EventListener.getEventLogs(
@@ -168,6 +177,7 @@ class Arbitrable extends StandardContract {
 
     const { file: _metaEvidenceJSON, isValid: metaEvidenceJSONValid } = await validateFileFromURI(metaEvidenceUri, {
       preValidated,
+      strict,
       strictHashes: options.strictHashes,
       customHashFn: options.customHashFn,
     });
@@ -198,6 +208,7 @@ class Arbitrable extends StandardContract {
 
           const script = await validateFileFromURI(scriptURI, {
             preValidated,
+            strict,
             strictHashes: options.strictHashes,
             hash: metaEvidenceJSON.dynamicScriptHash,
             customHashFn: options.customHashFn,
@@ -248,7 +259,7 @@ class Arbitrable extends StandardContract {
         }
       }
     } catch (err) {
-      if (options.strictHashes) {
+      if (strict) {
         throw new Error(err);
       }
 
@@ -265,6 +276,7 @@ class Arbitrable extends StandardContract {
         fileValid = (
           await validateFileFromURI(fileURI, {
             preValidated,
+            strict,
             strictHashes: options.strictHashes,
             hash: metaEvidenceJSON.fileHash,
             customHashFn: options.customHashFn,
@@ -272,7 +284,11 @@ class Arbitrable extends StandardContract {
         ).isValid;
       }
     } catch (err) {
-      if (options.strictHashes) throw new Error(err);
+      if (strict) {
+        throw new Error(err);
+      }
+
+      console.warn("Invalid fileURI:", err);
     }
 
     // validate file hash
@@ -286,6 +302,7 @@ class Arbitrable extends StandardContract {
         else
           interfaceValid = (
             await validateFileFromURI(disputeInterfaceURI, {
+              strict,
               strictHashes: options.strictHashes,
               hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
               customHashFn: options.customHashFn,
@@ -293,7 +310,11 @@ class Arbitrable extends StandardContract {
           ).isValid;
       }
     } catch (err) {
-      if (options.strictHashes) throw new Error(err);
+      if (strict) {
+        throw new Error(err);
+      }
+
+      console.warn("Invalid evidenceDisplayURI:", err);
     }
 
     return {

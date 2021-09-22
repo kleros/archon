@@ -311,7 +311,7 @@ describe('MetaEvidence', () => {
     )
     expect(metaEvidence.metaEvidenceJSONValid).toBeTruthy()
   })
-  it('invalid metaEvidence -- strictHashes', async () => {
+  it('invalid metaEvidence -- strict', async () => {
     const metaEvidenceJSON = {
       title: 'test title',
       description: 'test description'
@@ -343,7 +343,7 @@ describe('MetaEvidence', () => {
       await arbitrableInstance.getMetaEvidence(
         arbitrableContract.options.address,
         0,
-        { strictHashes: true }
+        { strict: true }
       )
     } catch (err) {
       expect(err).toBeTruthy()
@@ -351,7 +351,49 @@ describe('MetaEvidence', () => {
     }
     expect(errored).toBeTruthy()
   })
-  it('invalid file -- strictHashes', async () => {
+
+  it('invalid metaEvidence -- strict', async () => {
+    const metaEvidenceJSON = {
+      title: 'test title',
+      description: 'test description'
+    }
+    const hash = multihashFile(metaEvidenceJSON, 0x1B)
+
+    // deploy arbitrable contract to test with
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
+    expect(arbitrableContract.options.address).toBeTruthy()
+
+    const fakeHost = 'http://fake-address'
+    nock(fakeHost)
+      .get(`/${hash}`)
+      .reply(200, { title: 'different metaEvidence' })
+    // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+    const receipt = await arbitrableContract.methods
+      .emitMetaEvidence(0, `${fakeHost}/${hash}`)
+      .send({
+        from: accounts[0],
+        gas: 500000
+      })
+    expect(receipt.transactionHash).toBeTruthy()
+
+    let errored = false
+    try {
+      await arbitrableInstance.getMetaEvidence(
+        arbitrableContract.options.address,
+        0,
+        { strict: true }
+      )
+    } catch (err) {
+      expect(err).toBeTruthy()
+      errored = true
+    }
+    expect(errored).toBeTruthy()
+  })
+
+  it('invalid file -- deprecated strictHashes', async () => {
     const testFile = JSON.stringify({
       type: 'file',
       data: '0x0'
@@ -402,6 +444,7 @@ describe('MetaEvidence', () => {
     }
     expect(errored).toBeTruthy()
   })
+
   it('valid arbitrable interface -- hash in filename', async () => {
     const testFile = JSON.stringify({
       type: 'file',

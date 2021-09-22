@@ -44,7 +44,8 @@ The options parameter can include:
 ============  ======  ======================================================
 Key           Type    Description
 ============  ======  ======================================================
-strictHashes  bool    If true, an error will throw if hash validations fail.
+strict        bool    If true, an error will throw if hash or chain ID validations fail.
+strictHashes  bool    [DEPRECATED] If true, an error will throw if hash validations fail.
 customHashFn  fn      Hashing function that should be used to validate the hashes.
 fromBlock     int     The block where we start searching for event logs.
 toBlock       int     The block where we will stop searching for event logs.
@@ -84,7 +85,7 @@ Example
       "0x211f01e59b425253c0a0e9a7bf612605b42ce82c", // arbitrator contract address
       1, // dispute ID
       {
-        strictHashes: true
+        strict: true
       }
     ).then(data => {
       console.log(data)
@@ -140,7 +141,8 @@ The options parameter can include:
 ================  ======  ======================================================
 Key               Type    Description
 ================  ======  ======================================================
-strictHashes      bool    If true, an error will throw if hash validations fail.
+strict            bool    If true, an error will throw if hash or chain ID validations fail.
+strictHashes      bool    [DEPRECATED] If true, an error will throw if hash validations fail.
 customHashFn      fn      Hashing function that should be used to validate the hashes.
 fromBlock         int     The block where we start searching for event logs.
 toBlock           int     The block where we will stop searching for event logs.
@@ -182,7 +184,7 @@ Example
       '0x91697c78d48e9c83b71727ddd41ccdc95bb2f012',
       1,
       {
-        strictHashes: false
+        strict: false
       }
     ).then(data => {
       console.log(data)
