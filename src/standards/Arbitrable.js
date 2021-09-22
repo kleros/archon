@@ -248,8 +248,12 @@ class Arbitrable extends StandardContract {
         }
       }
     } catch (err) {
-      if (options.strictHashes) throw new Error(err);
+      if (options.strictHashes) {
+        throw new Error(err);
+      }
+
       // if we get an error in the execution the script is invalid
+      console.warn("Invalid MetaEvidence file:", err);
       scriptValid = false;
     }
 
