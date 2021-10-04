@@ -1,0 +1,7 @@
+{
+  "**/*.{json,html,svg,md}": "prettier --write --ignore-unknown",
+  "**/*.js": [
+    "prettier --write",
+    "eslint --fix"
+  ]
+}

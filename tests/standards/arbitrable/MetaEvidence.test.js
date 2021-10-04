@@ -311,7 +311,7 @@ describe('MetaEvidence', () => {
     )
     expect(metaEvidence.metaEvidenceJSONValid).toBeTruthy()
   })
-  it('invalid metaEvidence -- strictHashes', async () => {
+  it('invalid metaEvidence -- strict', async () => {
     const metaEvidenceJSON = {
       title: 'test title',
       description: 'test description'
@@ -343,7 +343,7 @@ describe('MetaEvidence', () => {
       await arbitrableInstance.getMetaEvidence(
         arbitrableContract.options.address,
         0,
-        { strictHashes: true }
+        { strict: true }
       )
     } catch (err) {
       expect(err).toBeTruthy()
@@ -351,7 +351,49 @@ describe('MetaEvidence', () => {
     }
     expect(errored).toBeTruthy()
   })
-  it('invalid file -- strictHashes', async () => {
+
+  it('invalid metaEvidence -- strict', async () => {
+    const metaEvidenceJSON = {
+      title: 'test title',
+      description: 'test description'
+    }
+    const hash = multihashFile(metaEvidenceJSON, 0x1B)
+
+    // deploy arbitrable contract to test with
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
+    expect(arbitrableContract.options.address).toBeTruthy()
+
+    const fakeHost = 'http://fake-address'
+    nock(fakeHost)
+      .get(`/${hash}`)
+      .reply(200, { title: 'different metaEvidence' })
+    // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+    const receipt = await arbitrableContract.methods
+      .emitMetaEvidence(0, `${fakeHost}/${hash}`)
+      .send({
+        from: accounts[0],
+        gas: 500000
+      })
+    expect(receipt.transactionHash).toBeTruthy()
+
+    let errored = false
+    try {
+      await arbitrableInstance.getMetaEvidence(
+        arbitrableContract.options.address,
+        0,
+        { strict: true }
+      )
+    } catch (err) {
+      expect(err).toBeTruthy()
+      errored = true
+    }
+    expect(errored).toBeTruthy()
+  })
+
+  it('invalid file -- deprecated strictHashes', async () => {
     const testFile = JSON.stringify({
       type: 'file',
       data: '0x0'
@@ -402,6 +444,7 @@ describe('MetaEvidence', () => {
     }
     expect(errored).toBeTruthy()
   })
+
   it('valid arbitrable interface -- hash in filename', async () => {
     const testFile = JSON.stringify({
       type: 'file',
@@ -536,8 +579,8 @@ describe('MetaEvidence', () => {
     )
     expect(metaEvidence.interfaceValid).toBeFalsy()
   })
-  it.skip('edit metaEvidence with dynamicScriptURI', async () => {
-    // TODO add support for nodejs
+
+  it('edit metaEvidence with dynamicScriptURI', async () => {
     const testScript = 'const getMetaEvidence = () => {resolveScript({rulingOptions: {type: "multiple-select"}})};'
     const scriptHash = multihashFile(testScript, 0x1B)
 
@@ -578,12 +621,64 @@ describe('MetaEvidence', () => {
 
     const metaEvidence = await arbitrableInstance.getMetaEvidence(
       arbitrableContract.options.address,
-      0
+      0,
+      { scriptParameters: { param: "foo" } }
     )
 
     expect(metaEvidence.scriptValid).toBeTruthy()
     expect(metaEvidence.metaEvidenceJSON.rulingOptions.type).toBe("multiple-select")
   })
+
+  it('edit metaEvidence with dynamicScriptURI and injected parameters', async () => {
+    const testScript = 'const getMetaEvidence = () => {resolveScript({rulingOptions: {type: "multiple-select"}, param: scriptParameters.param})};'
+    const scriptHash = multihashFile(testScript, 0x1B)
+
+    const fakeHost = 'http://fake-address'
+
+    const metaEvidenceJSON = {
+      title: 'test title',
+      description: 'test description',
+      rulingOptions: {
+        type: "single-select"
+      },
+      dynamicScriptURI: `${fakeHost}/${scriptHash}`,
+      dynamicScriptHash: scriptHash
+    }
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
+
+    // deploy arbitrable contract to test with
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
+    expect(arbitrableContract.options.address).toBeTruthy()
+
+    nock(fakeHost)
+      .get(`/${metaEvidenceHash}`)
+      .reply(200, metaEvidenceJSON)
+    nock(fakeHost)
+      .get(`/${scriptHash}`)
+      .reply(200, testScript)
+    // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+    const receipt = await arbitrableContract.methods
+      .emitMetaEvidence(0, `${fakeHost}/${metaEvidenceHash}`)
+      .send({
+        from: accounts[0],
+        gas: 500000
+      })
+    expect(receipt.transactionHash).toBeTruthy()
+
+    const metaEvidence = await arbitrableInstance.getMetaEvidence(
+      arbitrableContract.options.address,
+      0,
+      { scriptParameters: { param: "foo" } }
+    )
+
+    expect(metaEvidence.scriptValid).toBeTruthy()
+    expect(metaEvidence.metaEvidenceJSON.rulingOptions.type).toBe("multiple-select")
+    expect(metaEvidence.metaEvidenceJSON.param).toBe("foo")
+  })
+
   it('script fail: should still return metaEvidence', async () => {
     const testScript = 'const getMetaEvidence = () => {bad syntax; resolveScript({rulingOptions: {type: "multiple-select"}}});'
     const scriptHash = multihashFile(testScript, 0x1B)
@@ -631,9 +726,58 @@ describe('MetaEvidence', () => {
     expect(metaEvidence.scriptValid).toBeFalsy()
     expect(metaEvidence.metaEvidenceJSON).toEqual(metaEvidenceJSON)
   })
+
+  it('script reject: should still return metaEvidence', async () => {
+    const testScript = 'const getMetaEvidence = () => {rejectScript(new Error("fail"));'
+    const scriptHash = multihashFile(testScript, 0x1B)
+
+    const fakeHost = 'http://fake-address'
+
+    const metaEvidenceJSON = {
+      title: 'test title',
+      description: 'test description',
+      rulingOptions: {
+        type: "single-select"
+      },
+      dynamicScriptURI: `${fakeHost}/${scriptHash}`,
+      dynamicScriptHash: scriptHash
+    }
+    const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
+
+    // deploy arbitrable contract to test with
+    const arbitrableContract = await _deplyTestArbitrableContract(
+      provider,
+      accounts[0]
+    )
+    expect(arbitrableContract.options.address).toBeTruthy()
+
+    nock(fakeHost)
+      .get(`/${metaEvidenceHash}`)
+      .reply(200, metaEvidenceJSON)
+    nock(fakeHost)
+      .get(`/${scriptHash}`)
+      .reply(200, testScript)
+    // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+    const receipt = await arbitrableContract.methods
+      .emitMetaEvidence(0, `${fakeHost}/${metaEvidenceHash}`)
+      .send({
+        from: accounts[0],
+        gas: 500000
+      })
+    expect(receipt.transactionHash).toBeTruthy()
+
+    const metaEvidence = await arbitrableInstance.getMetaEvidence(
+      arbitrableContract.options.address,
+      0
+    )
+
+    expect(metaEvidence.scriptValid).toBeFalsy()
+    expect(metaEvidence.metaEvidenceJSON).toEqual(metaEvidenceJSON)
+  })
+
   it('script hash fail', async () => {
     const testScript = 'const getMetaEvidence = () => {resolveScript {rulingOptions: {type: "multiple-select"}}};'
-    const scriptHash = multihashFile(testScript, 0x1B) + '1'
+    const scriptHash = multihashFile(testScript + ';;', 0x1B)
 
     const fakeHost = 'http://fake-address'
 
@@ -677,5 +821,223 @@ describe('MetaEvidence', () => {
 
     expect(metaEvidence.scriptValid).toBeFalsy()
     expect(metaEvidence.metaEvidenceJSON).toBeTruthy()
+  })
+
+  describe('injected parameters', () => {
+    async function deployMetaEvidence(testScript, _metaEvidenceJSON) {
+      const scriptHash = multihashFile(testScript, 0x1B)
+
+      const fakeHost = 'http://fake-address'
+
+      const metaEvidenceJSON = {
+        ..._metaEvidenceJSON,
+        dynamicScriptURI: `${fakeHost}/${scriptHash}`,
+        dynamicScriptHash: scriptHash,
+      }
+      const metaEvidenceHash = multihashFile(metaEvidenceJSON, 0x1B)
+
+      // deploy arbitrable contract to test with
+      const arbitrableContract = await _deplyTestArbitrableContract(
+        provider,
+        accounts[0]
+      )
+      expect(arbitrableContract.options.address).toBeTruthy()
+
+      nock(fakeHost)
+        .get(`/${metaEvidenceHash}`)
+        .reply(200, metaEvidenceJSON)
+      nock(fakeHost)
+        .get(`/${scriptHash}`)
+        .reply(200, testScript)
+      // emit meta evidence with metaEvidenceID = 0 and evidence = fakeURI
+      const receipt = await arbitrableContract.methods
+        .emitMetaEvidence(0, `${fakeHost}/${metaEvidenceHash}`)
+        .send({
+          from: accounts[0],
+          gas: 500000
+        })
+      expect(receipt.transactionHash).toBeTruthy()
+
+      return arbitrableContract;
+    }
+
+    describe('when `arbitrableChainID` is hard-coded into meta evidence JSON', () => {
+      it('should inject `arbitrableChainID` as a parameter for dynamic script even when its not provided in `scriptParameters`', async () => {
+        const arbitrableChainID = 1;
+        const testScript = 'const getMetaEvidence = () => {resolveScript({ param: scriptParameters.arbitrableChainID });}'
+        const metaEvidenceJSON = {
+          title: 'test title',
+          description: 'test description',
+          rulingOptions: {
+            type: "single-select"
+          },
+          arbitrableChainID,
+        }
+
+        const arbitrableContract = await deployMetaEvidence(
+          testScript,
+          metaEvidenceJSON
+        )
+        const metaEvidence = await arbitrableInstance.getMetaEvidence(
+          arbitrableContract.options.address,
+          0
+        )
+
+        expect(metaEvidence.scriptValid).toBeTruthy()
+        expect(metaEvidence.metaEvidenceJSON.param).toBe(arbitrableChainID)
+      })
+
+      it('should consider the meta evidence invalid when `arbitrableChainID` from the file is different from the one provided in `scriptParameters`', async () => {
+        const arbitrableChainID = 1;
+        const testScript = 'const getMetaEvidence = () => {resolveScript({ param: scriptParameters.arbitrableChainID });}'
+        const metaEvidenceJSON = {
+          title: 'test title',
+          description: 'test description',
+          rulingOptions: {
+            type: "single-select"
+          },
+          arbitrableChainID,
+        }
+
+        const arbitrableContract = await deployMetaEvidence(
+          testScript,
+          metaEvidenceJSON
+        )
+        const metaEvidence = await arbitrableInstance.getMetaEvidence(
+          arbitrableContract.options.address,
+          0,
+          { scriptParameters: { arbitrableChainID: 100 } }
+        )
+
+        expect(metaEvidence.scriptValid).toBeFalsy()
+      })
+    })
+
+    describe('when `arbitratorChainID` is hard-coded into meta evidence JSON', () => {
+      it('should inject `arbitratorChainID` as a parameter for dynamic script even when its not provided in `scriptParameters`', async () => {
+        const arbitratorChainID = 1;
+        const testScript = 'const getMetaEvidence = () => {resolveScript({ param: scriptParameters.arbitratorChainID });}'
+        const metaEvidenceJSON = {
+          title: 'test title',
+          description: 'test description',
+          rulingOptions: {
+            type: "single-select"
+          },
+          arbitratorChainID,
+        }
+
+        const arbitratorContract = await deployMetaEvidence(
+          testScript,
+          metaEvidenceJSON
+        )
+        const metaEvidence = await arbitrableInstance.getMetaEvidence(
+          arbitratorContract.options.address,
+          0
+        )
+
+        expect(metaEvidence.scriptValid).toBeTruthy()
+        expect(metaEvidence.metaEvidenceJSON.param).toBe(arbitratorChainID)
+      })
+
+      it('should consider the meta evidence invalid when `arbitratorChainID` from the file is different from the one provided in `scriptParameters`', async () => {
+        const arbitratorChainID = 1;
+        const testScript = 'const getMetaEvidence = () => {resolveScript({ param: scriptParameters.arbitratorChainID });}'
+        const metaEvidenceJSON = {
+          title: 'test title',
+          description: 'test description',
+          rulingOptions: {
+            type: "single-select"
+          },
+          arbitratorChainID,
+        }
+
+        const arbitratorContract = await deployMetaEvidence(
+          testScript,
+          metaEvidenceJSON
+        )
+        const metaEvidence = await arbitrableInstance.getMetaEvidence(
+          arbitratorContract.options.address,
+          0,
+          { scriptParameters: { arbitratorChainID: 100 } }
+        )
+
+        expect(metaEvidence.scriptValid).toBeFalsy()
+      })
+    })
+
+    describe('when `arbitrableChainID` is missing from meta evidence JSON and not provided in `scriptParameters`', () => {
+      it('should inject `arbitrableChainID` with the same value as `arbitratorChainID` when the latter is hard-coded into the meta evidence JSON', async () => {
+        const arbitratorChainID = 1;
+        const testScript = 'const getMetaEvidence = () => {resolveScript({ param: scriptParameters.arbitrableChainID });}'
+        const metaEvidenceJSON = {
+          title: 'test title',
+          description: 'test description',
+          rulingOptions: {
+            type: "single-select"
+          },
+          arbitratorChainID,
+        }
+
+        const arbitrableContract = await deployMetaEvidence(
+          testScript,
+          metaEvidenceJSON
+        )
+        const metaEvidence = await arbitrableInstance.getMetaEvidence(
+          arbitrableContract.options.address,
+          0
+        )
+
+        expect(metaEvidence.scriptValid).toBeTruthy()
+        expect(metaEvidence.metaEvidenceJSON.param).toBe(arbitratorChainID)
+      })
+
+      it('should inject `arbitrableChainID` with the same value as `arbitratorChainID` when the latter provided in `scriptParameters`', async () => {
+        const arbitratorChainID = 1;
+        const testScript = 'const getMetaEvidence = () => {resolveScript({ param: scriptParameters.arbitrableChainID });}'
+        const metaEvidenceJSON = {
+          title: 'test title',
+          description: 'test description',
+          rulingOptions: {
+            type: "single-select"
+          }
+        }
+
+        const arbitrableContract = await deployMetaEvidence(
+          testScript,
+          metaEvidenceJSON
+        )
+        const metaEvidence = await arbitrableInstance.getMetaEvidence(
+          arbitrableContract.options.address,
+          0,
+          { scriptParameters: { arbitratorChainID } }
+        )
+
+        expect(metaEvidence.scriptValid).toBeTruthy()
+        expect(metaEvidence.metaEvidenceJSON.param).toBe(arbitratorChainID)
+      })
+
+      it('should not inject `arbitrableChainID` when `arbitratorChainID` is not hard-coded into meta evidence JSON neither provided in `scriptParameters`', async () => {
+        const testScript = 'const getMetaEvidence = () => {resolveScript({ param: scriptParameters.arbitrableChainID });}'
+        const metaEvidenceJSON = {
+          title: 'test title',
+          description: 'test description',
+          rulingOptions: {
+            type: "single-select"
+          }
+        }
+
+        const arbitrableContract = await deployMetaEvidence(
+          testScript,
+          metaEvidenceJSON
+        )
+        const metaEvidence = await arbitrableInstance.getMetaEvidence(
+          arbitrableContract.options.address,
+          0
+        )
+
+        expect(metaEvidence.scriptValid).toBeTruthy()
+        expect(metaEvidence.metaEvidenceJSON.param).toBe(undefined)
+      })
+    })
   })
 })

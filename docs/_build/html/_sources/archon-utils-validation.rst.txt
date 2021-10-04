@@ -27,7 +27,8 @@ Key           Type    Description
 ============  ======  ================================================================================
 preValidated  bool    If file has been pre-validated this will just fetch file and set isValid = true.
 hash          string  The original hash to compare the file against.
-strictHashes  bool    If true, an error will throw if hash validations fail.
+strict        bool    If true, an error will throw if hash or chain ID validations fail.
+strictHashes  bool    [DEPRECATED] If true, an error will throw if hash validations fail.
 customHashFn  fn      A custom hash function to use to validate the file.
 ============  ======  ================================================================================
 

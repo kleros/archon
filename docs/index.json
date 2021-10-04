@@ -1061,7 +1061,7 @@
     "__docId__": 75,
     "kind": "file",
     "name": "src/standards/Arbitrable.js",
-    "content": "import ArbitrableJSONInterface from '../abis/arbitrable'\n\nimport * as errorConstants from '../constants/error'\nimport EventListener from '../utils/EventListener'\nimport fetchDataFromScript from '../utils/frame-loader'\nimport isRequired from '../utils/isRequired'\nimport { validateFileFromURI } from '../utils/hashing'\nimport { getHttpUri } from '../utils/uri'\nimport { sanitizeMetaEvidence } from '../utils/sanitize'\n\nimport StandardContract from './StandardContract'\n\n// Polyfill to support Promise.allSettled with node < 12\nPromise.allSettled = Promise.allSettled || ((promises) => Promise.all(promises.map(p => p\n  .then(v => ({\n    status: 'fulfilled',\n    value: v,\n  }))\n  .catch(e => ({\n    status: 'rejected',\n    reason: e,\n  }))\n)));\n\n/**\n * Provides interaction with standard Arbitrable contracts\n * @example\n * const arbitrable = new Arbitable(web3Provider)\n */\nclass Arbitrable extends StandardContract {\n  /**\n   * Load an arbitrable web3 contract instance\n   * @param {string} contractAddress - Address of the Arbitrable contract.\n   * @returns {object} web3 contract instance\n   */\n  _loadContractInstance = contractAddress => {\n    return new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress)\n  }\n\n  /**\n   * Fetch all Evidence submitted to the contract.\n   * @param {string} contractAddress - The address of the arbitrable contract.\n   * @param {string} arbitratorAddress - The address of the arbitrator contract.\n   * @param {number} evidenceGroupID - The index of the evidence group.\n   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes\n   * @returns {object[]} An array of evidence objects\n   */\n  getEvidence = async (\n    contractAddress = isRequired('contractAddress'),\n    arbitratorAddress = isRequired('arbitratorAddress'),\n    evidenceGroupID = isRequired('evidenceGroupID'),\n    options = {}\n  ) => {\n    const contractInstance = this._loadContractInstance(contractAddress)\n\n    const evidenceLogs = await EventListener.getEventLogs(\n      contractInstance,\n      'Evidence',\n      options.fromBlock || 0,\n      options.toBlock || 'latest',\n      {\n        _arbitrator: arbitratorAddress,\n        _evidenceGroupID: evidenceGroupID.toString(),\n        ...options.filters\n      }\n    )\n\n    if (evidenceLogs.length === 0) return []\n\n    return (await Promise.allSettled(\n      evidenceLogs.map(async evidenceLog => {\n        const args = await evidenceLog.returnValues\n        const { uri: evidenceURI, preValidated } = getHttpUri(\n          args._evidence,\n          this.ipfsGateway\n        )\n\n        const {\n          file: evidenceJSON,\n          isValid: evidenceJSONValid\n        } = await validateFileFromURI(evidenceURI, {\n          preValidated,\n          strictHashes: options.strictHashes,\n          customHashFn: options.customHashFn\n        })\n\n        let fileValid = false\n\n        try {\n          if (evidenceJSON.fileURI) {\n            const { uri: evidenceURI, preValidated } = getHttpUri(\n              evidenceJSON.fileURI,\n              this.ipfsGateway\n            )\n\n            fileValid = (await validateFileFromURI(evidenceURI, {\n              preValidated,\n              strictHashes: options.strictHashes,\n              hash: evidenceJSON.fileHash,\n              customHashFn: options.customHashFn\n            })).isValid\n          }\n        } catch (err) {\n          if (options.strictHashes) throw new Error(err)\n        }\n\n        const submittedAt = (await new Promise((resolve, reject) => {\n          this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) => {\n            if (error) reject(error)\n\n            resolve(result)\n          })\n        })).timestamp\n\n        return {\n          evidenceJSONValid,\n          fileValid,\n          evidenceJSON,\n          submittedAt,\n          submittedBy: args._party,\n          blockNumber: evidenceLog.blockNumber,\n          transactionHash: evidenceLog.transactionHash\n        }\n      })\n    )).map(r => r.value ? r.value : r)\n  }\n\n  /**\n   * Get the MetaEvidence object for a metaEvidenceID. Hashes will be validated.\n   * By default MetaEvidence will be returned regardless of the validity of the hashes\n   * with an indicator on whether the hash was valid or not. To throw an error instead,\n   * use strictHashes = true in options object.\n   * NOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.\n   * @param {string} contractAddress - The address of the Arbitrable contract.\n   * @param {number} metaEvidenceID - The identifier of the metaEvidence log.\n   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, strictHashes\n   * @returns {object} The metaEvidence object\n   */\n  getMetaEvidence = async (\n    contractAddress = isRequired('contractAddress'),\n    metaEvidenceID = isRequired('metaEvidenceID'),\n    options = {}\n  ) => {\n    const contractInstance = this._loadContractInstance(contractAddress)\n\n    const metaEvidenceLogs = await EventListener.getEventLogs(\n      contractInstance,\n      'MetaEvidence',\n      options.fromBlock || 0,\n      options.toBlock || 'latest',\n      { _metaEvidenceID: metaEvidenceID.toString(), ...options.filters }\n    )\n\n    if (!metaEvidenceLogs[0])\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `No MetaEvidence log for ${contractAddress} with metaEvidenceID ${metaEvidenceID}`\n        )\n      )\n\n    const metaEvidenceLog = metaEvidenceLogs[0]\n    const args = await metaEvidenceLog.returnValues\n\n    const { uri: metaEvidenceUri, preValidated } = getHttpUri(\n      args._evidence,\n      this.ipfsGateway\n    )\n\n    const {\n      file: _metaEvidenceJSON,\n      isValid: metaEvidenceJSONValid\n    } = await validateFileFromURI(metaEvidenceUri, {\n      preValidated,\n      strictHashes: options.strictHashes,\n      customHashFn: options.customHashFn\n    })\n\n    // we want it to be a dynamic variable so we can edit via script if neccesary\n    let metaEvidenceJSON = sanitizeMetaEvidence(_metaEvidenceJSON)\n\n    // make updates to metaEvidence from script\n    let scriptValid = false\n    try {\n      if (metaEvidenceJSON.dynamicScriptURI) {\n        if (options.scriptParameters.disputeID === '302' || options.scriptParameters.disputeID === '532') {\n          // Need to update web3 for Firefox. Trusted hack for the short term\n          scriptValid = true\n          metaEvidenceJSON = {\n            ...metaEvidenceJSON,\n            ... {\n              rulingOptions: {\n                type: 'single-select',\n                titles: [\"Yes\", \"No\"]\n              }\n            }\n          }\n        } else {\n          const { uri: scriptURI, preValidated } = getHttpUri(\n            metaEvidenceJSON.dynamicScriptURI,\n            this.ipfsGateway\n          )\n\n          const script = await validateFileFromURI(scriptURI, {\n            preValidated,\n            strictHashes: options.strictHashes,\n            hash: metaEvidenceJSON.dynamicScriptHash,\n            customHashFn: options.customHashFn\n          })\n          scriptValid = script.isValid\n          const metaEvidenceEdits = await fetchDataFromScript(\n            script.file,\n            options.scriptParameters\n          )\n\n          metaEvidenceJSON = {\n            ...metaEvidenceJSON,\n            ...metaEvidenceEdits\n          }\n        }\n      }\n    } catch (err) {\n      if (options.strictHashes) throw new Error(err)\n      // if we get an error in the execution the script is invalid\n      scriptValid = false\n    }\n\n    let fileValid = false\n    try {\n      // validate file hash\n      if (metaEvidenceJSON.fileURI) {\n        const { uri: fileURI, preValidated } = getHttpUri(\n          metaEvidenceJSON.fileURI,\n          this.ipfsGateway\n        )\n        fileValid = (await validateFileFromURI(fileURI, {\n          preValidated,\n          strictHashes: options.strictHashes,\n          hash: metaEvidenceJSON.fileHash,\n          customHashFn: options.customHashFn\n        })).isValid\n      }\n    } catch (err) {\n      if (options.strictHashes) throw new Error(err)\n    }\n\n    // validate file hash\n    let interfaceValid = false\n    // allow for both so not to break previous versions from standard\n    const evidenceDisplayURI = metaEvidenceJSON.evidenceDisplayInterfaceURI\n    try {\n      if (evidenceDisplayURI) {\n        const { uri: disputeInterfaceURI, preValidated } = getHttpUri(\n          evidenceDisplayURI,\n          this.ipfsGateway\n        )\n        if (preValidated) interfaceValid = true\n        else\n          interfaceValid = (await validateFileFromURI(disputeInterfaceURI, {\n            strictHashes: options.strictHashes,\n            hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,\n            customHashFn: options.customHashFn\n          })).isValid\n      }\n    } catch (err) {\n      if (options.strictHashes) throw new Error(err)\n    }\n\n    return {\n      metaEvidenceJSON,\n      metaEvidenceJSONValid,\n      fileValid,\n      interfaceValid,\n      scriptValid,\n      blockNumber: metaEvidenceLog.blockNumber,\n      transactionHash: metaEvidenceLog.transactionHash\n    }\n  }\n\n  /**\n   * Fetch the ruling for a dispute.\n   * @param {string} contractAddress - The address of the arbitrable contract.\n   * @param {string} arbitratorAddress - The address of the arbitrator contract.\n   * @param {number} disputeID - The index of the dispute.\n   * @param {object} options - Optional parameters. Includes fromBlock and toBlock.\n   * @returns {number} The number denoting the ruling.\n   */\n  getRuling = async (\n    contractAddress = isRequired('contractAddress'),\n    arbitratorAddress = isRequired('arbitratorAddress'),\n    disputeID = isRequired('disputeID'),\n    options = {}\n  ) => {\n    const contractInstance = this._loadContractInstance(contractAddress)\n\n    const rulingLogs = await EventListener.getEventLogs(\n      contractInstance,\n      'Ruling',\n      options.fromBlock || 0,\n      options.toBlock || 'latest',\n      {\n        _arbitrator: arbitratorAddress,\n        _disputeID: disputeID.toString(),\n        ...options.filters\n      }\n    )\n\n    if (rulingLogs.length === 0)\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `There is no ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`\n        )\n      )\n    else if (rulingLogs.length > 1)\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `There is more than one ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`\n        )\n      )\n\n    const rulingLog = rulingLogs[0]\n    const args = await rulingLog.returnValues\n\n    const ruledAt = (await new Promise((resolve, reject) => {\n      this.web3.eth.getBlock(rulingLog.blockNumber, (error, result) => {\n        if (error) reject(error)\n\n        resolve(result)\n      })\n    })).timestamp\n\n    return {\n      ruling: args._ruling,\n      ruledAt,\n      blockNumber: rulingLog.blockNumber,\n      transactionHash: rulingLog.transactionHash\n    }\n  }\n\n  /**\n   * Get the event log emitted when a dispute has been created. This event links\n   * metaEvidence to a dispute by _metaEvidenceID.\n   * @param {string} contractAddress - The address of the contract.\n   * @param {string} arbitratorAddress - The address of the arbitrator contract.\n   * @param {number} disputeID - The index of the dispute.\n   * @param {object} options - Optional parameters. Includes fromBlock and toBlock.\n   * @returns {object} The data from the event log\n   */\n  getDispute = async (\n    contractAddress = isRequired('contractAddress'),\n    arbitratorAddress = isRequired('arbitratorAddress'),\n    disputeID = isRequired('isRequired'),\n    options = {}\n  ) => {\n    const contractInstance = this._loadContractInstance(contractAddress)\n\n    const disputeLogs = await EventListener.getEventLogs(\n      contractInstance,\n      'Dispute',\n      options.fromBlock || 0,\n      options.toBlock || 'latest',\n      {\n        _arbitrator: arbitratorAddress,\n        _disputeID: disputeID.toString(),\n        ...options.filters\n      }\n    )\n\n    if (disputeLogs.length === 0)\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `No Dispute log for ${contractAddress} with arbitrator ${arbitratorAddress} and disputeID ${disputeID}`\n        )\n      )\n\n    if (disputeLogs.length > 1)\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `More than one Dispute returned for arbitrator ${arbitratorAddress} and disputeID ${disputeID}`\n        )\n      )\n\n    const disputeLog = disputeLogs[0]\n    const args = await disputeLog.returnValues\n    const createdAt = (await new Promise((resolve, reject) => {\n      this.web3.eth.getBlock(disputeLog.blockNumber, (error, result) => {\n        if (error) reject(error)\n\n        resolve(result)\n      })\n    })).timestamp\n\n    return {\n      metaEvidenceID: args._metaEvidenceID,\n      evidenceGroupID: args._evidenceGroupID,\n      createdAt,\n      blockNumber: disputeLog.blockNumber,\n      transactionHash: disputeLog.transactionHash\n    }\n  }\n}\n\nexport default Arbitrable\n",
+    "content": "import ArbitrableJSONInterface from \"../abis/arbitrable\";\n\nimport * as errorConstants from \"../constants/error\";\nimport EventListener from \"../utils/EventListener\";\nimport fetchDataFromScript from \"../utils/frame-loader\";\nimport isRequired from \"../utils/isRequired\";\nimport { validateFileFromURI } from \"../utils/hashing\";\nimport { getHttpUri } from \"../utils/uri\";\nimport { sanitizeMetaEvidence } from \"../utils/sanitize\";\n\nimport StandardContract from \"./StandardContract\";\n\n// Polyfill to support Promise.allSettled with node < 12\nPromise.allSettled =\n  Promise.allSettled ||\n  ((promises) =>\n    Promise.all(\n      promises.map((p) =>\n        p\n          .then((v) => ({\n            status: \"fulfilled\",\n            value: v,\n          }))\n          .catch((e) => ({\n            status: \"rejected\",\n            reason: e,\n          }))\n      )\n    ));\n\n/**\n * Provides interaction with standard Arbitrable contracts\n * @example\n * const arbitrable = new Arbitable(web3Provider)\n */\nclass Arbitrable extends StandardContract {\n  /**\n   * Load an arbitrable web3 contract instance\n   * @param {string} contractAddress - Address of the Arbitrable contract.\n   * @returns {object} web3 contract instance\n   */\n  _loadContractInstance = (contractAddress) => {\n    return new this.web3.eth.Contract(ArbitrableJSONInterface.abi, contractAddress);\n  };\n\n  /**\n   * Fetch all Evidence submitted to the contract.\n   * @param {string} contractAddress - The address of the arbitrable contract.\n   * @param {string} arbitratorAddress - The address of the arbitrator contract.\n   * @param {number} evidenceGroupID - The index of the evidence group.\n   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes, strict\n   * @returns {object[]} An array of evidence objects\n   */\n  getEvidence = async (\n    contractAddress = isRequired(\"contractAddress\"),\n    arbitratorAddress = isRequired(\"arbitratorAddress\"),\n    evidenceGroupID = isRequired(\"evidenceGroupID\"),\n    options = {}\n  ) => {\n    const strict = options.strict || options.strictHashes;\n\n    const contractInstance = this._loadContractInstance(contractAddress);\n\n    const evidenceLogs = await EventListener.getEventLogs(\n      contractInstance,\n      \"Evidence\",\n      options.fromBlock || 0,\n      options.toBlock || \"latest\",\n      {\n        _arbitrator: arbitratorAddress,\n        _evidenceGroupID: evidenceGroupID.toString(),\n        ...options.filters,\n      }\n    );\n\n    if (evidenceLogs.length === 0) return [];\n\n    return (\n      await Promise.allSettled(\n        evidenceLogs.map(async (evidenceLog) => {\n          const args = await evidenceLog.returnValues;\n          const { uri: evidenceURI, preValidated } = getHttpUri(args._evidence, this.ipfsGateway);\n\n          const { file: evidenceJSON, isValid: evidenceJSONValid } = await validateFileFromURI(evidenceURI, {\n            preValidated,\n            strict,\n            strictHashes: options.strictHashes,\n            customHashFn: options.customHashFn,\n          });\n\n          let fileValid = false;\n\n          try {\n            if (evidenceJSON.fileURI) {\n              const { uri: evidenceURI, preValidated } = getHttpUri(evidenceJSON.fileURI, this.ipfsGateway);\n\n              fileValid = (\n                await validateFileFromURI(evidenceURI, {\n                  preValidated,\n                  strict,\n                  strictHashes: options.strictHashes,\n                  hash: evidenceJSON.fileHash,\n                  customHashFn: options.customHashFn,\n                })\n              ).isValid;\n            }\n          } catch (err) {\n            if (strict) {\n              throw new Error(err);\n            }\n\n            console.warn(\"Invalid evidence file:\", err);\n          }\n\n          const submittedAt = (\n            await new Promise((resolve, reject) => {\n              this.web3.eth.getBlock(evidenceLog.blockNumber, (error, result) => {\n                if (error) reject(error);\n\n                resolve(result);\n              });\n            })\n          ).timestamp;\n\n          return {\n            evidenceJSONValid,\n            fileValid,\n            evidenceJSON,\n            submittedAt,\n            submittedBy: args._party,\n            blockNumber: evidenceLog.blockNumber,\n            transactionHash: evidenceLog.transactionHash,\n          };\n        })\n      )\n    ).map((r) => (r.value ? r.value : r));\n  };\n\n  /**\n   * Get the MetaEvidence object for a metaEvidenceID. Hashes will be validated.\n   * By default MetaEvidence will be returned regardless of the validity of the hashes\n   * with an indicator on whether the hash was valid or not. To throw an error instead,\n   * use strict = true in options object.\n   * NOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.\n   * @param {string} contractAddress - The address of the Arbitrable contract.\n   * @param {number} metaEvidenceID - The identifier of the metaEvidence log.\n   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, strictHashes\n   * @returns {object} The metaEvidence object\n   */\n  getMetaEvidence = async (\n    contractAddress = isRequired(\"contractAddress\"),\n    metaEvidenceID = isRequired(\"metaEvidenceID\"),\n    options = {}\n  ) => {\n    const strict = options.strict || options.strictHashes;\n    const contractInstance = this._loadContractInstance(contractAddress);\n\n    const metaEvidenceLogs = await EventListener.getEventLogs(\n      contractInstance,\n      \"MetaEvidence\",\n      options.fromBlock || 0,\n      options.toBlock || \"latest\",\n      { _metaEvidenceID: metaEvidenceID.toString(), ...options.filters }\n    );\n\n    if (!metaEvidenceLogs[0])\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `No MetaEvidence log for ${contractAddress} with metaEvidenceID ${metaEvidenceID}`\n        )\n      );\n\n    const metaEvidenceLog = metaEvidenceLogs[0];\n    const args = await metaEvidenceLog.returnValues;\n\n    const { uri: metaEvidenceUri, preValidated } = getHttpUri(args._evidence, this.ipfsGateway);\n\n    const { file: _metaEvidenceJSON, isValid: metaEvidenceJSONValid } = await validateFileFromURI(metaEvidenceUri, {\n      preValidated,\n      strict,\n      strictHashes: options.strictHashes,\n      customHashFn: options.customHashFn,\n    });\n\n    // we want it to be a dynamic variable so we can edit via script if neccesary\n    let metaEvidenceJSON = sanitizeMetaEvidence(_metaEvidenceJSON);\n\n    // make updates to metaEvidence from script\n    let scriptValid = false;\n    try {\n      if (metaEvidenceJSON.dynamicScriptURI) {\n        const scriptParameters = options.scriptParameters || {};\n\n        if (scriptParameters.disputeID === \"302\" || scriptParameters.disputeID === \"532\") {\n          // Need to update web3 for Firefox. Trusted hack for the short term\n          scriptValid = true;\n          metaEvidenceJSON = {\n            ...metaEvidenceJSON,\n            ...{\n              rulingOptions: {\n                type: \"single-select\",\n                titles: [\"Yes\", \"No\"],\n              },\n            },\n          };\n        } else {\n          const { uri: scriptURI, preValidated } = getHttpUri(metaEvidenceJSON.dynamicScriptURI, this.ipfsGateway);\n\n          const script = await validateFileFromURI(scriptURI, {\n            preValidated,\n            strict,\n            strictHashes: options.strictHashes,\n            hash: metaEvidenceJSON.dynamicScriptHash,\n            customHashFn: options.customHashFn,\n          });\n\n          scriptValid = script.isValid;\n\n          const fileParameters = {\n            arbitratorChainID: metaEvidenceJSON.arbitratorChainID,\n            arbitrableChainID: metaEvidenceJSON.arbitrableChainID,\n          };\n\n          if (\n            fileParameters.arbitrableChainID !== undefined &&\n            scriptParameters.arbitrableChainID !== undefined &&\n            Number(fileParameters.arbitrableChainID) !== Number(scriptParameters.arbitrableChainID)\n          ) {\n            throw new Error(\n              `MetaEvidence requires 'arbitrableChainID' to be ${fileParameters.arbitrableChainID}, but ${scriptParameters.arbitrableChainID} was given`\n            );\n          }\n\n          if (\n            fileParameters.arbitratorChainID !== undefined &&\n            scriptParameters.arbitratorChainID !== undefined &&\n            Number(fileParameters.arbitratorChainID) !== Number(scriptParameters.arbitratorChainID)\n          ) {\n            throw new Error(\n              `MetaEvidence requires 'arbitratorChainID' to be ${fileParameters.arbitratorChainID}, but ${scriptParameters.arbitratorChainID} was given`\n            );\n          }\n\n          const injectedParameters = {\n            ...fileParameters,\n            ...scriptParameters,\n          };\n\n          if (injectedParameters.arbitrableChainID === undefined) {\n            injectedParameters.arbitrableChainID = injectedParameters.arbitratorChainID;\n          }\n\n          const metaEvidenceEdits = await fetchDataFromScript(script.file, injectedParameters);\n\n          metaEvidenceJSON = {\n            ...metaEvidenceJSON,\n            ...metaEvidenceEdits,\n          };\n        }\n      }\n    } catch (err) {\n      if (strict) {\n        throw new Error(err);\n      }\n\n      // if we get an error in the execution the script is invalid\n      console.warn(\"Invalid MetaEvidence file:\", err);\n      scriptValid = false;\n    }\n\n    let fileValid = false;\n    try {\n      // validate file hash\n      if (metaEvidenceJSON.fileURI) {\n        const { uri: fileURI, preValidated } = getHttpUri(metaEvidenceJSON.fileURI, this.ipfsGateway);\n        fileValid = (\n          await validateFileFromURI(fileURI, {\n            preValidated,\n            strict,\n            strictHashes: options.strictHashes,\n            hash: metaEvidenceJSON.fileHash,\n            customHashFn: options.customHashFn,\n          })\n        ).isValid;\n      }\n    } catch (err) {\n      if (strict) {\n        throw new Error(err);\n      }\n\n      console.warn(\"Invalid fileURI:\", err);\n    }\n\n    // validate file hash\n    let interfaceValid = false;\n    // allow for both so not to break previous versions from standard\n    const evidenceDisplayURI = metaEvidenceJSON.evidenceDisplayInterfaceURI;\n    try {\n      if (evidenceDisplayURI) {\n        const { uri: disputeInterfaceURI, preValidated } = getHttpUri(evidenceDisplayURI, this.ipfsGateway);\n        if (preValidated) interfaceValid = true;\n        else\n          interfaceValid = (\n            await validateFileFromURI(disputeInterfaceURI, {\n              strict,\n              strictHashes: options.strictHashes,\n              hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,\n              customHashFn: options.customHashFn,\n            })\n          ).isValid;\n      }\n    } catch (err) {\n      if (strict) {\n        throw new Error(err);\n      }\n\n      console.warn(\"Invalid evidenceDisplayURI:\", err);\n    }\n\n    return {\n      metaEvidenceJSON,\n      metaEvidenceJSONValid,\n      fileValid,\n      interfaceValid,\n      scriptValid,\n      blockNumber: metaEvidenceLog.blockNumber,\n      transactionHash: metaEvidenceLog.transactionHash,\n    };\n  };\n\n  /**\n   * Fetch the ruling for a dispute.\n   * @param {string} contractAddress - The address of the arbitrable contract.\n   * @param {string} arbitratorAddress - The address of the arbitrator contract.\n   * @param {number} disputeID - The index of the dispute.\n   * @param {object} options - Optional parameters. Includes fromBlock and toBlock.\n   * @returns {number} The number denoting the ruling.\n   */\n  getRuling = async (\n    contractAddress = isRequired(\"contractAddress\"),\n    arbitratorAddress = isRequired(\"arbitratorAddress\"),\n    disputeID = isRequired(\"disputeID\"),\n    options = {}\n  ) => {\n    const contractInstance = this._loadContractInstance(contractAddress);\n\n    const rulingLogs = await EventListener.getEventLogs(\n      contractInstance,\n      \"Ruling\",\n      options.fromBlock || 0,\n      options.toBlock || \"latest\",\n      {\n        _arbitrator: arbitratorAddress,\n        _disputeID: disputeID.toString(),\n        ...options.filters,\n      }\n    );\n\n    if (rulingLogs.length === 0)\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(`There is no ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`)\n      );\n    else if (rulingLogs.length > 1)\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `There is more than one ruling for dispute ${disputeID} in arbitrator ${arbitratorAddress}`\n        )\n      );\n\n    const rulingLog = rulingLogs[0];\n    const args = await rulingLog.returnValues;\n\n    const ruledAt = (\n      await new Promise((resolve, reject) => {\n        this.web3.eth.getBlock(rulingLog.blockNumber, (error, result) => {\n          if (error) reject(error);\n\n          resolve(result);\n        });\n      })\n    ).timestamp;\n\n    return {\n      ruling: args._ruling,\n      ruledAt,\n      blockNumber: rulingLog.blockNumber,\n      transactionHash: rulingLog.transactionHash,\n    };\n  };\n\n  /**\n   * Get the event log emitted when a dispute has been created. This event links\n   * metaEvidence to a dispute by _metaEvidenceID.\n   * @param {string} contractAddress - The address of the contract.\n   * @param {string} arbitratorAddress - The address of the arbitrator contract.\n   * @param {number} disputeID - The index of the dispute.\n   * @param {object} options - Optional parameters. Includes fromBlock and toBlock.\n   * @returns {object} The data from the event log\n   */\n  getDispute = async (\n    contractAddress = isRequired(\"contractAddress\"),\n    arbitratorAddress = isRequired(\"arbitratorAddress\"),\n    disputeID = isRequired(\"isRequired\"),\n    options = {}\n  ) => {\n    const contractInstance = this._loadContractInstance(contractAddress);\n\n    const disputeLogs = await EventListener.getEventLogs(\n      contractInstance,\n      \"Dispute\",\n      options.fromBlock || 0,\n      options.toBlock || \"latest\",\n      {\n        _arbitrator: arbitratorAddress,\n        _disputeID: disputeID.toString(),\n        ...options.filters,\n      }\n    );\n\n    if (disputeLogs.length === 0)\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `No Dispute log for ${contractAddress} with arbitrator ${arbitratorAddress} and disputeID ${disputeID}`\n        )\n      );\n\n    if (disputeLogs.length > 1)\n      throw new Error(\n        errorConstants.CONTRACT_ERROR(\n          `More than one Dispute returned for arbitrator ${arbitratorAddress} and disputeID ${disputeID}`\n        )\n      );\n\n    const disputeLog = disputeLogs[0];\n    const args = await disputeLog.returnValues;\n    const createdAt = (\n      await new Promise((resolve, reject) => {\n        this.web3.eth.getBlock(disputeLog.blockNumber, (error, result) => {\n          if (error) reject(error);\n\n          resolve(result);\n        });\n      })\n    ).timestamp;\n\n    return {\n      metaEvidenceID: args._metaEvidenceID,\n      evidenceGroupID: args._evidenceGroupID,\n      createdAt,\n      blockNumber: disputeLog.blockNumber,\n      transactionHash: disputeLog.transactionHash,\n    };\n  };\n}\n\nexport default Arbitrable;\n",
     "static": true,
     "longname": "/home/henrique/dev/kleros/archon/src/standards/Arbitrable.js",
     "access": "public",
@@ -1083,7 +1083,7 @@
     "examples": [
       "const arbitrable = new Arbitable(web3Provider)"
     ],
-    "lineNumber": 30,
+    "lineNumber": 36,
     "interface": false,
     "extends": [
       "src/standards/StandardContract.js~StandardContract"
@@ -1098,7 +1098,7 @@
     "longname": "src/standards/Arbitrable.js~Arbitrable#_loadContractInstance",
     "access": "private",
     "description": "Load an arbitrable web3 contract instance",
-    "lineNumber": 36,
+    "lineNumber": 42,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1140,7 +1140,7 @@
     "longname": "src/standards/Arbitrable.js~Arbitrable#getEvidence",
     "access": "public",
     "description": "Fetch all Evidence submitted to the contract.",
-    "lineNumber": 48,
+    "lineNumber": 54,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1186,7 +1186,7 @@
         "spread": false,
         "optional": false,
         "name": "options",
-        "description": "Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes"
+        "description": "Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes, strict"
       }
     ],
     "return": {
@@ -1211,8 +1211,8 @@
     "static": false,
     "longname": "src/standards/Arbitrable.js~Arbitrable#getMetaEvidence",
     "access": "public",
-    "description": "Get the MetaEvidence object for a metaEvidenceID. Hashes will be validated.\nBy default MetaEvidence will be returned regardless of the validity of the hashes\nwith an indicator on whether the hash was valid or not. To throw an error instead,\nuse strictHashes = true in options object.\nNOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.",
-    "lineNumber": 139,
+    "description": "Get the MetaEvidence object for a metaEvidenceID. Hashes will be validated.\nBy default MetaEvidence will be returned regardless of the validity of the hashes\nwith an indicator on whether the hash was valid or not. To throw an error instead,\nuse strict = true in options object.\nNOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.",
+    "lineNumber": 150,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1274,7 +1274,7 @@
     "longname": "src/standards/Arbitrable.js~Arbitrable#getRuling",
     "access": "public",
     "description": "Fetch the ruling for a dispute.",
-    "lineNumber": 287,
+    "lineNumber": 339,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1346,7 +1346,7 @@
     "longname": "src/standards/Arbitrable.js~Arbitrable#getDispute",
     "access": "public",
     "description": "Get the event log emitted when a dispute has been created. This event links\nmetaEvidence to a dispute by _metaEvidenceID.",
-    "lineNumber": 348,
+    "lineNumber": 400,
     "unknown": [
       {
         "tagName": "@returns",
@@ -2102,7 +2102,7 @@
     "__docId__": 104,
     "kind": "file",
     "name": "src/utils/frame-loader.js",
-    "content": "import iframe from 'iframe'\n\nconst fetchDataFromScript = async (scriptString, scriptParameters) => {\n  // Only works in the browser atm\n  if (!window) return {}\n  let resolver\n  const returnPromise = new Promise(resolve => {\n    resolver = resolve\n  })\n\n  window.onmessage = message => {\n    if (message.data.target === 'script') {\n      resolver(message.data.result)\n    }\n  }\n\n  const frameBody = `<script type='text/javascript'>\n    const scriptParameters = ${JSON.stringify(scriptParameters)}\n    let resolveScript\n    let rejectScript\n    const returnPromise = new Promise((resolve, reject) => {\n      resolveScript = resolve\n      rejectScript = reject\n    })\n\n    returnPromise.then(result => {window.parent.postMessage(\n      {\n        target: 'script',\n        result\n      },\n      '*'\n    )})\n\n    ${scriptString}\n    getMetaEvidence()\n  </script>`\n\n  const _ = iframe({\n    body: frameBody,\n    sandboxAttributes: ['allow-same-origin', 'allow-scripts']\n  })\n  _.iframe.style.display = 'none'\n  return returnPromise\n}\n\nexport default fetchDataFromScript\n",
+    "content": "import iframe from \"iframe\";\nimport Sandbox from \"v8-sandbox\";\n\nexport default function fetchDataFromScript(scriptString, scriptParameters) {\n  return typeof window !== \"undefined\"\n    ? fetchDataFromScriptIframe(scriptString, scriptParameters)\n    : fetchDataFromScriptSandbox(scriptString, scriptParameters);\n}\n\nconst fetchDataFromScriptSandbox = async (scriptString, scriptParameters) => {\n  const sandbox = new Sandbox();\n\n  const code = `\n    ${scriptString}\n\n    let resolveScript\n    let rejectScript\n    let scriptParameters = JSON.parse(stringifiedScriptParameters)\n\n    const returnPromise = new Promise((resolve, reject) => {\n      resolveScript = resolve\n      rejectScript = reject\n    })\n\n    getMetaEvidence()\n\n    returnPromise.then((metaEvidence) => {\n      setResult({ value: metaEvidence })\n    }).catch((err) => {\n      setResult({ error: err })\n    })\n  `;\n\n  const { error, value } = await sandbox.execute({\n    code,\n    globals: {\n      stringifiedScriptParameters: JSON.stringify(scriptParameters || {}),\n    },\n    timeout: 5000,\n  });\n\n  await sandbox.shutdown();\n\n  if (error) {\n    throw error;\n  }\n\n  return value;\n};\n\nconst fetchDataFromScriptIframe = async (scriptString, scriptParameters) => {\n  let resolver;\n  const returnPromise = new Promise((resolve) => {\n    resolver = resolve;\n  });\n\n  window.onmessage = (message) => {\n    if (message.data.target === \"script\") {\n      resolver(message.data.result);\n    }\n  };\n\n  const frameBody = `<script type='text/javascript'>\n    const scriptParameters = ${JSON.stringify(scriptParameters)}\n    let resolveScript\n    let rejectScript\n    const returnPromise = new Promise((resolve, reject) => {\n      resolveScript = resolve\n      rejectScript = reject\n    })\n\n    returnPromise.then(result => {window.parent.postMessage(\n      {\n        target: 'script',\n        result\n      },\n      '*'\n    )})\n\n    ${scriptString}\n    getMetaEvidence()\n  </script>`;\n\n  const _ = iframe({\n    body: frameBody,\n    sandboxAttributes: [\"allow-same-origin\", \"allow-scripts\"],\n  });\n  _.iframe.style.display = \"none\";\n  return returnPromise;\n};\n",
     "static": true,
     "longname": "/home/henrique/dev/kleros/archon/src/utils/frame-loader.js",
     "access": "public",
@@ -2115,7 +2115,7 @@
     "name": "fetchDataFromScript",
     "memberof": "src/utils/frame-loader.js",
     "generator": false,
-    "async": true,
+    "async": false,
     "static": true,
     "longname": "src/utils/frame-loader.js~fetchDataFromScript",
     "access": "public",
@@ -2123,7 +2123,7 @@
     "importPath": "@kleros/archon/src/utils/frame-loader.js",
     "importStyle": "fetchDataFromScript",
     "description": null,
-    "lineNumber": 3,
+    "lineNumber": 4,
     "undocument": true,
     "params": [
       {
@@ -2147,9 +2147,83 @@
   },
   {
     "__docId__": 106,
+    "kind": "function",
+    "name": "fetchDataFromScriptSandbox",
+    "memberof": "src/utils/frame-loader.js",
+    "generator": false,
+    "async": true,
+    "static": true,
+    "longname": "src/utils/frame-loader.js~fetchDataFromScriptSandbox",
+    "access": "public",
+    "export": false,
+    "importPath": "@kleros/archon/src/utils/frame-loader.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "params": [
+      {
+        "name": "scriptString",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "scriptParameters",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 107,
+    "kind": "function",
+    "name": "fetchDataFromScriptIframe",
+    "memberof": "src/utils/frame-loader.js",
+    "generator": false,
+    "async": true,
+    "static": true,
+    "longname": "src/utils/frame-loader.js~fetchDataFromScriptIframe",
+    "access": "public",
+    "export": false,
+    "importPath": "@kleros/archon/src/utils/frame-loader.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 51,
+    "undocument": true,
+    "params": [
+      {
+        "name": "scriptString",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "scriptParameters",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 108,
     "kind": "file",
     "name": "src/utils/hashing.js",
-    "content": "import multihash from 'multihashes'\nimport axios from 'axios'\n\nimport * as errorConstants from '../constants/error'\nimport { functions as hashFunctions } from '../constants/hash'\n\nimport isRequired from './isRequired'\nimport { getURISuffix } from './uri'\n\n/**\n * Validate a file. The file must include the hash as the suffix of the URI,\n * or the hash can be passed via the options parameter or using the Evidence standard\n * self hash.\n * @param {string} fileURI - The URI of where the file data can be fetched\n * @param {object} options - The optional paramaters that can be used to validate the file.\n * @returns {object} The file as well as the validity of the hashes\n */\nexport const validateFileFromURI = async (\n  fileURI = isRequired('fileURI'),\n  options = {}\n) => {\n  // Fetch the evidence JSON\n  const fileResponse = await axios.get(fileURI)\n\n  if (fileResponse.status !== 200)\n    throw new Error(\n      errorConstants.HTTP_ERROR(\n        `Unable to fetch file at ${fileURI}. Returned status code ${\n          fileResponse.status\n        }`\n      )\n    )\n\n  let fileContent = fileResponse.data\n  // If from ipfs or other source that validates hashes we cam return file\n  if (options.preValidated) return { file: fileContent, isValid: true }\n\n  let selfHash = null\n  // If we are validating evidence check for optional selfHash key\n  if (typeof fileContent === 'object') {\n    const { selfHash: _selfHash, ..._fileContent } = fileContent\n    fileContent = _fileContent\n    selfHash = _selfHash\n  }\n\n  let isValid\n  // If there is an error validating the hash just assume it is invalid so that legacy disputes can be fetched\n  try {\n    isValid = validMultihash(\n      options.hash || selfHash || getURISuffix(fileURI),\n      fileContent,\n      options.customHashFn\n    )\n  } catch (err) {\n    console.error(err)\n    isValid = false\n  }\n\n  if (!isValid && options.strictHashes)\n    throw new Error(\n      errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`)\n    )\n\n  return {\n    file: fileContent,\n    isValid\n  }\n}\n\n/**\n * Validate a multihash.\n * @param {string} multihashHex - The hexadecimal hash.\n * @param {object|string} file - The object we are validating against.\n * @param {fn} customHashFn - <optional> A custom hash function used for file.\n * @returns {bool} If the hashes match.\n */\nexport const validMultihash = (\n  multihashHex = isRequired('multihashHex'),\n  file = isRequired('file'),\n  customHashFn\n) => {\n  if (typeof file === 'object') file = JSON.stringify(file)\n  // Decode hash to get hashing algorithm\n\n  let decodedHash\n  try {\n    decodedHash = multihash.decode(multihash.fromB58String(multihashHex))\n  } catch (err) {\n    console.error(err)\n    throw new Error(\n      errorConstants.VALIDATION_ERROR(\n        'Unable to decode multihash hex. Is your hash base58?'\n      )\n    )\n  }\n\n  const hashFn = customHashFn || hashFunctions[decodedHash.code]\n  if (!hashFn)\n    throw new Error(\n      errorConstants.VALIDATION_ERROR(\n        `No hash function for multicode ${decodedHash.code}`\n      )\n    )\n  // Hash the original object\n  let fileHash = hashFn(file)\n  if (fileHash.indexOf('0x') !== 0) fileHash = '0x' + fileHash\n\n  // ensure they both have the same prefix\n  let decodedHashHex = decodedHash.digest.toString()\n  if (decodedHashHex.indexOf('0x') !== 0) decodedHashHex = '0x' + decodedHashHex\n\n  return fileHash === decodedHashHex\n}\n\n/**\n * Create a base58 multihash from a file.\n * @param {object|string} file - The object we are hashing.\n * @param {number} multicode - The multicode of the hashing algorithm.\n * @param {fn} customHashFn - <optional> A custom hash function used for file.\n * @returns {string} base58 multihash.\n */\nexport const multihashFile = (\n  file = isRequired('file'),\n  multicode = isRequired('multicode'),\n  customHashFn\n) => {\n  if (typeof file === 'object') file = JSON.stringify(file)\n\n  const hashFn = customHashFn || hashFunctions[multicode]\n  if (!hashFn)\n    throw new Error(`Hashing Error: Unsupported multicode ${multicode}`)\n\n  let fileHash = hashFn(file)\n\n  const encoded = multihash.encode(Buffer.from(fileHash), multicode)\n\n  return multihash.toB58String(encoded)\n}\n",
+    "content": "import multihash from \"multihashes\";\nimport axios from \"axios\";\n\nimport * as errorConstants from \"../constants/error\";\nimport { functions as hashFunctions } from \"../constants/hash\";\n\nimport isRequired from \"./isRequired\";\nimport { getURISuffix } from \"./uri\";\n\n/**\n * Validate a file. The file must include the hash as the suffix of the URI,\n * or the hash can be passed via the options parameter or using the Evidence standard\n * self hash.\n * @param {string} fileURI - The URI of where the file data can be fetched\n * @param {object} options - The optional paramaters that can be used to validate the file.\n * @returns {object} The file as well as the validity of the hashes\n */\nexport const validateFileFromURI = async (fileURI = isRequired(\"fileURI\"), options = {}) => {\n  const strict = options.strict || options.strictHashes;\n\n  // Fetch the evidence JSON\n  const fileResponse = await axios.get(fileURI);\n\n  if (fileResponse.status !== 200)\n    throw new Error(\n      errorConstants.HTTP_ERROR(`Unable to fetch file at ${fileURI}. Returned status code ${fileResponse.status}`)\n    );\n\n  let fileContent = fileResponse.data;\n  // If from ipfs or other source that validates hashes we cam return file\n  if (options.preValidated) return { file: fileContent, isValid: true };\n\n  let selfHash = null;\n  // If we are validating evidence check for optional selfHash key\n  if (typeof fileContent === \"object\") {\n    const { selfHash: _selfHash, ..._fileContent } = fileContent;\n    fileContent = _fileContent;\n    selfHash = _selfHash;\n  }\n\n  let isValid;\n  // If there is an error validating the hash just assume it is invalid so that legacy disputes can be fetched\n  try {\n    isValid = validMultihash(options.hash || selfHash || getURISuffix(fileURI), fileContent, options.customHashFn);\n  } catch (err) {\n    console.warn(\"Error validating the multihash:\", err);\n    isValid = false;\n  }\n\n  if (!isValid && strict) {\n    throw new Error(errorConstants.VALIDATION_ERROR(`Evidence hash validation failed`));\n  }\n\n  return {\n    file: fileContent,\n    isValid,\n  };\n};\n\n/**\n * Validate a multihash.\n * @param {string} multihashHex - The hexadecimal hash.\n * @param {object|string} file - The object we are validating against.\n * @param {fn} customHashFn - <optional> A custom hash function used for file.\n * @returns {bool} If the hashes match.\n */\nexport const validMultihash = (multihashHex = isRequired(\"multihashHex\"), file = isRequired(\"file\"), customHashFn) => {\n  if (typeof file === \"object\") file = JSON.stringify(file);\n  // Decode hash to get hashing algorithm\n\n  let decodedHash;\n  try {\n    decodedHash = multihash.decode(multihash.fromB58String(multihashHex));\n  } catch (err) {\n    console.error(err);\n    throw new Error(errorConstants.VALIDATION_ERROR(\"Unable to decode multihash hex. Is your hash base58?\"));\n  }\n\n  const hashFn = customHashFn || hashFunctions[decodedHash.code];\n  if (!hashFn) throw new Error(errorConstants.VALIDATION_ERROR(`No hash function for multicode ${decodedHash.code}`));\n  // Hash the original object\n  let fileHash = hashFn(file);\n  if (fileHash.indexOf(\"0x\") !== 0) fileHash = \"0x\" + fileHash;\n\n  // ensure they both have the same prefix\n  let decodedHashHex = decodedHash.digest.toString();\n  if (decodedHashHex.indexOf(\"0x\") !== 0) decodedHashHex = \"0x\" + decodedHashHex;\n\n  return fileHash === decodedHashHex;\n};\n\n/**\n * Create a base58 multihash from a file.\n * @param {object|string} file - The object we are hashing.\n * @param {number} multicode - The multicode of the hashing algorithm.\n * @param {fn} customHashFn - <optional> A custom hash function used for file.\n * @returns {string} base58 multihash.\n */\nexport const multihashFile = (file = isRequired(\"file\"), multicode = isRequired(\"multicode\"), customHashFn) => {\n  if (typeof file === \"object\") file = JSON.stringify(file);\n\n  const hashFn = customHashFn || hashFunctions[multicode];\n  if (!hashFn) throw new Error(`Hashing Error: Unsupported multicode ${multicode}`);\n\n  let fileHash = hashFn(file);\n\n  const encoded = multihash.encode(Buffer.from(fileHash), multicode);\n\n  return multihash.toB58String(encoded);\n};\n",
     "static": true,
     "longname": "/home/henrique/dev/kleros/archon/src/utils/hashing.js",
     "access": "public",
@@ -2157,7 +2231,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 107,
+    "__docId__": 109,
     "kind": "function",
     "name": "validateFileFromURI",
     "memberof": "src/utils/hashing.js",
@@ -2209,7 +2283,7 @@
     }
   },
   {
-    "__docId__": 108,
+    "__docId__": 110,
     "kind": "function",
     "name": "validMultihash",
     "memberof": "src/utils/hashing.js",
@@ -2222,7 +2296,7 @@
     "importPath": "@kleros/archon/src/utils/hashing.js",
     "importStyle": "{validMultihash}",
     "description": "Validate a multihash.",
-    "lineNumber": 77,
+    "lineNumber": 67,
     "unknown": [
       {
         "tagName": "@returns",
@@ -2272,7 +2346,7 @@
     }
   },
   {
-    "__docId__": 109,
+    "__docId__": 111,
     "kind": "function",
     "name": "multihashFile",
     "memberof": "src/utils/hashing.js",
@@ -2285,7 +2359,7 @@
     "importPath": "@kleros/archon/src/utils/hashing.js",
     "importStyle": "{multihashFile}",
     "description": "Create a base58 multihash from a file.",
-    "lineNumber": 122,
+    "lineNumber": 99,
     "unknown": [
       {
         "tagName": "@returns",
@@ -2335,7 +2409,7 @@
     }
   },
   {
-    "__docId__": 110,
+    "__docId__": 112,
     "kind": "file",
     "name": "src/utils/isRequired.js",
     "content": "import { MISSING_PARAMETERS } from '../constants/error'\n\n/**\n * Used as the default parameter for an arguemnt that is considered required. It will\n * throw an error if the argument is not supplied by the user.\n * @param {string} name - The name of the missing argument.\n */\nconst isRequired = name => {\n  throw new Error(MISSING_PARAMETERS(name))\n}\n\nexport default isRequired\n",
@@ -2346,7 +2420,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 111,
+    "__docId__": 113,
     "kind": "function",
     "name": "isRequired",
     "memberof": "src/utils/isRequired.js",
@@ -2375,7 +2449,7 @@
     "return": null
   },
   {
-    "__docId__": 112,
+    "__docId__": 114,
     "kind": "file",
     "name": "src/utils/sanitize.js",
     "content": "/**\n * As the evidence standard changes we need to coerce past standards into the latest one.\n * Update this function to do silent transformations to support any legacy disputes.\n */\n\nexport const sanitizeMetaEvidence = _metaEvidenceJSON => {\n  // Create copy\n  const metaEvidenceJSON = { ..._metaEvidenceJSON }\n  // Key: Legacy key to replace. Value: Latest key\n  const updateDict = {\n    evidenceDisplayInterfaceURL: 'evidenceDisplayInterfaceURI',\n    evidenceDisplayInterfaceURLHash: 'evidenceDisplayInterfaceHash'\n  }\n\n  const replacePairs = Object.entries(updateDict)\n  for (const [legacyKey, updatedKey] of replacePairs) {\n    if (!metaEvidenceJSON[legacyKey]) continue\n    const value = metaEvidenceJSON[legacyKey]\n    // remove old key and add new one\n    delete metaEvidenceJSON[legacyKey]\n    metaEvidenceJSON[updatedKey] = value\n  }\n\n  // default to single-select ruling options\n  if (metaEvidenceJSON.rulingOptions && !metaEvidenceJSON.rulingOptions.type)\n    metaEvidenceJSON.rulingOptions.type = 'single-select'\n\n  return metaEvidenceJSON\n}\n",
@@ -2386,7 +2460,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 113,
+    "__docId__": 115,
     "kind": "function",
     "name": "sanitizeMetaEvidence",
     "memberof": "src/utils/sanitize.js",
@@ -2415,7 +2489,7 @@
     }
   },
   {
-    "__docId__": 114,
+    "__docId__": 116,
     "kind": "file",
     "name": "src/utils/uri.js",
     "content": "/* eslint-disable no-fallthrough */\nexport const getURISuffix = uri => uri.split('/').pop()\n\nexport const getURIProtocol = uri => {\n  const uriParts = uri.replace(':', '').split('/')\n  switch (uri.substr(0, 1)) {\n    case '/':\n      return uriParts[1]\n    default:\n      return uriParts[0]\n  }\n}\n\nexport const getHttpUri = (uri, ipfsGateway) => {\n  const protocol = getURIProtocol(uri)\n  let preValidated = false\n  switch (protocol) {\n    case 'http':\n      break\n    case 'https': {\n      if (ipfsGateway === 'https://ipfs.kleros.io') preValidated = true\n      break\n    } case 'fs':\n      // check to see if fs is appended by /ipfs/\n      if (uri.includes('/ipfs/')) uri = uri.split(':/').pop()\n      else throw new Error(`Unrecognized protocol ${protocol}`)\n    case 'ipfs':\n      // NOTE the current WIP standard for IPFS uris: https://github.com/ipfs/go-ipfs/issues/1678#issuecomment-157478515\n      // :// -> :/\n      uri = uri.replace('://', ':/')\n      // NURI\n      if (uri.substr(0, 5) === '/ipfs' || uri.substr(0, 5) === 'ipfs/') {\n        if (uri.substr(0, 1) === '/') uri = uri.substr(1, uri.length - 1)\n        uri = `${ipfsGateway}/${uri}`\n      }\n      // compatability scheme\n      else if (uri.substr(0, 6) === 'ipfs:/')\n        uri = `${ipfsGateway}/${uri.split(':/').pop()}`\n      else throw new Error(`Unrecognized protocol ${protocol}`)\n\n      preValidated = true\n      break\n    case 'ipns':\n      // TODO we cannot validate these right now\n      break\n    default:\n      throw new Error(`Unrecognized protocol ${protocol}`)\n  }\n\n  return {\n    uri,\n    preValidated\n  }\n}\n",
@@ -2426,7 +2500,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 115,
+    "__docId__": 117,
     "kind": "function",
     "name": "getURISuffix",
     "memberof": "src/utils/uri.js",
@@ -2452,7 +2526,7 @@
     "return": null
   },
   {
-    "__docId__": 116,
+    "__docId__": 118,
     "kind": "function",
     "name": "getURIProtocol",
     "memberof": "src/utils/uri.js",
@@ -2482,7 +2556,7 @@
     }
   },
   {
-    "__docId__": 117,
+    "__docId__": 119,
     "kind": "function",
     "name": "getHttpUri",
     "memberof": "src/utils/uri.js",
@@ -2527,7 +2601,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n  \"name\": \"@kleros/archon\",\n  \"version\": \"2.0.0\",\n  \"description\": \"A javascript library for Ethereum dispute resolution. Provides the ability to interface with Arbitrable and Arbitrator Ethereum smart contracts, as defined in ERC 792.\",\n  \"license\": \"MIT\",\n  \"keywords\": [\n    \"Blockchain\",\n    \"Ethereum\",\n    \"Arbitration\",\n    \"Arbitrable\",\n    \"Arbitrator\",\n    \"ERC 792\",\n    \"Evidence\",\n    \"MetaEvidence\"\n  ],\n  \"main\": \"dist/index.js\",\n  \"module\": \"src/index.js\",\n  \"files\": [\n    \"dist\",\n    \"src\"\n  ],\n  \"scripts\": {\n    \"build\": \"babel src -d dist\",\n    \"prepublishOnly\": \"run-s test build\",\n    \"docs\": \"esdoc\",\n    \"ganache\": \"ganache-cli\",\n    \"test\": \"jest --config ./jest.config.js\"\n  },\n  \"dependencies\": {\n    \"axios\": \"^0.21.0\",\n    \"iframe\": \"^1.0.0\",\n    \"js-sha3\": \"^0.8.0\",\n    \"multihashes\": \"0.4.14\"\n  },\n  \"peerDependencies\": {\n    \"web3\": \"^1.3.6\"\n  },\n  \"devDependencies\": {\n    \"@babel/cli\": \"^7.14.5\",\n    \"@babel/core\": \"^7.12.3\",\n    \"@babel/plugin-proposal-class-properties\": \"^7.12.1\",\n    \"@babel/plugin-transform-runtime\": \"^7.12.1\",\n    \"@babel/preset-env\": \"^7.12.1\",\n    \"assert\": \"^2.0.0\",\n    \"babel-jest\": \"^26.6.1\",\n    \"electron\": \"^13.1.6\",\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-ecmascript-proposal-plugin\": \"^1.0.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"ganache-cli\": \"^6.12.1\",\n    \"ganache-core\": \"^2.13.2\",\n    \"jest\": \"^26.6.1\",\n    \"jest-cli\": \"^26.6.1\",\n    \"nock\": \"^13.0.4\",\n    \"npm-run-all\": \"^4.1.5\",\n    \"os-browserify\": \"^0.3.0\",\n    \"solc\": \"0.4.25\",\n    \"standard-version\": \"^9.0.0\",\n    \"url\": \"^0.11.0\",\n    \"util\": \"^0.12.3\"\n  },\n  \"volta\": {\n    \"node\": \"14.17.3\"\n  }\n}\n",
+    "content": "{\n  \"name\": \"@kleros/archon\",\n  \"version\": \"2.0.2\",\n  \"description\": \"A javascript library for Ethereum dispute resolution. Provides the ability to interface with Arbitrable and Arbitrator Ethereum smart contracts, as defined in ERC 792.\",\n  \"license\": \"MIT\",\n  \"keywords\": [\n    \"Blockchain\",\n    \"Ethereum\",\n    \"Arbitration\",\n    \"Arbitrable\",\n    \"Arbitrator\",\n    \"ERC 792\",\n    \"Evidence\",\n    \"MetaEvidence\"\n  ],\n  \"main\": \"dist/index.js\",\n  \"files\": [\n    \"dist\",\n    \"src\"\n  ],\n  \"scripts\": {\n    \"build\": \"babel src -d dist\",\n    \"docs\": \"esdoc\",\n    \"ganache\": \"ganache-cli\",\n    \"prepublishOnly\": \"run-s test build\",\n    \"release\": \"standard-version\",\n    \"test\": \"jest --config ./jest.config.js\",\n    \"prepare\": \"husky install\"\n  },\n  \"dependencies\": {\n    \"@babel/runtime\": \"^7.15.4\",\n    \"axios\": \"^0.21.0\",\n    \"iframe\": \"^1.0.0\",\n    \"js-sha3\": \"^0.8.0\",\n    \"multihashes\": \"0.4.14\",\n    \"v8-sandbox\": \"^2.2.2\"\n  },\n  \"peerDependencies\": {\n    \"web3\": \"^1.3.6\"\n  },\n  \"devDependencies\": {\n    \"@babel/cli\": \"^7.14.5\",\n    \"@babel/core\": \"^7.12.3\",\n    \"@babel/plugin-proposal-class-properties\": \"^7.12.1\",\n    \"@babel/plugin-transform-runtime\": \"^7.12.1\",\n    \"@babel/preset-env\": \"^7.12.1\",\n    \"assert\": \"^2.0.0\",\n    \"babel-eslint\": \"^10.1.0\",\n    \"babel-jest\": \"^26.6.1\",\n    \"electron\": \"^13.1.6\",\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-ecmascript-proposal-plugin\": \"^1.0.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^7.32.0\",\n    \"eslint-config-prettier\": \"^8.3.0\",\n    \"eslint-plugin-import\": \"^2.22.1\",\n    \"eslint-plugin-prettier\": \"^3.4.0\",\n    \"ganache-cli\": \"^6.12.1\",\n    \"ganache-core\": \"^2.13.2\",\n    \"husky\": \">=6\",\n    \"jest\": \"^26.6.1\",\n    \"jest-cli\": \"^26.6.1\",\n    \"lint-staged\": \">=10\",\n    \"nock\": \"^13.0.4\",\n    \"npm-run-all\": \"^4.1.5\",\n    \"os-browserify\": \"^0.3.0\",\n    \"prettier\": \"2.2.1\",\n    \"prettier-config-standard\": \"^4.0.0\",\n    \"solc\": \"0.4.25\",\n    \"standard-version\": \"^9.0.0\",\n    \"url\": \"^0.11.0\",\n    \"util\": \"^0.12.3\"\n  },\n  \"volta\": {\n    \"node\": \"14.17.3\"\n  },\n  \"lint-staged\": {\n    \"*.js\": \"eslint --cache --fix\"\n  }\n}\n",
     "longname": "/home/henrique/dev/kleros/archon/package.json",
     "name": "package.json",
     "static": true,

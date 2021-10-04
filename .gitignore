@@ -1,4 +1,5 @@
 # Dependencies
+.eslintcache
 node_modules/
 
 # Testing

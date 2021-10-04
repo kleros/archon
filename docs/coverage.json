@@ -1,6 +1,6 @@
 {
-  "coverage": "48.07%",
-  "expectCount": 52,
+  "coverage": "46.29%",
+  "expectCount": 54,
   "actualCount": 25,
   "files": {
     "src/Archon.js": {
@@ -73,10 +73,12 @@
       "undocumentLines": []
     },
     "src/utils/frame-loader.js": {
-      "expectCount": 1,
+      "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
-        3
+        4,
+        10,
+        51
       ]
     },
     "src/utils/hashing.js": {

@@ -73,9 +73,9 @@ For a particular dispute.</p>
 <p>The options parameter can include:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 15%" />
-<col style="width: 8%" />
-<col style="width: 77%" />
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Key</p></th>
@@ -84,23 +84,27 @@ For a particular dispute.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>strictHashes</p></td>
+<tr class="row-even"><td><p>strict</p></td>
 <td><p>bool</p></td>
-<td><p>If true, an error will throw if hash validations fail.</p></td>
+<td><p>If true, an error will throw if hash or chain ID validations fail.</p></td>
 </tr>
-<tr class="row-odd"><td><p>customHashFn</p></td>
+<tr class="row-odd"><td><p>strictHashes</p></td>
+<td><p>bool</p></td>
+<td><p>[DEPRECATED] If true, an error will throw if hash validations fail.</p></td>
+</tr>
+<tr class="row-even"><td><p>customHashFn</p></td>
 <td><p>fn</p></td>
 <td><p>Hashing function that should be used to validate the hashes.</p></td>
 </tr>
-<tr class="row-even"><td><p>fromBlock</p></td>
+<tr class="row-odd"><td><p>fromBlock</p></td>
 <td><p>int</p></td>
 <td><p>The block where we start searching for event logs.</p></td>
 </tr>
-<tr class="row-odd"><td><p>toBlock</p></td>
+<tr class="row-even"><td><p>toBlock</p></td>
 <td><p>int</p></td>
 <td><p>The block where we will stop searching for event logs.</p></td>
 </tr>
-<tr class="row-even"><td><p>filters</p></td>
+<tr class="row-odd"><td><p>filters</p></td>
 <td><p>object</p></td>
 <td><p>Additional filters for event logs.</p></td>
 </tr>
@@ -134,7 +138,7 @@ the validity of the <code class="docutils literal notranslate"><span class="pre"
   <span class="s2">&quot;0x211f01e59b425253c0a0e9a7bf612605b42ce82c&quot;</span><span class="p">,</span> <span class="c1">// arbitrator contract address</span>
   <span class="mf">1</span><span class="p">,</span> <span class="c1">// dispute ID</span>
   <span class="p">{</span>
-    <span class="nx">strictHashes</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="nx">strict</span><span class="o">:</span> <span class="kc">true</span>
   <span class="p">}</span>
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
@@ -186,9 +190,9 @@ external interface used to render the evidence found at <code class="docutils li
 <p>The options parameter can include:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 20%" />
+<col style="width: 18%" />
 <col style="width: 7%" />
-<col style="width: 73%" />
+<col style="width: 75%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Key</p></th>
@@ -197,27 +201,31 @@ external interface used to render the evidence found at <code class="docutils li
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>strictHashes</p></td>
+<tr class="row-even"><td><p>strict</p></td>
 <td><p>bool</p></td>
-<td><p>If true, an error will throw if hash validations fail.</p></td>
+<td><p>If true, an error will throw if hash or chain ID validations fail.</p></td>
 </tr>
-<tr class="row-odd"><td><p>customHashFn</p></td>
+<tr class="row-odd"><td><p>strictHashes</p></td>
+<td><p>bool</p></td>
+<td><p>[DEPRECATED] If true, an error will throw if hash validations fail.</p></td>
+</tr>
+<tr class="row-even"><td><p>customHashFn</p></td>
 <td><p>fn</p></td>
 <td><p>Hashing function that should be used to validate the hashes.</p></td>
 </tr>
-<tr class="row-even"><td><p>fromBlock</p></td>
+<tr class="row-odd"><td><p>fromBlock</p></td>
 <td><p>int</p></td>
 <td><p>The block where we start searching for event logs.</p></td>
 </tr>
-<tr class="row-odd"><td><p>toBlock</p></td>
+<tr class="row-even"><td><p>toBlock</p></td>
 <td><p>int</p></td>
 <td><p>The block where we will stop searching for event logs.</p></td>
 </tr>
-<tr class="row-even"><td><p>filters</p></td>
+<tr class="row-odd"><td><p>filters</p></td>
 <td><p>object</p></td>
 <td><p>Additional filters for event logs.</p></td>
 </tr>
-<tr class="row-odd"><td><p>scriptParameters</p></td>
+<tr class="row-even"><td><p>scriptParameters</p></td>
 <td><p>object</p></td>
 <td><p>Parameters to pass to sandboxed script.</p></td>
 </tr>
@@ -257,7 +265,7 @@ external interface used to render the evidence found at <code class="docutils li
   <span class="s1">&#39;0x91697c78d48e9c83b71727ddd41ccdc95bb2f012&#39;</span><span class="p">,</span>
   <span class="mf">1</span><span class="p">,</span>
   <span class="p">{</span>
-    <span class="nx">strictHashes</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="nx">strict</span><span class="o">:</span> <span class="kc">false</span>
   <span class="p">}</span>
 <span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>

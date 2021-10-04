@@ -56,21 +56,67 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/utils/frame-loader.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import iframe from &apos;iframe&apos;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import iframe from &quot;iframe&quot;;
+import Sandbox from &quot;v8-sandbox&quot;;
 
-const fetchDataFromScript = async (scriptString, scriptParameters) =&gt; {
-  // Only works in the browser atm
-  if (!window) return {}
-  let resolver
-  const returnPromise = new Promise(resolve =&gt; {
-    resolver = resolve
-  })
+export default function fetchDataFromScript(scriptString, scriptParameters) {
+  return typeof window !== &quot;undefined&quot;
+    ? fetchDataFromScriptIframe(scriptString, scriptParameters)
+    : fetchDataFromScriptSandbox(scriptString, scriptParameters);
+}
 
-  window.onmessage = message =&gt; {
-    if (message.data.target === &apos;script&apos;) {
-      resolver(message.data.result)
-    }
+const fetchDataFromScriptSandbox = async (scriptString, scriptParameters) =&gt; {
+  const sandbox = new Sandbox();
+
+  const code = `
+    ${scriptString}
+
+    let resolveScript
+    let rejectScript
+    let scriptParameters = JSON.parse(stringifiedScriptParameters)
+
+    const returnPromise = new Promise((resolve, reject) =&gt; {
+      resolveScript = resolve
+      rejectScript = reject
+    })
+
+    getMetaEvidence()
+
+    returnPromise.then((metaEvidence) =&gt; {
+      setResult({ value: metaEvidence })
+    }).catch((err) =&gt; {
+      setResult({ error: err })
+    })
+  `;
+
+  const { error, value } = await sandbox.execute({
+    code,
+    globals: {
+      stringifiedScriptParameters: JSON.stringify(scriptParameters || {}),
+    },
+    timeout: 5000,
+  });
+
+  await sandbox.shutdown();
+
+  if (error) {
+    throw error;
   }
+
+  return value;
+};
+
+const fetchDataFromScriptIframe = async (scriptString, scriptParameters) =&gt; {
+  let resolver;
+  const returnPromise = new Promise((resolve) =&gt; {
+    resolver = resolve;
+  });
+
+  window.onmessage = (message) =&gt; {
+    if (message.data.target === &quot;script&quot;) {
+      resolver(message.data.result);
+    }
+  };
 
   const frameBody = `&lt;script type=&apos;text/javascript&apos;&gt;
     const scriptParameters = ${JSON.stringify(scriptParameters)}
@@ -91,17 +137,15 @@ const fetchDataFromScript = async (scriptString, scriptParameters) =&gt; {
 
     ${scriptString}
     getMetaEvidence()
-  &lt;/script&gt;`
+  &lt;/script&gt;`;
 
   const _ = iframe({
     body: frameBody,
-    sandboxAttributes: [&apos;allow-same-origin&apos;, &apos;allow-scripts&apos;]
-  })
-  _.iframe.style.display = &apos;none&apos;
-  return returnPromise
-}
-
-export default fetchDataFromScript
+    sandboxAttributes: [&quot;allow-same-origin&quot;, &quot;allow-scripts&quot;],
+  });
+  _.iframe.style.display = &quot;none&quot;;
+  return returnPromise;
+};
 </code></pre>
 
 </div>
