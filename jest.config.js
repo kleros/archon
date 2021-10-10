@@ -1,5 +1,5 @@
 module.exports = {
-  testEnvironment: 'node',
+  testEnvironment: "node",
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.js', '!**/node_modules/**']
-}
+  collectCoverageFrom: ["src/**/*.js", "!**/node_modules/**"],
+};
