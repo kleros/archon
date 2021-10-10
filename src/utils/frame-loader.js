@@ -1,3 +1,5 @@
+import iframe from "iframe";
+
 export default function fetchDataFromScript(scriptString, scriptParameters) {
   return typeof window !== "undefined" ? fetchDataFromScriptIframe(scriptString, scriptParameters) : {};
 }
@@ -35,7 +37,6 @@ const fetchDataFromScriptIframe = async (scriptString, scriptParameters) => {
     getMetaEvidence()
   </script>`;
 
-  const { default: iframe } = await import("iframe");
   const _ = iframe({
     body: frameBody,
     sandboxAttributes: ["allow-same-origin", "allow-scripts"],

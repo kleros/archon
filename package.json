@@ -1,6 +1,6 @@
 {
   "name": "@kleros/archon",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A javascript library for Ethereum dispute resolution. Provides the ability to interface with Arbitrable and Arbitrator Ethereum smart contracts, as defined in ERC 792.",
   "license": "MIT",
   "keywords": [
