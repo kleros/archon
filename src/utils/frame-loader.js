@@ -1,52 +1,6 @@
-import iframe from "iframe";
-import Sandbox from "v8-sandbox";
-
 export default function fetchDataFromScript(scriptString, scriptParameters) {
-  return typeof window !== "undefined"
-    ? fetchDataFromScriptIframe(scriptString, scriptParameters)
-    : fetchDataFromScriptSandbox(scriptString, scriptParameters);
+  return typeof window !== "undefined" ? fetchDataFromScriptIframe(scriptString, scriptParameters) : {};
 }
-
-const fetchDataFromScriptSandbox = async (scriptString, scriptParameters) => {
-  const sandbox = new Sandbox();
-
-  const code = `
-    ${scriptString}
-
-    let resolveScript
-    let rejectScript
-    let scriptParameters = JSON.parse(stringifiedScriptParameters)
-
-    const returnPromise = new Promise((resolve, reject) => {
-      resolveScript = resolve
-      rejectScript = reject
-    })
-
-    getMetaEvidence()
-
-    returnPromise.then((metaEvidence) => {
-      setResult({ value: metaEvidence })
-    }).catch((err) => {
-      setResult({ error: err })
-    })
-  `;
-
-  const { error, value } = await sandbox.execute({
-    code,
-    globals: {
-      stringifiedScriptParameters: JSON.stringify(scriptParameters || {}),
-    },
-    timeout: 5000,
-  });
-
-  await sandbox.shutdown();
-
-  if (error) {
-    throw error;
-  }
-
-  return value;
-};
 
 const fetchDataFromScriptIframe = async (scriptString, scriptParameters) => {
   let resolver;
@@ -81,6 +35,7 @@ const fetchDataFromScriptIframe = async (scriptString, scriptParameters) => {
     getMetaEvidence()
   </script>`;
 
+  const { default: iframe } = await import("iframe");
   const _ = iframe({
     body: frameBody,
     sandboxAttributes: ["allow-same-origin", "allow-scripts"],

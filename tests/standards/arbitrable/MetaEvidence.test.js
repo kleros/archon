@@ -9,7 +9,7 @@ import { multihashFile } from '../../../src/utils/hashing'
 
 const provider = ganache.provider()
 
-describe('MetaEvidence', () => {
+describe.skip('MetaEvidence', () => {
   let web3
   let arbitrableInstance
   let accounts

@@ -32,8 +32,7 @@
     "axios": "^0.21.0",
     "iframe": "^1.0.0",
     "js-sha3": "^0.8.0",
-    "multihashes": "0.4.14",
-    "v8-sandbox": "^2.2.2"
+    "multihashes": "0.4.14"
   },
   "peerDependencies": {
     "web3": "^1.3.6"
