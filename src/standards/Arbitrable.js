@@ -48,7 +48,7 @@ class Arbitrable extends StandardContract {
    * @param {string} contractAddress - The address of the arbitrable contract.
    * @param {string} arbitratorAddress - The address of the arbitrator contract.
    * @param {number} evidenceGroupID - The index of the evidence group.
-   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strictHashes, strict
+   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, filters, strict
    * @returns {object[]} An array of evidence objects
    */
   getEvidence = async (
@@ -84,7 +84,6 @@ class Arbitrable extends StandardContract {
           const { file: evidenceJSON, isValid: evidenceJSONValid } = await validateFileFromURI(evidenceURI, {
             preValidated,
             strict,
-            strictHashes: options.strictHashes,
             customHashFn: options.customHashFn,
           });
 
@@ -98,7 +97,6 @@ class Arbitrable extends StandardContract {
                 await validateFileFromURI(evidenceURI, {
                   preValidated,
                   strict,
-                  strictHashes: options.strictHashes,
                   hash: evidenceJSON.fileHash,
                   customHashFn: options.customHashFn,
                 })
@@ -144,14 +142,15 @@ class Arbitrable extends StandardContract {
    * NOTE: If more than one MetaEvidence with the same metaEvidenceID is found it will return the 1st one.
    * @param {string} contractAddress - The address of the Arbitrable contract.
    * @param {number} metaEvidenceID - The identifier of the metaEvidence log.
-   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, strictHashes
+   * @param {object} options - Additional paramaters. Includes fromBlock, toBlock, strict, getJsonRpcUrl
    * @returns {object} The metaEvidence object
    */
-  getMetaEvidence = async (
+  async getMetaEvidence(
     contractAddress = isRequired("contractAddress"),
     metaEvidenceID = isRequired("metaEvidenceID"),
     options = {}
-  ) => {
+  ) {
+    const { getJsonRpcUrl = () => {} } = options;
     const strict = options.strict || options.strictHashes;
     const contractInstance = this._loadContractInstance(contractAddress);
 
@@ -178,7 +177,6 @@ class Arbitrable extends StandardContract {
     const { file: _metaEvidenceJSON, isValid: metaEvidenceJSONValid } = await validateFileFromURI(metaEvidenceUri, {
       preValidated,
       strict,
-      strictHashes: options.strictHashes,
       customHashFn: options.customHashFn,
     });
 
@@ -209,7 +207,6 @@ class Arbitrable extends StandardContract {
           const script = await validateFileFromURI(scriptURI, {
             preValidated,
             strict,
-            strictHashes: options.strictHashes,
             hash: metaEvidenceJSON.dynamicScriptHash,
             customHashFn: options.customHashFn,
           });
@@ -246,8 +243,49 @@ class Arbitrable extends StandardContract {
             ...scriptParameters,
           };
 
+          if (injectedParameters.arbitrableContractAddress === undefined) {
+            injectedParameters.arbitrableContractAddress = contractAddress;
+          }
+
+          if (injectedParameters.arbitratorChainID !== undefined) {
+            injectedParameters.arbitratorJsonRpcUrl =
+              injectedParameters.arbitratorJsonRpcUrl || getJsonRpcUrl(injectedParameters.arbitratorChainID);
+          }
+
           if (injectedParameters.arbitrableChainID === undefined) {
             injectedParameters.arbitrableChainID = injectedParameters.arbitratorChainID;
+          }
+
+          if (
+            injectedParameters.arbitrableChainID !== undefined &&
+            injectedParameters.arbitrableJsonRpcUrl === undefined
+          ) {
+            if (injectedParameters.arbitrableChainID === injectedParameters.arbitratorChainID) {
+              injectedParameters.arbitrableJsonRpcUrl = injectedParameters.arbitratorJsonRpcUrl;
+            }
+
+            injectedParameters.arbitrableJsonRpcUrl =
+              injectedParameters.arbitrableJsonRpcUrl || getJsonRpcUrl(injectedParameters.arbitrableChainID);
+          }
+
+          if (
+            injectedParameters.arbitratorChainID !== undefined &&
+            injectedParameters.arbitratorJsonRpcUrl === undefined
+          ) {
+            console.warn(
+              `Could not obtain a valid 'arbitratorJsonRpcUrl' for chain ID ${injectedParameters.arbitratorChainID} on the Arbitrator side.
+You should either provide it directly or provide a 'options.getJsonRpcUrl(chainID: number) => string' callback.`
+            );
+          }
+
+          if (
+            injectedParameters.arbitrableChainID !== undefined &&
+            injectedParameters.arbitrableJsonRpcUrl === undefined
+          ) {
+            console.warn(
+              `Could not obtain a valid 'arbitrableJsonRpcUrl' for chain ID ${injectedParameters.arbitrableChainID} on the Arbitrable side.
+You should either provide it directly or provide a 'options.getJsonRpcUrl(chainID: number) => string' callback.`
+            );
           }
 
           const metaEvidenceEdits = await fetchDataFromScript(script.file, injectedParameters);
@@ -277,7 +315,6 @@ class Arbitrable extends StandardContract {
           await validateFileFromURI(fileURI, {
             preValidated,
             strict,
-            strictHashes: options.strictHashes,
             hash: metaEvidenceJSON.fileHash,
             customHashFn: options.customHashFn,
           })
@@ -303,7 +340,6 @@ class Arbitrable extends StandardContract {
           interfaceValid = (
             await validateFileFromURI(disputeInterfaceURI, {
               strict,
-              strictHashes: options.strictHashes,
               hash: metaEvidenceJSON.evidenceDisplayInterfaceHash,
               customHashFn: options.customHashFn,
             })
@@ -326,7 +362,7 @@ class Arbitrable extends StandardContract {
       blockNumber: metaEvidenceLog.blockNumber,
       transactionHash: metaEvidenceLog.transactionHash,
     };
-  };
+  }
 
   /**
    * Fetch the ruling for a dispute.
