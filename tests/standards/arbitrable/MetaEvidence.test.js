@@ -707,33 +707,6 @@ describe("MetaEvidence", () => {
         expect(metaEvidence.scriptValid).toBeTruthy();
         expect(metaEvidence.metaEvidenceJSON.param).toBe(fakeJsonRpcUrl);
       });
-
-      it("should get the `arbitrableJsonRpcUrl` from `scriptParameters.arbitratorJsonRpcUrl` when `metaEvidence.arbitrableChainID === scriptParameters.arbitratorChainID` and inject it into `scriptParameters`", async () => {
-        const arbitrableChainID = 1;
-        const fakeJsonRpcUrl = "dummy://url";
-        const testScript =
-          "const getMetaEvidence = () => {resolveScript({ param: scriptParameters.arbitrableJsonRpcUrl });}";
-        const metaEvidenceJSON = {
-          title: "test title",
-          description: "test description",
-          rulingOptions: {
-            type: "single-select",
-          },
-          arbitrableChainID,
-        };
-
-        const arbitrableContract = await deployMetaEvidence(testScript, metaEvidenceJSON);
-        const metaEvidence = await arbitrableInstance.getMetaEvidence(arbitrableContract.options.address, 0, {
-          scriptParameters: {
-            arbitratorChainID: 1,
-            arbitratorJsonRpcUrl: fakeJsonRpcUrl,
-          },
-          getJsonRpcUrl: () => "dummy://yet-another-fake-url",
-        });
-
-        expect(metaEvidence.scriptValid).toBeTruthy();
-        expect(metaEvidence.metaEvidenceJSON.param).toBe(fakeJsonRpcUrl);
-      });
     });
 
     describe("when `arbitratorChainID` is hard-coded into meta evidence JSON", () => {
