@@ -234,7 +234,7 @@ class Arbitrable extends StandardContract {
             Number(fileParameters.arbitratorChainID) !== Number(scriptParameters.arbitratorChainID)
           ) {
             throw new Error(
-              `MetaEvidence requires 'arbitratorChainID' to be ${fileParameters.arbitratorChainID}, but ${scriptParameters.arbitratorChainID} was given`
+              `MetaEvidence requires 'arbitratorChainID' to be ${fileParameters.arbitratorChainID}, but ${scriptParameters.arbitratorChainID} was given.`
             );
           }
 
@@ -243,30 +243,14 @@ class Arbitrable extends StandardContract {
             ...scriptParameters,
           };
 
-          if (injectedParameters.arbitrableContractAddress === undefined) {
-            injectedParameters.arbitrableContractAddress = contractAddress;
-          }
-
-          if (injectedParameters.arbitratorChainID !== undefined) {
-            injectedParameters.arbitratorJsonRpcUrl =
-              injectedParameters.arbitratorJsonRpcUrl || getJsonRpcUrl(injectedParameters.arbitratorChainID);
-          }
-
-          if (injectedParameters.arbitrableChainID === undefined) {
-            injectedParameters.arbitrableChainID = injectedParameters.arbitratorChainID;
-          }
-
-          if (
-            injectedParameters.arbitrableChainID !== undefined &&
-            injectedParameters.arbitrableJsonRpcUrl === undefined
-          ) {
-            if (injectedParameters.arbitrableChainID === injectedParameters.arbitratorChainID) {
-              injectedParameters.arbitrableJsonRpcUrl = injectedParameters.arbitratorJsonRpcUrl;
-            }
-
-            injectedParameters.arbitrableJsonRpcUrl =
-              injectedParameters.arbitrableJsonRpcUrl || getJsonRpcUrl(injectedParameters.arbitrableChainID);
-          }
+          injectedParameters.arbitrableContractAddress =
+            injectedParameters.arbitrableContractAddress || contractAddress;
+          injectedParameters.arbitratorJsonRpcUrl =
+            injectedParameters.arbitratorJsonRpcUrl || getJsonRpcUrl(injectedParameters.arbitratorChainID);
+          injectedParameters.arbitrableChainID =
+            injectedParameters.arbitrableChainID || injectedParameters.arbitratorChainID;
+          injectedParameters.arbitrableJsonRpcUrl =
+            injectedParameters.arbitrableJsonRpcUrl || getJsonRpcUrl(injectedParameters.arbitrableChainID);
 
           if (
             injectedParameters.arbitratorChainID !== undefined &&
