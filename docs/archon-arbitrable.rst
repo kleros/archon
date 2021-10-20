@@ -138,17 +138,18 @@ Parameters
 
 The options parameter can include:
 
-================  ======  ======================================================
-Key               Type    Description
-================  ======  ======================================================
-strict            bool    If true, an error will throw if hash or chain ID validations fail.
-strictHashes      bool    [DEPRECATED] If true, an error will throw if hash validations fail.
-customHashFn      fn      Hashing function that should be used to validate the hashes.
-fromBlock         int     The block where we start searching for event logs.
-toBlock           int     The block where we will stop searching for event logs.
-filters           object  Additional filters for event logs.
-scriptParameters  object  Parameters to pass to sandboxed script.
-================  ======  ======================================================
+================  ========  ======================================================
+Key               Type      Description
+================  ========  ======================================================
+`strict`            bool      If true, an error will throw if hash or chain ID validations fail.
+`strictHashes`      bool      [DEPRECATED] If true, an error will throw if hash validations fail.
+`customHashFn`      fn        Hashing function that should be used to validate the hashes.
+`fromBlock`         int       The block where we start searching for event logs.
+`toBlock`           int       The block where we will stop searching for event logs.
+`filters`           object    Additional filters for event logs.
+`scriptParameters`  object    Parameters to pass to sandboxed script.
+`getJsonRpcUrl`     function  A callback `(chainID: number) => string` to get a JSON-RPC URL for the given chain ID. Required in cross-chain MetaEvidece.
+================  ========  ======================================================
 
 .. tip:: Use :ref:`getDispute <getDispute>` to get the metaEvidenceID for a dispute.
 
