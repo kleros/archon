@@ -178,46 +178,50 @@ class Arbitrable extends StandardContract {
     };
     const dispute = (await (await fetch(subgraph, { method: "POST", body: JSON.stringify(query) })).json())?.data
       ?.disputes;
-    dispute[0]?.evidenceGroup?.evidence.map(async (evidence) => {
-      const { uri: evidenceURI, preValidated } = getHttpUri(evidence.uri, this.ipfsGateway);
+    return (
+      await Promise.allSettled(
+        dispute[0]?.evidenceGroup?.evidence.map(async (evidence) => {
+          const { uri: evidenceURI, preValidated } = getHttpUri(evidence.URI, this.ipfsGateway);
 
-      const { file: evidenceJSON, isValid: evidenceJSONValid } = await validateFileFromURI(evidenceURI, {
-        preValidated,
-        strict,
-        customHashFn: options.customHashFn,
-      });
+          const { file: evidenceJSON, isValid: evidenceJSONValid } = await validateFileFromURI(evidenceURI, {
+            preValidated,
+            strict,
+            customHashFn: options.customHashFn,
+          });
 
-      let fileValid = false;
+          let fileValid = false;
 
-      try {
-        if (evidenceJSON.fileURI) {
-          const { uri: evidenceURI, preValidated } = getHttpUri(evidenceJSON.fileURI, this.ipfsGateway);
+          try {
+            if (evidenceJSON.fileURI) {
+              const { uri: evidenceURI, preValidated } = getHttpUri(evidenceJSON.fileURI, this.ipfsGateway);
 
-          fileValid = (
-            await validateFileFromURI(evidenceURI, {
-              preValidated,
-              strict,
-              hash: evidenceJSON.fileHash,
-              customHashFn: options.customHashFn,
-            })
-          ).isValid;
-        }
-      } catch (err) {
-        if (strict) {
-          throw new Error(err);
-        }
+              fileValid = (
+                await validateFileFromURI(evidenceURI, {
+                  preValidated,
+                  strict,
+                  hash: evidenceJSON.fileHash,
+                  customHashFn: options.customHashFn,
+                })
+              ).isValid;
+            }
+          } catch (err) {
+            if (strict) {
+              throw new Error(err);
+            }
 
-        console.warn("Invalid evidence file:", err);
-      }
+            console.warn("Invalid evidence file:", err);
+          }
 
-      return {
-        evidenceJSONValid,
-        fileValid,
-        evidenceJSON,
-        submittedAt: evidence.creationTime,
-        submittedBy: evidence.sender,
-      };
-    });
+          return {
+            evidenceJSONValid,
+            fileValid,
+            evidenceJSON,
+            submittedAt: parseInt(evidence.creationTime),
+            submittedBy: evidence.sender,
+          };
+        })
+      )
+    ).map((r) => (r.value ? r.value : r));
   };
 
   /**
@@ -241,13 +245,13 @@ class Arbitrable extends StandardContract {
     const { getJsonRpcUrl = () => {} } = options;
     const strict = options.strict || options.strictHashes;
 
-    const metaEvidenceURI = (
-      await (
-        await fetch(
-          `https://kleros-api.netlify.app/.netlify/functions/get-dispute-metaevidence?chainId=${chainID}&disputeId=${disputeID}`
-        )
-      ).json()
-    ).metaEvidenceUri;
+    const resp = await (
+      await fetch(
+        `https://kleros-api.netlify.app/.netlify/functions/get-dispute-metaevidence?chainId=${chainID}&disputeId=${disputeID}`
+      )
+    ).json();
+
+    const metaEvidenceURI = resp.metaEvidenceUri;
 
     if (!metaEvidenceURI)
       throw new Error(
