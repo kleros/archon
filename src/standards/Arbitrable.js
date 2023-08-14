@@ -241,11 +241,13 @@ class Arbitrable extends StandardContract {
     const { getJsonRpcUrl = () => {} } = options;
     const strict = options.strict || options.strictHashes;
 
-    const metaEvidenceURI = await (
-      await fetch(
-        `https://kleros-api.netlify.app/.netlify/functions/get-dispute-metaevidence?chainId=${chainID}&disputeId=${disputeID}`
-      )
-    ).json();
+    const metaEvidenceURI = (
+      await (
+        await fetch(
+          `https://kleros-api.netlify.app/.netlify/functions/get-dispute-metaevidence?chainId=${chainID}&disputeId=${disputeID}`
+        )
+      ).json()
+    ).metaEvidenceUri;
 
     if (!metaEvidenceURI)
       throw new Error(
