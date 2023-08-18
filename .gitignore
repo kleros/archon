@@ -24,3 +24,7 @@ yarn-error.log*
 
 # Misc
 .DS_Store
+
+# Yarn
+.yarn/cache/
+.yarn/install-state.gz
