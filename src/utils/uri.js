@@ -35,7 +35,7 @@ export const getHttpUri = (uri, ipfsGateway) => {
       }
       // compatability scheme
       else if (uri.substr(0, 6) === 'ipfs:/')
-        uri = `${ipfsGateway}/${uri.split(':/').pop()}`
+        uri = `${ipfsGateway}/ipfs/${uri.split(':/').pop()}`
       else throw new Error(`Unrecognized protocol ${protocol}`)
 
       preValidated = true
