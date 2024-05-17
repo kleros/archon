@@ -137,11 +137,11 @@ class Arbitrable extends StandardContract {
   getSubgraph = (chainID) => {
     switch (chainID) {
       case 1:
-        return "https://api.thegraph.com/subgraphs/name/andreimvp/kleros-display-mainnet";
+        return "https://api.studio.thegraph.com/query/61738/kleros-display-mainnet/version/latest";
       case 100:
-        return "https://api.thegraph.com/subgraphs/name/andreimvp/kleros-display";
+        return "https://api.studio.thegraph.com/query/61738/kleros-display-gnosis/version/latest";
       case 11155111:
-        return "https://api.studio.thegraph.com/query/50849/kleros-sepolia-ss/version/latest";
+        return "https://api.studio.thegraph.com/query/61738/kleros-display-sepolia/version/latest";
       default:
         return null;
     }
