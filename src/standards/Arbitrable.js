@@ -176,8 +176,11 @@ class Arbitrable extends StandardContract {
         }
       }`,
     };
-    const dispute = (await (await fetch(subgraph, { method: "POST", body: JSON.stringify(query) })).json())?.data
-      ?.disputes;
+    const dispute = (await (await fetch(subgraph, { method: "POST", 
+                                                    body: JSON.stringify(query),
+                                                    headers: {
+                                                      'Content-Type': 'application/json',
+                                                    }, })).json())?.data?.disputes;
     return (
       await Promise.allSettled(
         dispute[0]?.evidenceGroup?.evidence.map(async (evidence) => {
