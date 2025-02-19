@@ -1498,10 +1498,10 @@
                                         }
                                       },
                                       "extra": {
-                                        "rawValue": "https://ipfs.kleros.io",
-                                        "raw": "'https://ipfs.kleros.io'"
+                                        "rawValue": "https://cdn.kleros.link",
+                                        "raw": "'https://cdn.kleros.link'"
                                       },
-                                      "value": "https://ipfs.kleros.io"
+                                      "value": "https://cdn.kleros.link"
                                     }
                                   },
                                   "consequent": {
@@ -7240,7 +7240,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "https://ipfs.kleros.io",
+      "value": "https://cdn.kleros.link",
       "start": 510,
       "end": 534,
       "loc": {
