@@ -18,7 +18,7 @@ export const getHttpUri = (uri, ipfsGateway) => {
     case 'http':
       break
     case 'https': {
-      if (ipfsGateway === 'https://ipfs.kleros.io') preValidated = true
+      if (ipfsGateway === 'https://cdn.kleros.link') preValidated = true
       break
     } case 'fs':
       // check to see if fs is appended by /ipfs/
